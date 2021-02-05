@@ -7,20 +7,122 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE0BFF7F25CCA303007ACA9D /* AdventureCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */; };
 		EE87FAC225CB5DA400BA5BA0 /* myAdventureRecordApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */; };
 		EE87FAC425CB5DA400BA5BA0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAC325CB5DA400BA5BA0 /* ContentView.swift */; };
 		EE87FAC625CB5DA600BA5BA0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE87FAC525CB5DA600BA5BA0 /* Assets.xcassets */; };
 		EE87FAC925CB5DA600BA5BA0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE87FAC825CB5DA600BA5BA0 /* Preview Assets.xcassets */; };
+		EE87FB0325CB5E0400BA5BA0 /* StatsStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAD425CB5E0300BA5BA0 /* StatsStructs.swift */; };
+		EE87FB0425CB5E0400BA5BA0 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAD525CB5E0300BA5BA0 /* Track.swift */; };
+		EE87FB0525CB5E0400BA5BA0 /* ParsingStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAD625CB5E0300BA5BA0 /* ParsingStructs.swift */; };
+		EE87FB0625CB5E0500BA5BA0 /* Trkpt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAD725CB5E0300BA5BA0 /* Trkpt.swift */; };
+		EE87FB0725CB5E0500BA5BA0 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAD825CB5E0300BA5BA0 /* GlobalConstants.swift */; };
+		EE87FB0825CB5E0500BA5BA0 /* DistanceSpeedChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAD925CB5E0300BA5BA0 /* DistanceSpeedChart.swift */; };
+		EE87FB0925CB5E0500BA5BA0 /* DistanceElevationChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADA25CB5E0300BA5BA0 /* DistanceElevationChart.swift */; };
+		EE87FB0A25CB5E0500BA5BA0 /* SqlTrkPtsDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADC25CB5E0300BA5BA0 /* SqlTrkPtsDatabase.swift */; };
+		EE87FB0B25CB5E0500BA5BA0 /* DBViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADD25CB5E0300BA5BA0 /* DBViewControllerRepresentable.swift */; };
+		EE87FB0C25CB5E0500BA5BA0 /* DBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADE25CB5E0300BA5BA0 /* DBViewController.swift */; };
+		EE87FB0D25CB5E0500BA5BA0 /* SqlHikingDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADF25CB5E0300BA5BA0 /* SqlHikingDatabase.swift */; };
+		EE87FB0F25CB5E0500BA5BA0 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAE225CB5E0300BA5BA0 /* Data.swift */; };
+		EE87FB1025CB5E0500BA5BA0 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAE325CB5E0300BA5BA0 /* UserData.swift */; };
+		EE87FB1125CB5E0500BA5BA0 /* Adventure.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAE425CB5E0300BA5BA0 /* Adventure.swift */; };
+		EE87FB1225CB5E0500BA5BA0 /* DistanceGradeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAE725CB5E0400BA5BA0 /* DistanceGradeTab.swift */; };
+		EE87FB1325CB5E0500BA5BA0 /* DistanceElevationTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAE825CB5E0400BA5BA0 /* DistanceElevationTab.swift */; };
+		EE87FB1425CB5E0500BA5BA0 /* DistanceSpeedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */; };
+		EE87FB1525CB5E0500BA5BA0 /* GainTriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAEA25CB5E0400BA5BA0 /* GainTriangleView.swift */; };
+		EE87FB1625CB5E0500BA5BA0 /* HikingDBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAEC25CB5E0400BA5BA0 /* HikingDBView.swift */; };
+		EE87FB1725CB5E0500BA5BA0 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAED25CB5E0400BA5BA0 /* MapView.swift */; };
+		EE87FB1825CB5E0500BA5BA0 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAEE25CB5E0400BA5BA0 /* CircleImage.swift */; };
+		EE87FB1925CB5E0500BA5BA0 /* YAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAF025CB5E0400BA5BA0 /* YAxisView.swift */; };
+		EE87FB1A25CB5E0500BA5BA0 /* DistSpdMainChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAF125CB5E0400BA5BA0 /* DistSpdMainChart.swift */; };
+		EE87FB1B25CB5E0500BA5BA0 /* MinMaxChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAF225CB5E0400BA5BA0 /* MinMaxChart.swift */; };
+		EE87FB1C25CB5E0500BA5BA0 /* DistGrdMainChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAF325CB5E0400BA5BA0 /* DistGrdMainChart.swift */; };
+		EE87FB1D25CB5E0500BA5BA0 /* DistanceGradeChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAF425CB5E0400BA5BA0 /* DistanceGradeChart.swift */; };
+		EE87FB1E25CB5E0500BA5BA0 /* DistEleMainChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAF525CB5E0400BA5BA0 /* DistEleMainChart.swift */; };
+		EE87FB1F25CB5E0500BA5BA0 /* XAxisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAF625CB5E0400BA5BA0 /* XAxisView.swift */; };
+		EE87FB2125CB5E0500BA5BA0 /* Annie.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = EE87FAF925CB5E0400BA5BA0 /* Annie.jpeg */; };
+		EE87FB2225CB5E0500BA5BA0 /* myHikingRecordIcon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE87FAFA25CB5E0400BA5BA0 /* myHikingRecordIcon.jpg */; };
+		EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */; };
+		EE87FB2425CB5E0500BA5BA0 /* AdventureList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */; };
+		EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */; };
+		EE87FB2725CB5E0500BA5BA0 /* NavigationPrimary.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFF25CB5E0400BA5BA0 /* NavigationPrimary.swift */; };
+		EE87FB3625CB61E800BA5BA0 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE87FB3525CB61E800BA5BA0 /* SQLite.framework */; };
+		EE87FB3725CB61E800BA5BA0 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EE87FB3525CB61E800BA5BA0 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EE87FB3B25CB622B00BA5BA0 /* SQLite.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */; };
+		EE87FB4625CB742E00BA5BA0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE87FB4825CB742E00BA5BA0 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		EE87FB3825CB61E800BA5BA0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EE87FB3725CB61E800BA5BA0 /* SQLite.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE87FB3925CB620A00BA5BA0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				EE87FB3B25CB622B00BA5BA0 /* SQLite.framework.dSYM in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureCommands.swift; sourceTree = "<group>"; };
+		EE1D66DF25CCB48A0050EB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE87FABE25CB5DA400BA5BA0 /* myAdventureRecord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myAdventureRecord.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myAdventureRecordApp.swift; sourceTree = "<group>"; };
 		EE87FAC325CB5DA400BA5BA0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		EE87FAC525CB5DA600BA5BA0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EE87FAC825CB5DA600BA5BA0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		EE87FACA25CB5DA600BA5BA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE87FACB25CB5DA600BA5BA0 /* myAdventureRecord.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = myAdventureRecord.entitlements; sourceTree = "<group>"; };
+		EE87FAD425CB5E0300BA5BA0 /* StatsStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsStructs.swift; sourceTree = "<group>"; };
+		EE87FAD525CB5E0300BA5BA0 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		EE87FAD625CB5E0300BA5BA0 /* ParsingStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParsingStructs.swift; sourceTree = "<group>"; };
+		EE87FAD725CB5E0300BA5BA0 /* Trkpt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trkpt.swift; sourceTree = "<group>"; };
+		EE87FAD825CB5E0300BA5BA0 /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		EE87FAD925CB5E0300BA5BA0 /* DistanceSpeedChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceSpeedChart.swift; sourceTree = "<group>"; };
+		EE87FADA25CB5E0300BA5BA0 /* DistanceElevationChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceElevationChart.swift; sourceTree = "<group>"; };
+		EE87FADC25CB5E0300BA5BA0 /* SqlTrkPtsDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqlTrkPtsDatabase.swift; sourceTree = "<group>"; };
+		EE87FADD25CB5E0300BA5BA0 /* DBViewControllerRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBViewControllerRepresentable.swift; sourceTree = "<group>"; };
+		EE87FADE25CB5E0300BA5BA0 /* DBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBViewController.swift; sourceTree = "<group>"; };
+		EE87FADF25CB5E0300BA5BA0 /* SqlHikingDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqlHikingDatabase.swift; sourceTree = "<group>"; };
+		EE87FAE225CB5E0300BA5BA0 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		EE87FAE325CB5E0300BA5BA0 /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		EE87FAE425CB5E0300BA5BA0 /* Adventure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Adventure.swift; sourceTree = "<group>"; };
+		EE87FAE725CB5E0400BA5BA0 /* DistanceGradeTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceGradeTab.swift; sourceTree = "<group>"; };
+		EE87FAE825CB5E0400BA5BA0 /* DistanceElevationTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceElevationTab.swift; sourceTree = "<group>"; };
+		EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceSpeedTab.swift; sourceTree = "<group>"; };
+		EE87FAEA25CB5E0400BA5BA0 /* GainTriangleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GainTriangleView.swift; sourceTree = "<group>"; };
+		EE87FAEC25CB5E0400BA5BA0 /* HikingDBView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HikingDBView.swift; sourceTree = "<group>"; };
+		EE87FAED25CB5E0400BA5BA0 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		EE87FAEE25CB5E0400BA5BA0 /* CircleImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
+		EE87FAF025CB5E0400BA5BA0 /* YAxisView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YAxisView.swift; sourceTree = "<group>"; };
+		EE87FAF125CB5E0400BA5BA0 /* DistSpdMainChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistSpdMainChart.swift; sourceTree = "<group>"; };
+		EE87FAF225CB5E0400BA5BA0 /* MinMaxChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinMaxChart.swift; sourceTree = "<group>"; };
+		EE87FAF325CB5E0400BA5BA0 /* DistGrdMainChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistGrdMainChart.swift; sourceTree = "<group>"; };
+		EE87FAF425CB5E0400BA5BA0 /* DistanceGradeChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceGradeChart.swift; sourceTree = "<group>"; };
+		EE87FAF525CB5E0400BA5BA0 /* DistEleMainChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistEleMainChart.swift; sourceTree = "<group>"; };
+		EE87FAF625CB5E0400BA5BA0 /* XAxisView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XAxisView.swift; sourceTree = "<group>"; };
+		EE87FAF925CB5E0400BA5BA0 /* Annie.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Annie.jpeg; sourceTree = "<group>"; };
+		EE87FAFA25CB5E0400BA5BA0 /* myHikingRecordIcon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = myHikingRecordIcon.jpg; sourceTree = "<group>"; };
+		EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdventureRow.swift; sourceTree = "<group>"; };
+		EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdventureList.swift; sourceTree = "<group>"; };
+		EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdventureDetail.swift; sourceTree = "<group>"; };
+		EE87FAFF25CB5E0400BA5BA0 /* NavigationPrimary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationPrimary.swift; sourceTree = "<group>"; };
+		EE87FB3025CB61C400BA5BA0 /* SQLite */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = SQLite; path = Carthage/Build/Mac/SQLite.framework/SQLite; sourceTree = "<group>"; };
+		EE87FB3525CB61E800BA5BA0 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/Mac/SQLite.framework; sourceTree = "<group>"; };
+		EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SQLite.framework.dSYM; path = Carthage/Build/Mac/SQLite.framework.dSYM; sourceTree = "<group>"; };
+		EE87FB4725CB742E00BA5BA0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE87FB3625CB61E800BA5BA0 /* SQLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,8 +140,10 @@
 		EE87FAB525CB5DA400BA5BA0 = {
 			isa = PBXGroup;
 			children = (
+				EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */,
 				EE87FAC025CB5DA400BA5BA0 /* myAdventureRecord */,
 				EE87FABF25CB5DA400BA5BA0 /* Products */,
+				EE87FB2F25CB61C400BA5BA0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -53,11 +158,22 @@
 		EE87FAC025CB5DA400BA5BA0 /* myAdventureRecord */ = {
 			isa = PBXGroup;
 			children = (
+				EE87FB4825CB742E00BA5BA0 /* Main.storyboard */,
 				EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */,
+				EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */,
 				EE87FAC325CB5DA400BA5BA0 /* ContentView.swift */,
+				EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */,
+				EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */,
+				EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */,
+				EE87FAFF25CB5E0400BA5BA0 /* NavigationPrimary.swift */,
+				EE87FAD325CB5E0300BA5BA0 /* DataStructures */,
+				EE87FAE125CB5E0300BA5BA0 /* Models */,
+				EE87FAF825CB5E0400BA5BA0 /* Resources */,
+				EE87FADB25CB5E0300BA5BA0 /* SqlDatabase */,
+				EE87FAE525CB5E0400BA5BA0 /* Supporting Views */,
 				EE87FAC525CB5DA600BA5BA0 /* Assets.xcassets */,
-				EE87FACA25CB5DA600BA5BA0 /* Info.plist */,
 				EE87FACB25CB5DA600BA5BA0 /* myAdventureRecord.entitlements */,
+				EE1D66DF25CCB48A0050EB69 /* Info.plist */,
 				EE87FAC725CB5DA600BA5BA0 /* Preview Content */,
 			);
 			path = myAdventureRecord;
@@ -71,6 +187,104 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		EE87FAD325CB5E0300BA5BA0 /* DataStructures */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FAD425CB5E0300BA5BA0 /* StatsStructs.swift */,
+				EE87FAD525CB5E0300BA5BA0 /* Track.swift */,
+				EE87FAD625CB5E0300BA5BA0 /* ParsingStructs.swift */,
+				EE87FAD725CB5E0300BA5BA0 /* Trkpt.swift */,
+				EE87FAD825CB5E0300BA5BA0 /* GlobalConstants.swift */,
+			);
+			path = DataStructures;
+			sourceTree = "<group>";
+		};
+		EE87FADB25CB5E0300BA5BA0 /* SqlDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FADC25CB5E0300BA5BA0 /* SqlTrkPtsDatabase.swift */,
+				EE87FADD25CB5E0300BA5BA0 /* DBViewControllerRepresentable.swift */,
+				EE87FADE25CB5E0300BA5BA0 /* DBViewController.swift */,
+				EE87FADF25CB5E0300BA5BA0 /* SqlHikingDatabase.swift */,
+			);
+			path = SqlDatabase;
+			sourceTree = "<group>";
+		};
+		EE87FAE125CB5E0300BA5BA0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FAE225CB5E0300BA5BA0 /* Data.swift */,
+				EE87FAE325CB5E0300BA5BA0 /* UserData.swift */,
+				EE87FAE425CB5E0300BA5BA0 /* Adventure.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		EE87FAE525CB5E0400BA5BA0 /* Supporting Views */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FAE625CB5E0400BA5BA0 /* Tabs */,
+				EE87FAEB25CB5E0400BA5BA0 /* DataBase */,
+				EE87FAED25CB5E0400BA5BA0 /* MapView.swift */,
+				EE87FAEE25CB5E0400BA5BA0 /* CircleImage.swift */,
+				EE87FAEF25CB5E0400BA5BA0 /* Charts */,
+			);
+			path = "Supporting Views";
+			sourceTree = "<group>";
+		};
+		EE87FAE625CB5E0400BA5BA0 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FAE725CB5E0400BA5BA0 /* DistanceGradeTab.swift */,
+				EE87FAE825CB5E0400BA5BA0 /* DistanceElevationTab.swift */,
+				EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */,
+				EE87FAEA25CB5E0400BA5BA0 /* GainTriangleView.swift */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		EE87FAEB25CB5E0400BA5BA0 /* DataBase */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FAEC25CB5E0400BA5BA0 /* HikingDBView.swift */,
+			);
+			path = DataBase;
+			sourceTree = "<group>";
+		};
+		EE87FAEF25CB5E0400BA5BA0 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FAF125CB5E0400BA5BA0 /* DistSpdMainChart.swift */,
+				EE87FAD925CB5E0300BA5BA0 /* DistanceSpeedChart.swift */,
+				EE87FAF325CB5E0400BA5BA0 /* DistGrdMainChart.swift */,
+				EE87FAF425CB5E0400BA5BA0 /* DistanceGradeChart.swift */,
+				EE87FAF525CB5E0400BA5BA0 /* DistEleMainChart.swift */,
+				EE87FADA25CB5E0300BA5BA0 /* DistanceElevationChart.swift */,
+				EE87FAF625CB5E0400BA5BA0 /* XAxisView.swift */,
+				EE87FAF025CB5E0400BA5BA0 /* YAxisView.swift */,
+				EE87FAF225CB5E0400BA5BA0 /* MinMaxChart.swift */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		EE87FAF825CB5E0400BA5BA0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FAF925CB5E0400BA5BA0 /* Annie.jpeg */,
+				EE87FAFA25CB5E0400BA5BA0 /* myHikingRecordIcon.jpg */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		EE87FB2F25CB61C400BA5BA0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EE87FB3525CB61E800BA5BA0 /* SQLite.framework */,
+				EE87FB3025CB61C400BA5BA0 /* SQLite */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -81,6 +295,8 @@
 				EE87FABA25CB5DA400BA5BA0 /* Sources */,
 				EE87FABB25CB5DA400BA5BA0 /* Frameworks */,
 				EE87FABC25CB5DA400BA5BA0 /* Resources */,
+				EE87FB3825CB61E800BA5BA0 /* Embed Frameworks */,
+				EE87FB3925CB620A00BA5BA0 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -129,7 +345,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE87FAC925CB5DA600BA5BA0 /* Preview Assets.xcassets in Resources */,
+				EE87FB4625CB742E00BA5BA0 /* Main.storyboard in Resources */,
+				EE87FB2225CB5E0500BA5BA0 /* myHikingRecordIcon.jpg in Resources */,
 				EE87FAC625CB5DA600BA5BA0 /* Assets.xcassets in Resources */,
+				EE87FB2125CB5E0500BA5BA0 /* Annie.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,12 +359,56 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE87FB0325CB5E0400BA5BA0 /* StatsStructs.swift in Sources */,
+				EE87FB1725CB5E0500BA5BA0 /* MapView.swift in Sources */,
+				EE87FB0425CB5E0400BA5BA0 /* Track.swift in Sources */,
+				EE87FB1A25CB5E0500BA5BA0 /* DistSpdMainChart.swift in Sources */,
+				EE87FB1325CB5E0500BA5BA0 /* DistanceElevationTab.swift in Sources */,
+				EE87FB0625CB5E0500BA5BA0 /* Trkpt.swift in Sources */,
+				EE87FB0B25CB5E0500BA5BA0 /* DBViewControllerRepresentable.swift in Sources */,
+				EE87FB1525CB5E0500BA5BA0 /* GainTriangleView.swift in Sources */,
+				EE87FB2425CB5E0500BA5BA0 /* AdventureList.swift in Sources */,
 				EE87FAC425CB5DA400BA5BA0 /* ContentView.swift in Sources */,
 				EE87FAC225CB5DA400BA5BA0 /* myAdventureRecordApp.swift in Sources */,
+				EE87FB0C25CB5E0500BA5BA0 /* DBViewController.swift in Sources */,
+				EE87FB1425CB5E0500BA5BA0 /* DistanceSpeedTab.swift in Sources */,
+				EE87FB1225CB5E0500BA5BA0 /* DistanceGradeTab.swift in Sources */,
+				EE87FB1925CB5E0500BA5BA0 /* YAxisView.swift in Sources */,
+				EE87FB0925CB5E0500BA5BA0 /* DistanceElevationChart.swift in Sources */,
+				EE87FB1125CB5E0500BA5BA0 /* Adventure.swift in Sources */,
+				EE87FB1F25CB5E0500BA5BA0 /* XAxisView.swift in Sources */,
+				EE87FB0D25CB5E0500BA5BA0 /* SqlHikingDatabase.swift in Sources */,
+				EE87FB1D25CB5E0500BA5BA0 /* DistanceGradeChart.swift in Sources */,
+				EE87FB1625CB5E0500BA5BA0 /* HikingDBView.swift in Sources */,
+				EE87FB1B25CB5E0500BA5BA0 /* MinMaxChart.swift in Sources */,
+				EE87FB0A25CB5E0500BA5BA0 /* SqlTrkPtsDatabase.swift in Sources */,
+				EE87FB0825CB5E0500BA5BA0 /* DistanceSpeedChart.swift in Sources */,
+				EE87FB1025CB5E0500BA5BA0 /* UserData.swift in Sources */,
+				EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */,
+				EE87FB1C25CB5E0500BA5BA0 /* DistGrdMainChart.swift in Sources */,
+				EE87FB1E25CB5E0500BA5BA0 /* DistEleMainChart.swift in Sources */,
+				EE87FB2725CB5E0500BA5BA0 /* NavigationPrimary.swift in Sources */,
+				EE87FB0725CB5E0500BA5BA0 /* GlobalConstants.swift in Sources */,
+				EE0BFF7F25CCA303007ACA9D /* AdventureCommands.swift in Sources */,
+				EE87FB0525CB5E0400BA5BA0 /* ParsingStructs.swift in Sources */,
+				EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */,
+				EE87FB0F25CB5E0500BA5BA0 /* Data.swift in Sources */,
+				EE87FB1825CB5E0500BA5BA0 /* CircleImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		EE87FB4825CB742E00BA5BA0 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EE87FB4725CB742E00BA5BA0 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		EE87FACC25CB5DA600BA5BA0 /* Debug */ = {
@@ -199,7 +462,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -254,7 +517,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -275,10 +538,18 @@
 				DEVELOPMENT_TEAM = YF37JW378F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = myAdventureRecord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac/SQLite.framework",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = rlm.myAdventureRecord;
@@ -299,10 +570,18 @@
 				DEVELOPMENT_TEAM = YF37JW378F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = myAdventureRecord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac/SQLite.framework",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = rlm.myAdventureRecord;
