@@ -120,6 +120,12 @@ struct AdventureDetail: View {
 				.tabItem({
 					Image(systemName: "chart.bar.fill")
 					Text("Speed")})
+			SummaryTab(adventure: adventure)
+				.tabItem({
+					Image(systemName: "charr.bar.fill")
+					Text("Summary")
+				})
+			
 		}.frame(minWidth: 500, idealWidth: 500, maxWidth: .infinity, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: 400, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 		
 		

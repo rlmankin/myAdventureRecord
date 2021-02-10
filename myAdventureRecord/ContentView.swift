@@ -9,17 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
 	
-	@State private var showDBTable = false
+	
 	
 	var body: some View {
-					
-		if showDBTable {
-			HikingDBView()
-		} else {
-			AdventureList()
+		AdventureList()
 			.frame(minWidth: 875, idealWidth: 900, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 500, idealHeight: 900, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-		}
 	}
+	
 }
 
 

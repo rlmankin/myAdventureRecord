@@ -347,6 +347,7 @@ extension DBViewController: NSTableViewDelegate {
 		
 				
 		dbTableview.reloadData()
+		
 	}
 	
 	func tableViewSelectionDidChange(_ notification: Notification) {

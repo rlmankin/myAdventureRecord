@@ -12,6 +12,17 @@ import SwiftUI
 
 
 struct DBViewControllerRepresentable : NSViewControllerRepresentable {
+	// CRITICAL:  to make the representable work a storyboard entry with the identifier "dbViewControllerID" must be present
+	//	in the Main storyboard of the application.  Further ALL IBOutlets declared in the dbControllerView must be connected
+	//	via the storyboard
+	
+	class Coordinator: NSObject,  NSTabViewDelegate{
+		
+	}
+	
+	func makeCoordinator() -> Coordinator {
+		Coordinator()
+	}
 	
 	typealias NSViewType = DBViewController
 	
@@ -19,9 +30,7 @@ struct DBViewControllerRepresentable : NSViewControllerRepresentable {
 		let mainStoryboard = NSStoryboard.init(name: "Main", bundle: nil)
 		
 		let dbViewController = mainStoryboard.instantiateController( withIdentifier: "dbViewControllerID") as! DBViewController
-		//dbViewController.loadView()
-		//dbViewController.dbTableview = NSTableView()
-		//let x = dbViewController.dbTableview.reloadData()
+		//dbViewController.delegate = context.coordinator
 		return dbViewController
 	}
 	
