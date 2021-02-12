@@ -52,6 +52,7 @@
 		EE87FB3B25CB622B00BA5BA0 /* SQLite.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */; };
 		EE87FB4625CB742E00BA5BA0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE87FB4825CB742E00BA5BA0 /* Main.storyboard */; };
 		EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A625D4992D00B72577 /* parseGPXXML.swift */; };
+		EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A825D56FF300B72577 /* GpxParseView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -127,6 +128,7 @@
 		EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SQLite.framework.dSYM; path = Carthage/Build/Mac/SQLite.framework.dSYM; sourceTree = "<group>"; };
 		EE87FB4725CB742E00BA5BA0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EEDA19A625D4992D00B72577 /* parseGPXXML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parseGPXXML.swift; sourceTree = "<group>"; };
+		EEDA19A825D56FF300B72577 /* GpxParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxParseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,9 +168,9 @@
 				EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */,
 				EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */,
 				EE87FAC325CB5DA400BA5BA0 /* ContentView.swift */,
-				EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */,
 				EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */,
 				EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */,
+				EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */,
 				EE87FAFF25CB5E0400BA5BA0 /* NavigationPrimary.swift */,
 				EE87FAD325CB5E0300BA5BA0 /* DataStructures */,
 				EE87FAE125CB5E0300BA5BA0 /* Models */,
@@ -295,6 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				EEDA19A625D4992D00B72577 /* parseGPXXML.swift */,
+				EEDA19A825D56FF300B72577 /* GpxParseView.swift */,
 			);
 			path = GpxParser;
 			sourceTree = "<group>";
@@ -409,6 +412,7 @@
 				EE87FB0525CB5E0400BA5BA0 /* ParsingStructs.swift in Sources */,
 				EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */,
 				EE87FB0F25CB5E0500BA5BA0 /* Data.swift in Sources */,
+				EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */,
 				EE87FB1825CB5E0500BA5BA0 /* CircleImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

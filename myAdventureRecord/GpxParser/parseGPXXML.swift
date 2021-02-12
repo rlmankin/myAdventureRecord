@@ -14,6 +14,362 @@
 import Foundation
 import CoreLocation
 
+
+//***  Comment flag for items commented out from original file
+
+
+//
+//  copied from doHikingDB/trkptUtilities.swift
+//  Robb Mankin on 2/10/21
+
+import Foundation
+import CoreLocation
+
+func calcDistance(_ currentTrkpt: Trkpt, _ lastTrkpt: Trkpt) -> Double {		// Calculate the distance between two trackpoints
+																				// inputs are two trackpoints.  No range checking is preformed because
+																				// all trackpoints will have longitude and latitude.
+	let currentLocation = CLLocation(latitude: currentTrkpt.latitude, longitude: currentTrkpt.longitude)
+	let previousLocation = CLLocation(latitude: lastTrkpt.latitude,	  longitude: lastTrkpt.longitude)
+	return currentLocation.distance(from: previousLocation)				// return value is the distance
+}
+
+func calcGain(_ currentTrkpt: Trkpt, _ lastTrkpt: Trkpt) -> Double? {			// Calculate the gain between two trackpoints, return Double
+	if let elevation1 = currentTrkpt.elevation {								//	Since .elevation may be nil, use optional binding,
+		if let elevation2 = lastTrkpt.elevation {
+			return elevation1 - elevation2
+		}
+	}
+	return nil																	// return nil if either or both .elevation values are nil
+}
+
+func calcElapsedTime(_ currentTrkpt: Trkpt, _ lastTrkpt: Trkpt) -> TimeInterval {	// Calculate the elapsed time between two trackpoints, return TimeInterval
+	if let time1 = currentTrkpt.timeStamp {										//	Since .timeStamp may be nil use optional binding
+		if let time2 = lastTrkpt.timeStamp {
+			return time1.timeIntervalSince(time2)
+		}
+	}
+	return -1																	//	return -1 if either or both .timeStamps are nil
+																				//	Should probably fix this to return TimeInterval?
+}
+
+//	****************************************************************************
+func calculateTrkProperties(_ currentTrack: inout Track) {						//  Main track property calculations
+	//  Determine all summary level totals (ascent, descent, distance
+	//	For those tracks which have valid time and elevation data
+	//	Sequence through the validTimeAndEleArray to calculate the the distance, gain, and speed for all possible legs
+	
+	//	Determine if there is either enough time and elevation datapoints or enough elevation only datapoints to calculate total
+	//		ascent and descent
+	currentTrack.validTrkptsForStatistics = currentTrack.trkptsList
+					.filter({$0.hasValidTimeStamp && $0.hasValidElevation})		//  get only those trackpoints that have a valid elevation and a valid timeStamp
+	let validElevationArray = currentTrack.trkptsList.filter({$0.hasValidElevation})
+	if currentTrack.validTrkptsForStatistics.count < 2 {										// not enough time and elevation trackpoints
+		currentTrack.noValidTimeEle = true
+		//print("not enough TimeAndEle")
+		if validElevationArray.count >= 2 {										// check if there is enough elevation trackpoints
+			currentTrack.validTrkptsForStatistics = validElevationArray
+			for i in 0 ... currentTrack.validTrkptsForStatistics.count - 1  {
+				guard currentTrack.validTrkptsForStatistics[i].copyToStatisticsStruct("Ele") else { return }
+			}
+
+			//print("using validElevationArray")
+		} else {
+			currentTrack.noValidEle = true
+			return																//	early return if there are not enough entries in the ValidTimeAndEleArray
+		}
+	} else {
+		for i in 0 ... currentTrack.validTrkptsForStatistics.count - 1 {
+			guard currentTrack.validTrkptsForStatistics[i].copyToStatisticsStruct("EleTime") else { return }
+		}
+		//print("using validTimeElevationArray")
+	}
+	
+	if !currentTrack.noValidTimeEle {
+		currentTrack.trackSummary.totalAscentTime =
+				currentTrack.trkptsList.compactMap({$0.lastTimeEleTrkpt.elapsedTime})	// .compactMap removes all nil entries
+					.filter({$0 >= 0}).reduce(0,+)								// ,filter get only those values >= 0, .reduce sums the result
+		currentTrack.trackSummary.totalDescentTime =
+				currentTrack.trkptsList.compactMap({$0.lastTimeEleTrkpt.elapsedTime})	// .compactMap removes all nil entries
+					.filter({$0 < 0}).reduce(0,+)								// ,filter get only those values >= 0, .reduce sums the result
+		currentTrack.trackSummary.totalAscent =
+				currentTrack.trkptsList.compactMap({$0.lastTimeEleTrkpt.gain})	// .compactMap removes all nil entries
+					.filter({$0 >= 0}).reduce(0,+)								// ,filter get only those values >= 0, .reduce sums the result
+		currentTrack.trackSummary.totalDescent =
+				currentTrack.trkptsList.compactMap({$0.lastTimeEleTrkpt.gain})	// .compactMap removes all nil entries
+					.filter({$0 < 0}).reduce(0,+)								// ,filter get only those values >= 0, .reduce sums the result
+		currentTrack.trackSummary.distance =
+				currentTrack.trkptsList.compactMap({$0.lastTrkpt.distance}).reduce(0,+)// .compactMap removes all nil entries, sum all distances
+		currentTrack.trackSummary.avgAscentRate = (currentTrack.trackSummary.totalAscentTime != 0 ?
+				(currentTrack.trackSummary.totalAscent / currentTrack.trackSummary.totalAscentTime) : 0)// ternary assignment (condition ? assigniftrue: assigniffalse)
+		currentTrack.trackSummary.avgDescentRate = (currentTrack.trackSummary.totalDescentTime != 0 ?
+				(currentTrack.trackSummary.totalDescent / currentTrack.trackSummary.totalDescentTime) : 0)	// ternary assignment (condition ? assigniftrue: assigniffalse)
+		currentTrack.trackSummary.netAscent = currentTrack.trackSummary.totalAscent + currentTrack.trackSummary.totalDescent
+		currentTrack.trackSummary.avgSpeed = (currentTrack.trackSummary.duration != 0 ? currentTrack.trackSummary.distance / 	currentTrack.trackSummary.duration : 0)	//time related
+	}
+	
+	if !currentTrack.noValidEle {
+		currentTrack.trackSummary.totalAscent =
+				currentTrack.trkptsList.compactMap({$0.lastEleTrkpt.gain})	// .compactMap removes all nil entries
+					.filter({$0 >= 0}).reduce(0,+)								// ,filter get only those values >= 0, .reduce sums the result
+		currentTrack.trackSummary.totalDescent =
+				currentTrack.trkptsList.compactMap({$0.lastEleTrkpt.gain})	// .compactMap removes all nil entries
+					.filter({$0 < 0}).reduce(0,+)								// ,filter get only those values >= 0, .reduce sums the result
+		currentTrack.trackSummary.distance =
+				currentTrack.trkptsList.compactMap({$0.lastTrkpt.distance}).reduce(0,+)// .compactMap removes all nil entries, sum all distances
+		
+	}
+	
+	//	Determine all summary elevation stats (start, max, min) and start/end time properties
+	if let startElevation = currentTrack.trkptsList.compactMap({$0.elevation}).first {
+		currentTrack.trackSummary.startElevation = startElevation				// if there are no recorded elevations .first will return nil, thus need optional binding
+	}
+	if let startTimeStamp = currentTrack.trkptsList.compactMap({$0.timeStamp}).first {
+		currentTrack.trackSummary.startTime = startTimeStamp					// if there are no recorded times .first will return nil, thus need optional binding
+	}
+	if let endTimeStamp = currentTrack.trkptsList.compactMap({$0.timeStamp}).last {
+		currentTrack.trackSummary.endTime = endTimeStamp						// if there are no recorded times .last will return nil, thus need optional binding
+	}
+	if let tmpStart = currentTrack.trackSummary.startTime, let tmpEnd = currentTrack.trackSummary.endTime {
+			currentTrack.trackSummary.duration = tmpEnd.timeIntervalSince(tmpStart)// if there are no recorded times return nil, thus need optional binding
+	}
+	currentTrack.trackSummary.avgSpeed = (currentTrack.trackSummary.duration != 0 ? currentTrack.trackSummary.distance / currentTrack.trackSummary.duration : 0)
+																				// ternary assignment (condition ? assigniftrue: assigniffalse)
+					// Min,Max Elevation calculations
+	if let maxElevation = currentTrack.trkptsList.compactMap({$0.elevation}).max() {	// .compactMap removes all nil entries
+		currentTrack.trackSummary.elevationStats.max.elevation = maxElevation	// no need to option bind because nil entries have been removed
+		currentTrack.trackSummary.elevationStats.max.index =
+			currentTrack.trkptsList.firstIndex(where: {$0.elevation == maxElevation})!	// since a maxElevation was found, there is no need for a nil check
+	}
+	if let minElevation = currentTrack.trkptsList.compactMap({$0.elevation}).min() {	// .compactMap removes all nil entries
+		currentTrack.trackSummary.elevationStats.min.elevation = minElevation	// no need to option bind because nil entries have been removed
+		currentTrack.trackSummary.elevationStats.min.index =
+			currentTrack.trkptsList.firstIndex(where: {$0.elevation == minElevation})!	// since a minElevation was found, there is no need for a nil check
+	}
+}
+
+//	This method finds the minimum and maximium values in an array, then sets the approporiate minMax structure values
+func setMinMax(_ sourceArray: inout [LegStatsStruct], _ targetParm: inout MinMaxStats, closure: (LegStatsStruct) -> (Double), loopCount: Int, closureNum: Int) {
+																				// input is a sourceArray of LegStatsStruct
+																				//		targetParm is a single element of a MinMaxStats structure to place the specific stats
+																				//		closure is a closure that is used to help map a specific LegStatsStruct element from
+																				//			the sourceArray
+																				//		loopcount is a debug variable passed to indicate which trackpoint is being worked on
+																				//		closureNum is debug variable passed to indicate which LegStatsStruct element is being requested
+	let debugVar = sourceArray.map(closure)										//  creates an array of the DListStruct element under examination.  E.g. gain, speed, ascent, descent, ...
+			//  In order to deal with various (Double) variables that should hold the same value, but don't create a new array from the sourceArray(debugVar) that creates an Integer that is the
+			//		value multiplied by 1 million.  This should allow for successfully finding all indexes associated with maximum and minimum values.  This was required to address the periodic
+			//		failure of the statIndex = debugVar.Index(of: <var>) to successfully find the index of the maximum/minimum values, due to imprecision of converting Doubles
+	//Swift.print("loopCount = \(loopCount) closure#: \(closureNum)")
+	guard !debugVar.isEmpty else {
+		return
+	}
+	let mappedArray = debugVar.map({Int($0*1e6)})								// create an integer & multiply values by 1 million
+	let debugVarMax = mappedArray.reduce(Int.min,max)							// find the maximum
+	let debugVarMin = mappedArray.reduce(Int.max, min)							// find the minimum
+	var statIndex = mappedArray.firstIndex(of: debugVarMax)!					// find the index of the maximum.  OK to force unwrap because I know the value exists
+																// the force unwrap fails on CHeyenne Mountain hike  need to investigate
+	targetParm.max.statData = max(targetParm.max.statData, debugVar[statIndex])	// set the statdata field to the actual value of the maximum, not the 1e6 multiple
+	targetParm.max.startIndex = sourceArray[statIndex].startIndex				// set the start/end index values fromthe original sourceArray
+	targetParm.max.endIndex = sourceArray[statIndex].endIndex
+		// find minimum index
+	statIndex = mappedArray.firstIndex(of: debugVarMin)!						// find the index of the minimum.  OK to force unwrap because I know the value exists
+	targetParm.min.statData = min(targetParm.min.statData, debugVar[statIndex])	// set the statdata field to the actual value of the maximum, not the 1e6 multiple
+	targetParm.min.startIndex = sourceArray[statIndex].startIndex				// set the start/end index values fromthe original sourceArray
+	targetParm.min.endIndex = sourceArray[statIndex].endIndex
+}
+
+//	LegStatsStruct is the structure used to collect all relevant parts of a leg or segment of a track.
+struct LegStatsStruct {
+	var startIndex: Int															// start index of the leg
+	var endIndex: Int															// end index of the leg
+	var distance: Double														// distance between start and end
+	var elapsedTime: TimeInterval												// elapsedTime between start and end
+	var gain: Double															// elevation difference between start and end
+	var grade : Double {														// a getter used to calcuate the grade between start and end, return 0 if distance is 0
+		get {
+			return (distance != 0 ? gain/distance : 0.0)
+		}
+	}
+	var gradeSpeed : Double {													// a getter used to calculate the vertical speed over the lef, return 0 if elapsedTime is 0
+		get {
+			return  (elapsedTime != 0 ? gain/elapsedTime : 0.0)
+		}
+	}
+	var ascent : Double															// sum of meters gained for every point between the start and end.
+	var ascentElapsedTime: TimeInterval											// time spent ascending
+	var ascentSpeed : Double {													// a getter used to caclulate the average speed of the ascent, return 0 if elapsedTime is 0
+		get {
+			return (ascentElapsedTime != 0 ? ascent / ascentElapsedTime : 0)
+		}
+	}
+	var descent : Double														// sum of meters lost for every point between the start and end
+	var descentElapsedTime: TimeInterval										// time spend descending
+	var descentSpeed : Double {													// a getter used to calcuate the average speed of the descent, return 0 if elapsedTime is 0
+		get {
+			return (descentElapsedTime != 0 ? descent / descentElapsedTime : 0)
+		}
+	}
+	var trailSpeed : Double {													// a getter used to calculare the overall 'flatland' speed between start and end
+		get {
+			return (elapsedTime != 0 ? distance / elapsedTime : 0)				// 		return - if elapsedTime is 0
+		}
+	}
+	
+	init() {
+		self.startIndex = -1													// invalid startIndex
+		self.endIndex = -1														// invalid endIndex
+		self.distance = 0.0														// all other values init to 0.0
+		self.elapsedTime = 0.0
+		self.gain = 0.0
+		self.ascent = 0.0
+		self.ascentElapsedTime = 0.0
+		self.descent = 0.0
+		self.descentElapsedTime = 0.0
+	}
+}
+
+//	main function to create all mileage based statistics
+//*** func createMileageStats(_ currentTrack: inout Track, _ parentViewController:  Document?) {
+func createMileageStats(_ currentTrack: inout Track) {
+																				// input is the track currently being processed
+																				//	and the pointer to the overall ViewController (used only by Notification to update the progress bar
+
+	var overEighthMile = [LegStatsStruct]()										// Collection of all track segments (leg) that are between 1/8 and 3/16 of a mile
+	var overMile = [LegStatsStruct]()											// Collection of all track segments that are at least one mile in length
+	var eighthStats = MileageStats()											// local temporary variable to hold the 1/8 mile min/max values for all calculated stat
+	var mileStats = MileageStats()												// local temporary variable to hold the 1 mile min/max values for all calculated stats
+					//	initializers
+	var avgDescentRateMile = 0.0
+	var avgAscentRateMile = 0.0
+	let progressBarMax = Double(currentTrack.trkptsList.count)					// the maximum value used by the deterministic progress bar in the View
+	let progressBarMin = 0.0													// used by the progressBar
+	let progressBarIncr = 1.0													// used by the progressBar
+	let userInfo = ["min": progressBarMin, "max": progressBarMax, "increment": progressBarIncr]	// dictionary used by Notification.post (see Apple developer documentation)
+	
+	
+	//	Sequence through the validTimeAndEleArray to calculate the the distance, gain, and speed for all possible legs
+	var validTrkptsForStatistics = currentTrack.trkptsList
+					.filter({$0.hasValidTimeStamp && $0.hasValidElevation})		//  get only those trackpoints that have a valid elevation and a valid timeStamp
+	let validElevationArray = currentTrack.trkptsList.filter({$0.hasValidElevation})
+	if validTrkptsForStatistics.count < 2 {										// not enough time and elevation trackpoints
+		currentTrack.noValidTimeEle = true
+		//print("not enough TimeAndEle")
+		if validElevationArray.count >= 2 {										// check if there is enough elevation trackpoints
+			validTrkptsForStatistics = validElevationArray
+			for i in 0 ... validTrkptsForStatistics.count - 1  {
+				guard validTrkptsForStatistics[i].copyToStatisticsStruct("Ele") else { return }
+			}
+
+			//print("using validElevationArray")
+		} else {
+			currentTrack.noValidEle = true
+			return																//	early return if there are not enough entries in the ValidTimeAndEleArray
+		}
+	} else {
+		for i in 0 ... validTrkptsForStatistics.count - 1 {
+			guard validTrkptsForStatistics[i].copyToStatisticsStruct("EleTime") else { return }
+		}
+		//print("using validTimeElevationArray")
+	}
+	
+	
+	for k in 0 ... (currentTrack.validTrkptsForStatistics.endIndex - 2) {
+		/*DispatchQueue.main.async {												// update the progress bar.  NOTE: the Notification.post is wrapped and dispatched back to
+																				//	the main thread.
+																				//  this is required so that all UI updates are done on the main thread.  Eliminated runTime errors found
+			
+			// 	in the case where gpxDocumentArray has not yet been populated (e.g. parentViewController == nil), then createMileageStats will not attempt to update
+			//	the window progress bar
+			
+			if let pvc = parentViewController {
+				NotificationCenter.default.post(name: .updateProgNotification, object: pvc.windowControllers[0].contentViewController as! MainViewController,  userInfo: userInfo)
+			}
+		} */
+		
+		for j in k ... (currentTrack.validTrkptsForStatistics.endIndex - 1) {					// sequence through all points between the current one and the last one.  This creates all possible track
+																				//	segments (leg) for the current trackpoint
+			var tempLegStats = LegStatsStruct()
+			
+			tempLegStats.gain = (calcGain(currentTrack.validTrkptsForStatistics[j], currentTrack.validTrkptsForStatistics[k]) ?? 0.0)			//	determine true gain over the distance relies only on start/end elevations
+			tempLegStats.startIndex = currentTrack.validTrkptsForStatistics[k].index				// store the starting/ending indices for future reference and debug
+			tempLegStats.endIndex = currentTrack.validTrkptsForStatistics[j].index				//  NOTE:  the index is the index item in currentTrack.trkptsList, NOT of the subarray
+						
+			// calculate the ascent and descent properties.  Since a trail will go up/down over a distance we use
+						//	the sum of the positive gains/distances/times over all segments within the leg for ascent properties
+						//	and, similarly, the sum of the negative gains for descent properties
+			let ascentDescentArray = currentTrack.validTrkptsForStatistics[k...j]				// create an array of the the leg in question.  Do this once to eliminate always creating it
+																				// as part of the specific statistic calculataion
+			//******************************************************************
+			//**   have to change to reflect routing (i.e. may not have time) **
+			//******************************************************************
+			tempLegStats.distance = ascentDescentArray.map({$0.statisticsTrkpt.distance}).reduce(0,+)	// distance only relies on the beginning and end lat/long
+			tempLegStats.elapsedTime = ascentDescentArray.map({$0.statisticsTrkpt.elapsedTime}).reduce(0,+)	//	similarly the elapsed time only relies on the beginning/end timeStamps
+			// time dependency (lastTimeEleTrkpt)
+			tempLegStats.ascent = ascentDescentArray.filter({$0.statisticsTrkpt.gain >= 0}).map({$0.statisticsTrkpt.gain}).reduce(0,+)	// sum all positive gain in the subarray
+			tempLegStats.ascentElapsedTime = ascentDescentArray.filter({$0.statisticsTrkpt.gain >= 0}).map({$0.statisticsTrkpt.elapsedTime}).reduce(0,+)
+																				// sum all elapsed time for positive gain in the subarray
+			tempLegStats.descent = ascentDescentArray.filter({$0.statisticsTrkpt.gain < 0}).map({$0.statisticsTrkpt.gain}).reduce(0,+)	// sum all negative gain in the subarrau
+			tempLegStats.descentElapsedTime = ascentDescentArray.filter({$0.statisticsTrkpt.gain < 0}).map({$0.statisticsTrkpt.elapsedTime}).reduce(0,+)			// 	sum all elapsed time for negative gain in the
+																				//	subarray
+			//******************************************************************
+			//******************************************************************
+			//******************************************************************
+			if (tempLegStats.distance >= metersperMile/8) && (tempLegStats.distance <= metersperMile*(3/16)) {
+				overEighthMile.append(tempLegStats)								//	add to the overEighthMile collection
+			}
+			if (tempLegStats.distance >= metersperMile) {
+				overMile.append(tempLegStats)									//	add to the overMile collection
+				break															//	break the loop j once the first segment over a mile is found.
+			}
+			//print("k: \(k), j: \(j), k.latitude \(trkPtList[k].latitude), j.latitude \(trkPtListJ[j].latitude), legValidDistance: \(legValidDistance)")
+			if (j % 100) == 0 {
+				//print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
+			}
+		} // loop j
+		
+																				// calculate Min/Max statistics for all legs in the overEighthMile collection (there is probably many of these)
+		setMinMax(&overEighthMile, &eighthStats.grade, closure: {$0.grade}, loopCount: k, closureNum: 288)
+		setMinMax(&overEighthMile, &eighthStats.speed, closure: {$0.trailSpeed}, loopCount: k, closureNum: 289)
+		setMinMax(&overEighthMile, &eighthStats.ascent, closure: {$0.ascent}, loopCount: k, closureNum: 290)
+		setMinMax(&overEighthMile, &eighthStats.ascentRate, closure: {$0.ascentSpeed}, loopCount: k, closureNum: 291)
+		setMinMax(&overEighthMile, &eighthStats.descent, closure: {$0.descent}, loopCount: k, closureNum: 292)
+		setMinMax(&overEighthMile, &eighthStats.descentRate, closure: {$0.descentSpeed}, loopCount: k, closureNum: 293)
+																				// calculate  Min/Max statistics for all legs in the over mile collection (there is should only be one entry here)
+		setMinMax(&overMile, &mileStats.grade, closure: {$0.grade}, loopCount: k, closureNum: 295)
+		setMinMax(&overMile, &mileStats.speed, closure: {$0.trailSpeed}, loopCount: k, closureNum: 296)
+		setMinMax(&overMile, &mileStats.ascent, closure: {$0.ascent}, loopCount: k, closureNum: 297)
+		setMinMax(&overMile, &mileStats.ascentRate, closure: {$0.ascentSpeed}, loopCount: k, closureNum: 298)
+		setMinMax(&overMile, &mileStats.descent, closure: {$0.descent}, loopCount: k, closureNum: 299)
+		setMinMax(&overMile, &mileStats.descentRate, closure: {$0.descentSpeed}, loopCount: k,closureNum: 300)
+		
+																				//  caclulate partial sum averages for Rates
+		avgAscentRateMile = ((avgAscentRateMile * Double(k)) + overMile.map({$0.ascentSpeed}).reduce(0,max)) / Double(k+1)
+		avgDescentRateMile = ((avgDescentRateMile * Double(k)) + overMile.map({$0.descentSpeed}).reduce(0,min)) / Double(k+1)
+		if (k % 100) == 0 {						// print progress indicator
+			//print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
+		}
+	} // loop k
+	overEighthMile.removeAll()													// clear the array
+	overMile.removeAll()														// clear the array
+																				// Populare the current track class with all mileage stats
+	currentTrack.trackSummary.numberOfDatapoints = currentTrack.trkptsList.count
+	currentTrack.trackSummary.eighthMileStats = eighthStats
+	currentTrack.trackSummary.mileStats = mileStats
+	
+	currentTrack.trackSummary.maxGradeMile = currentTrack.trackSummary.mileStats.grade.max.statData
+	currentTrack.trackSummary.maxSpeedMile = currentTrack.trackSummary.mileStats.speed.max.statData
+	currentTrack.trackSummary.maxAscentMile = currentTrack.trackSummary.mileStats.ascent.max.statData
+	currentTrack.trackSummary.avgAscentRateMile = avgAscentRateMile
+	currentTrack.trackSummary.maxAscentRateMile = currentTrack.trackSummary.mileStats.ascentRate.max.statData
+	currentTrack.trackSummary.maxDescentMile = currentTrack.trackSummary.mileStats.descent.max.statData
+	currentTrack.trackSummary.avgDescentRateMile = avgDescentRateMile
+	currentTrack.trackSummary.maxDescentRateMile = currentTrack.trackSummary.mileStats.descentRate.max.statData
+	
+	return
+}
+	
+
+
 class parseGPXXML: NSObject, XMLParserDelegate {
 	
 	
@@ -30,10 +386,11 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 	var currentTrack = Track()
 	var allTracks = [Track]()
 	var currentTrkpt = Trkpt()
-	var parentViewController: MainViewController		// this causes a Runtime warning about this not being in the Main Thread.  Not sure what
+	//*** var parentViewController: MainViewController		// this causes a Runtime warning about this not being in the Main Thread.  Not sure what
 													//	to do about it yet
 	var parseURL: URL
-	var gpxDocumentArray = [Document]()											// holds the documents created when a track is found
+	//*** var gpxDocumentArray = [Document]()											// holds the documents created when a track is found
+	var gpxTrackArray = [Track]()					// changed from Document type to Track type to reflect change to SwiftUI
 	
 	
 	
@@ -46,13 +403,14 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 		self.lastValidTrkptElevationIndex = -1
 		self.lastValidTrkptTimestampIndex = -1
 		self.lastValidEleAndTimeIndex = -1
-		self.parentViewController = MainViewController()
+		//*** self.parentViewController = MainViewController()
 		self.parseURL = URL(string: "blah")!
 		super.init()
 	}
 	
-	func parseURL( gpxURL: URL, parentViewController: MainViewController) {
-		self.parentViewController = parentViewController	// this is where the runtime warning occurs.  Just dispathqueue the progress bar update?
+	//***	func parseURL( gpxURL: URL, parentViewController: MainViewController)
+	func parseURL( gpxURL: URL) -> Bool {
+		//*** self.parentViewController = parentViewController	// this is where the runtime warning occurs.  Just dispathqueue the progress bar update?
 		parseURL = gpxURL
 		let gpxParser = XMLParser(contentsOf: gpxURL)!
 		gpxParser.delegate = self
@@ -63,6 +421,9 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 		if !gpxParser.parse() {
 				// Parser Error
 				print("XML parsing failed at \(gpxParser.lineNumber):\(gpxParser.columnNumber) \nDebug Description: \(gpxParser.debugDescription)")
+				return false
+		} else {
+			return true
 		}
 	}
 	
@@ -254,8 +615,12 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 			if fcShouldExpect == "name" {
 				
 				
-				
-				DispatchQueue.main.async {
+				//***
+				//	This section of code is intende to create another tabbed window to hold newly parsed track summaries.  Dispatch is
+				//		used here to create the window on the main thread to allow for progress indicators to be displayed.  Creating
+				//		the window without Dispatch created a runtime warning/error related to changing the User Interface outside the
+				//		main thread
+				/* DispatchQueue.main.async {
 					if MainViewController.firstGPXParse {
 						let gpxSummaryDocument = self.parentViewController.view.window?.windowController?.document as! Document
 						let viewController = gpxSummaryDocument.windowControllers[0].contentViewController as! MainViewController
@@ -277,7 +642,8 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 						//fatalError("open failed \(error), file: \(filesArray[i])")
 						}
 					}
-				}
+				}*/
+				//***
 			}
 			fcShouldExpect = nullString
 		}
@@ -328,8 +694,9 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 			//print(currentTrack.trkptsList.count)
 
 			calculateTrkProperties(&currentTrack)								//  calculate all the track properties that do not rely on specific mileage informaton
-			//print("examining gpxDocumentArray \(gpxDocumentArray)")
-			createMileageStats(&self.currentTrack, gpxDocumentArray.last)		//  create all the track properties that require information regarding mileage.
+			//print("examining gpxDocumentArray \(gpxTrackArray)")
+			//***createMileageStats(&self.currentTrack, gpxDocumentArray.last)		//  create all the track properties that require information regarding mileage.
+			createMileageStats(&self.currentTrack)		//  create all the track properties that require information regarding mileage.
 																				//	in the case of near empty or very small .gpx files gpxDocumentArray may not have yet
 																				//	been populated yet from the earlier dispatchQueue.  In that case createMileageStats will
 																				//	not attempt to update the window progress bar
