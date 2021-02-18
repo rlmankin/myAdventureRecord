@@ -11,40 +11,47 @@ struct GPXParsingView: View {
 	@State  var selectedURLs : [URL] = []
 	@State private var selectedTab : Int = 1
 	@State private var tabcount : Int = 1
-	@State private var beenParsed: Bool = false
+	@State private var firstParse: Bool = true
+	@ObservedObject private var parseGPX = parseController()
 	
-	func parseAll(urlArray: [URL]) -> [Track] {
+	/* func parseAll(urlArray: [URL]) -> Bool {
 		var trackArray : [Track] = []
-		for url in urlArray {
-			let parseGPX = parseGPXXML()
-			let parseSuccess = parseGPX.parseURL(gpxURL: url)
-			if parseSuccess {
-				for  track in (0 ... parseGPX.allTracks.count - 1) {
-					trackArray.append(parseGPX.allTracks[track])
-				}
+		
+		if firstParse {
+			
+			for url in 0 ... urlArray.count - 1  {
+				
+					parseGPX.parseURL(gpxURL: urlArray[url])
+					print("\(urlArray[url].lastPathComponent), trackCount = \(parseGPX.allTracks.count)")
+					
+				
 			}
 		}
-		return trackArray
-	}
+		return true
+		//return parseGPX.allTracks
+	}*/
 	
 	var body: some View {
 		
 		if !selectedURLs.isEmpty {
 			
-			let parsedTracks = parseAll(urlArray: selectedURLs)
-			var trackcount : Int = 0
 			
-			TabView(selection: $selectedTab) {
-				ForEach (0 ... parsedTracks.count - 1, id:\.self)
-					{ track in
-							let header = parsedTracks[track].header
-							Text( parsedTracks[track].print(true))
-								.font(.footnote)
-								.tag(track)
-								.tabItem { Text("\(parsedTracks[track].header)")}
-									.font(.caption)
+			if parseGPX.parsedTracks.count != 0 {
+				TabView {
+					ForEach( 0 ... parseGPX.parsedTracks.count - 1, id:\.self) {track in
+						VStack {
+							Text("\(parseGPX.parsedTracks[track].header)+ \(track)")
+							Text(parseGPX.parsedTracks[track].print(true))
+						}
+						.font(.footnote)
+						.tag(track)
+						.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
+							.font(.caption)
 					}
+					
+				}
 			}
+			
 		} else {
 			Text("")
 				.fileImporter(isPresented: .constant(true),
@@ -52,9 +59,11 @@ struct GPXParsingView: View {
 									 allowsMultipleSelection: true)
 						   {result in
 							   do {
-								   let fileURLs = try result.get()
-								   selectedURLs = fileURLs
-								   print(selectedURLs)
+								   	let fileURLs = try result.get()
+								  	 selectedURLs = fileURLs
+								  	 print(selectedURLs)
+								  	 let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)
+									firstParse = false
 							   } catch {
 								   print("Fail")
 							   }

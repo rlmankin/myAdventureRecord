@@ -323,7 +323,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 			}
 			//print("k: \(k), j: \(j), k.latitude \(trkPtList[k].latitude), j.latitude \(trkPtListJ[j].latitude), legValidDistance: \(legValidDistance)")
 			if (j % 100) == 0 {
-				//print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
+				print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
 			}
 		} // loop j
 		
@@ -346,7 +346,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 		avgAscentRateMile = ((avgAscentRateMile * Double(k)) + overMile.map({$0.ascentSpeed}).reduce(0,max)) / Double(k+1)
 		avgDescentRateMile = ((avgDescentRateMile * Double(k)) + overMile.map({$0.descentSpeed}).reduce(0,min)) / Double(k+1)
 		if (k % 100) == 0 {						// print progress indicator
-			//print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
+			print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
 		}
 	} // loop k
 	overEighthMile.removeAll()													// clear the array
@@ -370,8 +370,9 @@ func createMileageStats(_ currentTrack: inout Track) {
 	
 
 
-class parseGPXXML: NSObject, XMLParserDelegate {
+class parseGPXXML: NSObject, XMLParserDelegate{
 	
+
 	
 	
 	var numCalls : Int								// Dictionary that contains the overall summary stats of the track
@@ -410,21 +411,35 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 	
 	//***	func parseURL( gpxURL: URL, parentViewController: MainViewController)
 	func parseURL( gpxURL: URL) -> Bool {
-		//*** self.parentViewController = parentViewController	// this is where the runtime warning occurs.  Just dispathqueue the progress bar update?
-		parseURL = gpxURL
-		let gpxParser = XMLParser(contentsOf: gpxURL)!
-		gpxParser.delegate = self
-		gpxParser.shouldReportNamespacePrefixes = true
-		gpxParser.shouldProcessNamespaces = true
+		var returnValue: Bool = false
+		var parserSuccess: Bool = false
+		let parseQueue = DispatchQueue(label: gpxURL.lastPathComponent, attributes: .concurrent)
+		//parseQueue.async {
+			
+			self.parseURL = gpxURL
+			let gpxParser = XMLParser(contentsOf: gpxURL)!
+			gpxParser.delegate = self
+			gpxParser.shouldReportNamespacePrefixes = true
+			gpxParser.shouldProcessNamespaces = true
+			
+			print("parseQueue: parse started for \(gpxURL.lastPathComponent)")
+			parserSuccess = gpxParser.parse()
+			
+			//DispatchQueue.main.async {
+				if !parserSuccess {
+							// Parser Error
+							//print("XML parsing failed at \(gpxParser.lineNumber):\(gpxParser.columnNumber) \nDebug Description: \(gpxParser.debugDescription)")
+							returnValue = false
+				} else {
+					print("parseQueue: parse ended for \(gpxURL.lastPathComponent)")
+					print("self.allTracks.count = \(self.allTracks.count)")
+					let x = self.allTracks
+					returnValue = true
+				}
+			//}
+		//}
 		
-			//let parserSuccess = gpxParser.parse()
-		if !gpxParser.parse() {
-				// Parser Error
-				print("XML parsing failed at \(gpxParser.lineNumber):\(gpxParser.columnNumber) \nDebug Description: \(gpxParser.debugDescription)")
-				return false
-		} else {
-			return true
-		}
+		return returnValue
 	}
 	
 	private func processElement(elementName: String,
@@ -471,12 +486,12 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 	
 	
 	func parserDidStartDocument(_ parser: XMLParser) {
-		print("xml parsing started: \(parseURL.absoluteString.removingPercentEncoding ?? "")")
+		print("xml parsing started: \(parseURL.lastPathComponent)")
 	}
 	
 	func parserDidEndDocument(_ parser: XMLParser) {
 
-		print("xml parsing reached end of document")
+		print("xml parsing documentEnd:\(parseURL.lastPathComponent)")
 	}
 	
 	//	Process Starting Elements.  Those with a < elementName> XML tag  ********************************************
@@ -669,7 +684,7 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 					//print("unexpected foundCharacters in 'time' '\(foundCharacters)'")
 				}
 			default :
-				print("unexpected characters in '\(fcShouldExpect)': '\(foundCharacters)'")
+				print(" unexpected characters in '\(fcShouldExpect)': '\(foundCharacters)': file: \(parseURL.lastPathComponent)")
 			}
 		}
 		//print("foundCharacters: '\(foundCharacters)'")
@@ -695,7 +710,7 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 
 			calculateTrkProperties(&currentTrack)								//  calculate all the track properties that do not rely on specific mileage informaton
 			//print("examining gpxDocumentArray \(gpxTrackArray)")
-			//***createMileageStats(&self.currentTrack, gpxDocumentArray.last)		//  create all the track properties that require information regarding mileage.
+		
 			createMileageStats(&self.currentTrack)		//  create all the track properties that require information regarding mileage.
 																				//	in the case of near empty or very small .gpx files gpxDocumentArray may not have yet
 																				//	been populated yet from the earlier dispatchQueue.  In that case createMileageStats will
@@ -706,7 +721,10 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 			} else {
 				self.parentViewController.doHikingDbAlert(message: "createMileageStats called with nil Document")
 			}*/
-			allTracks.append(currentTrack)										//	add the current track to the all tracks array
+			DispatchQueue.main.async {
+				print("header[\(self.allTracks.count)] = \(self.currentTrack.header)")
+				self.allTracks.append(self.currentTrack)										//	add the current track to the all tracks array
+			}
 			
 			
 			//currentTrack.print()
@@ -720,7 +738,7 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 			//		it may have .elevation and .timeStamp populated as well.  It is now time to populate the remainder of the trackpoint structure
 			//	To fully populate the trackpoint I need to know the last valid elevation trackpoint index and the last valid distance trackpoint index.
 			//	The question is "where to I set those variables?
-			
+			//print("\(Thread.current)")
 			populateTrkptStructures()
 			updateLastValidIndexPointers()
 			currentTrack.trkptsList.append(currentTrkpt)						// 	add the current trackpoint to the track point lis
@@ -751,4 +769,33 @@ class parseGPXXML: NSObject, XMLParserDelegate {
 	
 	
 }
+
+class parseController:  ObservableObject {
+	
+	@Published var parsedTracks : [Track]
+	
+	init() {
+		parsedTracks = []
+	}
+	
+	
+	func parseGpxFileList (_ filesArray: [URL]) -> Bool {					// filesArray contains a list of all URLs requested to be parsed.
+																			// parseGpxFileList currently always returns true
+		for i in 0 ... filesArray.count-1 {
+			let parseQueue = DispatchQueue(label: filesArray[i].lastPathComponent, attributes: .concurrent)
+			parseQueue.async {
+				let myparsegpxxml = parseGPXXML()
+				let parseSuccess = myparsegpxxml.parseURL(gpxURL: filesArray[i])
+				DispatchQueue.main.async {
+					if parseSuccess {
+						self.parsedTracks += myparsegpxxml.allTracks
+					}
+				}
+			}
+		}
+		return true
+	}
+}
+
+
 

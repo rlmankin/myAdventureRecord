@@ -76,7 +76,7 @@ struct Track: Codable, Hashable, Identifiable{																	// the structure 
 	
 	init () {
 		self.trkIndex = 0
-		self.header = nullString
+		self.header = "init - header set null" //nullString
 		self.trkptsList.removeAll()
 		self.trackSummary = TrkSummaryStats()
 		self.trackURLString = nullString
