@@ -409,7 +409,7 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 		super.init()
 	}
 	
-	//***	func parseURL( gpxURL: URL, parentViewController: MainViewController)
+	//	func parseURL( gpxURL: URL, parentViewController: MainViewController)
 	func parseURL( gpxURL: URL) -> Bool {
 		var returnValue: Bool = false
 		var parserSuccess: Bool = false
@@ -422,7 +422,7 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 			gpxParser.shouldReportNamespacePrefixes = true
 			gpxParser.shouldProcessNamespaces = true
 			
-			print("parseQueue: parse started for \(gpxURL.lastPathComponent)")
+			//print("parseQueue: parse started for \(gpxURL.lastPathComponent)")
 			parserSuccess = gpxParser.parse()
 			
 			//DispatchQueue.main.async {
@@ -431,7 +431,7 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 							//print("XML parsing failed at \(gpxParser.lineNumber):\(gpxParser.columnNumber) \nDebug Description: \(gpxParser.debugDescription)")
 							returnValue = false
 				} else {
-					print("parseQueue: parse ended for \(gpxURL.lastPathComponent)")
+					//print("parseQueue: parse ended for \(gpxURL.lastPathComponent)")
 					print("self.allTracks.count = \(self.allTracks.count)")
 					let x = self.allTracks
 					returnValue = true
@@ -700,35 +700,19 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 								//	the currentTrack structure and change the state of elementsBeingProcessed.
 					// This is also the time to generate all the tracks vital statistics
 						
-			if let tempname = currentTrack.garminSummaryStats["name"] {						// put the track name into the track header
+			if let tempname = currentTrack.garminSummaryStats["name"] {
+				// put the track name into the track header
 				currentTrack.header = tempname
 				if tempname.contains("\n") {
 					currentTrack.header = " "
 				}
 			}
-			//print(currentTrack.trkptsList.count)
-
+			
 			calculateTrkProperties(&currentTrack)								//  calculate all the track properties that do not rely on specific mileage informaton
-			//print("examining gpxDocumentArray \(gpxTrackArray)")
-		
-			createMileageStats(&self.currentTrack)		//  create all the track properties that require information regarding mileage.
-																				//	in the case of near empty or very small .gpx files gpxDocumentArray may not have yet
-																				//	been populated yet from the earlier dispatchQueue.  In that case createMileageStats will
-																				//	not attempt to update the window progress bar
-			/*if let validgpxDocument = gpxDocumentArray.last {
-				createMileageStats(&self.currentTrack, validgpxDocument)		//  create all the track properties that require information regarding mileage.
-																				//	pass validegpxDocument to enable progress bar is updated.  Really only need viewController
-			} else {
-				self.parentViewController.doHikingDbAlert(message: "createMileageStats called with nil Document")
-			}*/
-			DispatchQueue.main.async {
-				print("header[\(self.allTracks.count)] = \(self.currentTrack.header)")
-				self.allTracks.append(self.currentTrack)										//	add the current track to the all tracks array
-			}
-			
-			
-			//currentTrack.print()
-
+			createMileageStats(&self.currentTrack)								//  create all the track properties that require information regarding mileage.
+					//	in the case of near empty or very small .gpx files gpxDocumentArray may not have yet been populated yet from the earlier dispatchQueue.
+					//	In that case createMileageStats will not attempt to update the window progress bar add the current track to the all tracks array
+			self.allTracks.append(self.currentTrack)										//	add the current track to the all tracks array
 			currentTrack.clean()												// 	clean up and empty the current track variable
 			elementsBeingProcessed.trk = false									// 	since we're done, clear processing flag
 		case "trkseg" :
@@ -755,12 +739,6 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 			elementsBeingProcessed.other = false
 			// if the elementName is "name" then I know I have a track name and could populate the document title with the name of the track
 		}
-		
-		/*//print("didEndElement Calls > \(numCalls)")
-		print("didEndElement: \(elementName)")
-		//print("namespaceURI: \(namespaceURI!)")
-		print("qualifiedName: \(qName!)\n\n")*/
-		
 	}
 	
 	func updateLastValidIndexPointers () {
