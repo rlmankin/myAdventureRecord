@@ -165,11 +165,11 @@
 			isa = PBXGroup;
 			children = (
 				EE87FB4825CB742E00BA5BA0 /* Main.storyboard */,
-				EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */,
 				EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */,
 				EE87FAC325CB5DA400BA5BA0 /* ContentView.swift */,
 				EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */,
 				EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */,
+				EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */,
 				EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */,
 				EE87FAFF25CB5E0400BA5BA0 /* NavigationPrimary.swift */,
 				EE87FAD325CB5E0300BA5BA0 /* DataStructures */,

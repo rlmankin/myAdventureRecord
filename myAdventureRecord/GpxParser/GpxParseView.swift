@@ -13,44 +13,61 @@ struct GPXParsingView: View {
 	@State private var tabcount : Int = 1
 	@State private var firstParse: Bool = true
 	@ObservedObject private var parseGPX = parseController()
+	private var tabcontent: String = "Working ..."
 	
-	/* func parseAll(urlArray: [URL]) -> Bool {
-		var trackArray : [Track] = []
-		
-		if firstParse {
-			
-			for url in 0 ... urlArray.count - 1  {
-				
-					parseGPX.parseURL(gpxURL: urlArray[url])
-					print("\(urlArray[url].lastPathComponent), trackCount = \(parseGPX.allTracks.count)")
-					
-				
-			}
+	func createTabContent(validStat: Bool, trackString: String, index: Int) -> String {
+		if validStat {
+			return "Working ..."
+		} else {
+			return trackString
 		}
-		return true
-		//return parseGPX.allTracks
-	}*/
+	}
 	
 	var body: some View {
 		
 		if !selectedURLs.isEmpty {
 			
 			
-			if parseGPX.parsedTracks.count != 0 {
-				TabView {
-					ForEach( 0 ... parseGPX.parsedTracks.count - 1, id:\.self) {track in
-						VStack {
-							Text("\(parseGPX.parsedTracks[track].header)+ \(track)")
-							Text(parseGPX.parsedTracks[track].print(true))
+			
+			if parseGPX.numberOfTracks != 0 {
+				TabView (selection: $selectedTab) {
+					if parseGPX.parsedTracks.count != 0 {
+						ForEach( 0 ... parseGPX.parsedTracks.count - 1, id:\.self) {track in
+							if parseGPX.parsedTracks[track].validTrkptsForStatistics.isEmpty {
+								
+								ProgressView()
+									.font(.footnote)
+									.tag(track)
+									.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
+									.font(.caption)
+							} else {
+								Text(parseGPX.parsedTracks[track].print(true))
+									.font(.footnote)
+									.tag(track)
+									.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
+									.font(.caption)
+							}
+							
+							/*VStack {
+								
+								Text(createTabContent(
+											validStat: parseGPX.parsedTracks[track].validTrkptsForStatistics.isEmpty,
+											trackString: parseGPX.parsedTracks[track].print(true),
+											index: track)
+								)
+								
+							}
+							.font(.footnote)
+							.tag(track)
+							.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
+							.font(.caption)*/
+							
 						}
-						.font(.footnote)
-						.tag(track)
-						.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
-							.font(.caption)
 					}
 					
 				}
 			}
+			
 			
 		} else {
 			Text("")

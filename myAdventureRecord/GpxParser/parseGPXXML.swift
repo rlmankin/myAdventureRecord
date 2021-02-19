@@ -13,6 +13,7 @@
 //		to a SwiftUI framework.  Assumption is to remove all document based elements and replace with an 'appropriate' SwiftUI construct
 import Foundation
 import CoreLocation
+import SwiftUI
 
 
 //***  Comment flag for items commented out from original file
@@ -392,6 +393,7 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 	var parseURL: URL
 	//*** var gpxDocumentArray = [Document]()											// holds the documents created when a track is found
 	var gpxTrackArray = [Track]()					// changed from Document type to Track type to reflect change to SwiftUI
+	var withStats : Bool
 	
 	
 	
@@ -406,38 +408,34 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 		self.lastValidEleAndTimeIndex = -1
 		//*** self.parentViewController = MainViewController()
 		self.parseURL = URL(string: "blah")!
+		self.withStats = true
 		super.init()
 	}
 	
 	//	func parseURL( gpxURL: URL, parentViewController: MainViewController)
-	func parseURL( gpxURL: URL) -> Bool {
-		var returnValue: Bool = false
+	func parseURL( gpxURL: URL, withStats: Bool) -> Int {										// returns number of tracks in a URL
+		var returnValue: Int
 		var parserSuccess: Bool = false
-		let parseQueue = DispatchQueue(label: gpxURL.lastPathComponent, attributes: .concurrent)
-		//parseQueue.async {
 			
-			self.parseURL = gpxURL
-			let gpxParser = XMLParser(contentsOf: gpxURL)!
-			gpxParser.delegate = self
-			gpxParser.shouldReportNamespacePrefixes = true
-			gpxParser.shouldProcessNamespaces = true
+		self.withStats = withStats
+		self.parseURL = gpxURL
+		let gpxParser = XMLParser(contentsOf: gpxURL)!
+		gpxParser.delegate = self
+		gpxParser.shouldReportNamespacePrefixes = true
+		gpxParser.shouldProcessNamespaces = true
+		
+		//print("parseQueue: parse started for \(gpxURL.lastPathComponent)")
+		parserSuccess = gpxParser.parse()
+		if !parserSuccess {
+			// Parser Error
+			//print("XML parsing failed at \(gpxParser.lineNumber):\(gpxParser.columnNumber) \nDebug Description: \(gpxParser.debugDescription)")
+			returnValue = 0
+		} else {
+			//print("parseQueue: parse ended for \(gpxURL.lastPathComponent)")
+			print("self.allTracks.count = \(self.allTracks.count)")
+			returnValue = self.allTracks.count
+		}
 			
-			//print("parseQueue: parse started for \(gpxURL.lastPathComponent)")
-			parserSuccess = gpxParser.parse()
-			
-			//DispatchQueue.main.async {
-				if !parserSuccess {
-							// Parser Error
-							//print("XML parsing failed at \(gpxParser.lineNumber):\(gpxParser.columnNumber) \nDebug Description: \(gpxParser.debugDescription)")
-							returnValue = false
-				} else {
-					//print("parseQueue: parse ended for \(gpxURL.lastPathComponent)")
-					print("self.allTracks.count = \(self.allTracks.count)")
-					let x = self.allTracks
-					returnValue = true
-				}
-			//}
-		//}
 		
 		return returnValue
 	}
@@ -629,6 +627,9 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 			currentTrack.garminSummaryStats[fcShouldExpect] = foundCharacters
 			if fcShouldExpect == "name" {
 				
+				// interim step to open tabView when "name" of track is found
+				self.currentTrack.header = foundCharacters						// header gets the "name" of the treack
+				self.allTracks.append(self.currentTrack)						// addend that to allTracks.  Need a way to publish to the View
 				
 				//***
 				//	This section of code is intende to create another tabbed window to hold newly parsed track summaries.  Dispatch is
@@ -708,11 +709,17 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 				}
 			}
 			
-			calculateTrkProperties(&currentTrack)								//  calculate all the track properties that do not rely on specific mileage informaton
-			createMileageStats(&self.currentTrack)								//  create all the track properties that require information regarding mileage.
+			if withStats {
+				calculateTrkProperties(&currentTrack)								//  calculate all the track properties that do not rely on specific mileage informaton
+				createMileageStats(&self.currentTrack)								//  create all the track properties that require information regarding mileage.
+			}
 					//	in the case of near empty or very small .gpx files gpxDocumentArray may not have yet been populated yet from the earlier dispatchQueue.
 					//	In that case createMileageStats will not attempt to update the window progress bar add the current track to the all tracks array
-			self.allTracks.append(self.currentTrack)										//	add the current track to the all tracks array
+			if self.allTracks.count != 0 {
+				self.allTracks[self.allTracks.endIndex - 1] = self.currentTrack
+			} else {
+				self.allTracks[0] = self.currentTrack
+			}//	add the current track to the all tracks array
 			currentTrack.clean()												// 	clean up and empty the current track variable
 			elementsBeingProcessed.trk = false									// 	since we're done, clear processing flag
 		case "trkseg" :
@@ -751,22 +758,44 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 class parseController:  ObservableObject {
 	
 	@Published var parsedTracks : [Track]
+	@Published var numberOfTracks : Int
 	
 	init() {
 		parsedTracks = []
+		numberOfTracks = 0
 	}
 	
 	
 	func parseGpxFileList (_ filesArray: [URL]) -> Bool {					// filesArray contains a list of all URLs requested to be parsed.
 																			// parseGpxFileList currently always returns true
 		for i in 0 ... filesArray.count-1 {
+			
+				let myparsegpxxml = parseGPXXML()
+				let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: false)
+				self.numberOfTracks += parseNumTracks
+				if parseNumTracks != 0 {
+				self.parsedTracks += myparsegpxxml.allTracks
+			}
+				
+			}
+		print("firstParse number of tracks - \(self.numberOfTracks)")
+		for i in (0 ..< self.numberOfTracks) {
+			print("header[\(i)] = \(self.parsedTracks[i].header)")
+		}
+		
+		for i in 0 ... filesArray.count-1 {
 			let parseQueue = DispatchQueue(label: filesArray[i].lastPathComponent, attributes: .concurrent)
 			parseQueue.async {
 				let myparsegpxxml = parseGPXXML()
-				let parseSuccess = myparsegpxxml.parseURL(gpxURL: filesArray[i])
+				let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: true)
 				DispatchQueue.main.async {
-					if parseSuccess {
-						self.parsedTracks += myparsegpxxml.allTracks
+					if parseNumTracks != 0 {
+						for track in (0 ... parseNumTracks - 1) {
+							if let parseHeaderIndex = self.parsedTracks.firstIndex(where: {$0.header == myparsegpxxml.allTracks[track].header}) {
+								self.parsedTracks[parseHeaderIndex] = myparsegpxxml.allTracks[track]
+							}
+						}
+						//self.parsedTracks += myparsegpxxml.allTracks
 					}
 				}
 			}
