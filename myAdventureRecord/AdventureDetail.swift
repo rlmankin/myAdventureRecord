@@ -122,7 +122,7 @@ struct AdventureDetail: View {
 					Text("Speed")})
 			SummaryTab(adventure: adventure)
 				.tabItem({
-					Image(systemName: "charr.bar.fill")
+					Image(systemName: "chart.bar.fill")
 					Text("Summary")
 				})
 			

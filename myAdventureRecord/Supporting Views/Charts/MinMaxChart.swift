@@ -68,7 +68,7 @@ struct MinMaxChart: View {
 						GainTriangleView(readerHeight: readerHeight, startXOffset: startXOffset, endXOffset: endXOffset, startYHeight: startYHeight, endYHeight: endYHeight, distX: distX, distY: distY)
 			
 			// draw the line for the statistic in question
-			ForEach ((startIndex...endIndex) , id: \.self) { index in
+			ForEach ((startIndex + 1...endIndex) , id: \.self) { index in
 				let trkpt = track.trkptsList[index]
 				Path { p in
 					// x-axis offsets

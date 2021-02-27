@@ -15,41 +15,52 @@ import ImageIO
 
 let adventureData: [Adventure] = loadAdventureData()
 
+func loadAdventureTrack(track: Track) -> Adventure {
+	var adventure = Adventure()
+	adventure.id = track.trkIndex
+	adventure.name = track.header
+	adventure.imageName = "myHikingRecordIcon"
+	adventure.description = track.trackComment
+	adventure.trackData = track
+	adventure.trackData.trkptsList = track.trkptsList
+	print(adventure.name, adventure.id, track.trkIndex, adventure.trackData.trkptsList.count)
+	if adventure.trackData.trkptsList.count != 0 {
+		adventure.coordinates.latitude = adventure.trackData.trkptsList[0].latitude
+		adventure.coordinates.longitude = adventure.trackData.trkptsList[0].longitude
+		
+		adventure.coordinates.maxLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).max()!
+		adventure.coordinates.maxLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).max()!
+		adventure.coordinates.minLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).min()!
+		adventure.coordinates.minLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).min()!
+		adventure.latitudeSpan = CLLocationDegrees( max( abs( adventure.coordinates.latitude - adventure.coordinates.maxLatitude),
+									  abs( adventure.coordinates.latitude - adventure.coordinates.minLatitude)))
+		adventure.longitudeSpan = CLLocationDegrees(max( abs( adventure.coordinates.longitude - adventure.coordinates.maxLongitude),
+									  abs( adventure.coordinates.longitude - adventure.coordinates.minLongitude)))
+	}
+	adventure.hikeDate = {
+		let dateFmt = DateFormatter()
+		dateFmt.timeZone = TimeZone.current
+		dateFmt.dateFormat =  "MMM dd, yyyy"
+		return String(format: "\(dateFmt.string(from: track.trackSummary.startTime!))")
+	}()
+	return adventure
+}
+
 func loadAdventureData() -> [Adventure] {
 	var adventure = Adventure()
 	var adventures = [Adventure]()
 	let sqlHikingData = SqlHikingDatabase()
 	let sqlTrkptsData = SqlTrkptsDatabase()
-	for item in sqlHikingData.tracks {
-		adventure.id = item.trkIndex
-		adventure.name = item.header
-		adventure.imageName = "myHikingRecordIcon"
-		adventure.description = item.trackComment
-		adventure.trackData = item
-		adventure.trackData.trkptsList = sqlTrkptsData.sqlRetrieveTrkptlist(item.trkIndex)
-		print(adventure.name, adventure.id, item.trkIndex, adventure.trackData.trkptsList.count)
-		if adventure.trackData.trkptsList.count != 0 {
-			adventure.coordinates.latitude = adventure.trackData.trkptsList[0].latitude
-			adventure.coordinates.longitude = adventure.trackData.trkptsList[0].longitude
-			
-			adventure.coordinates.maxLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).max()!
-			adventure.coordinates.maxLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).max()!
-			adventure.coordinates.minLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).min()!
-			adventure.coordinates.minLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).min()!
-			adventure.latitudeSpan = CLLocationDegrees( max( abs( adventure.coordinates.latitude - adventure.coordinates.maxLatitude),
-										  abs( adventure.coordinates.latitude - adventure.coordinates.minLatitude)))
-			adventure.longitudeSpan = CLLocationDegrees(max( abs( adventure.coordinates.longitude - adventure.coordinates.maxLongitude),
-										  abs( adventure.coordinates.longitude - adventure.coordinates.minLongitude)))
-		}
-		adventure.hikeDate = {
-			let dateFmt = DateFormatter()
-			dateFmt.timeZone = TimeZone.current
-			dateFmt.dateFormat =  "MMM dd, yyyy"
-			return String(format: "\(dateFmt.string(from: item.trackSummary.startTime!))")
-		}()
+	for var item in sqlHikingData.tracks {
+		//var track = item
+		item.trkptsList = sqlTrkptsData.sqlRetrieveTrkptlist(item.trkIndex)
+		
+		adventure = loadAdventureTrack(track: item)
+
 		adventures.append(adventure)
 		adventure = Adventure()	// reinit the adventure
 	}
+	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
 	return adventures
 }
 //****************

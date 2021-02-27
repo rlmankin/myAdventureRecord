@@ -46,7 +46,6 @@
 		EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */; };
 		EE87FB2425CB5E0500BA5BA0 /* AdventureList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */; };
 		EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */; };
-		EE87FB2725CB5E0500BA5BA0 /* NavigationPrimary.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFF25CB5E0400BA5BA0 /* NavigationPrimary.swift */; };
 		EE87FB3625CB61E800BA5BA0 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE87FB3525CB61E800BA5BA0 /* SQLite.framework */; };
 		EE87FB3725CB61E800BA5BA0 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EE87FB3525CB61E800BA5BA0 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EE87FB3B25CB622B00BA5BA0 /* SQLite.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */; };
@@ -122,7 +121,6 @@
 		EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdventureRow.swift; sourceTree = "<group>"; };
 		EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdventureList.swift; sourceTree = "<group>"; };
 		EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdventureDetail.swift; sourceTree = "<group>"; };
-		EE87FAFF25CB5E0400BA5BA0 /* NavigationPrimary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationPrimary.swift; sourceTree = "<group>"; };
 		EE87FB3025CB61C400BA5BA0 /* SQLite */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = SQLite; path = Carthage/Build/Mac/SQLite.framework/SQLite; sourceTree = "<group>"; };
 		EE87FB3525CB61E800BA5BA0 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/Mac/SQLite.framework; sourceTree = "<group>"; };
 		EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SQLite.framework.dSYM; path = Carthage/Build/Mac/SQLite.framework.dSYM; sourceTree = "<group>"; };
@@ -171,7 +169,6 @@
 				EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */,
 				EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */,
 				EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */,
-				EE87FAFF25CB5E0400BA5BA0 /* NavigationPrimary.swift */,
 				EE87FAD325CB5E0300BA5BA0 /* DataStructures */,
 				EE87FAE125CB5E0300BA5BA0 /* Models */,
 				EE87FAF825CB5E0400BA5BA0 /* Resources */,
@@ -406,7 +403,6 @@
 				EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */,
 				EE87FB1C25CB5E0500BA5BA0 /* DistGrdMainChart.swift in Sources */,
 				EE87FB1E25CB5E0500BA5BA0 /* DistEleMainChart.swift in Sources */,
-				EE87FB2725CB5E0500BA5BA0 /* NavigationPrimary.swift in Sources */,
 				EE87FB0725CB5E0500BA5BA0 /* GlobalConstants.swift in Sources */,
 				EE0BFF7F25CCA303007ACA9D /* AdventureCommands.swift in Sources */,
 				EE87FB0525CB5E0400BA5BA0 /* ParsingStructs.swift in Sources */,
@@ -552,8 +548,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = myAdventureRecord/myAdventureRecord.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"myAdventureRecord/Preview Content\"";
 				DEVELOPMENT_TEAM = YF37JW378F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -572,6 +570,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/Mac/SQLite.framework",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = rlm.myAdventureRecord;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -584,8 +583,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = myAdventureRecord/myAdventureRecord.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"myAdventureRecord/Preview Content\"";
 				DEVELOPMENT_TEAM = YF37JW378F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -604,6 +605,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/Mac/SQLite.framework",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = rlm.myAdventureRecord;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

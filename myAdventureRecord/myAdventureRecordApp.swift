@@ -10,10 +10,12 @@ import SwiftUI
 @main
 struct myAdventureRecordApp: App {
 	@StateObject private var userData = UserData()
+	@StateObject private var parseGPX = parseController()
 	
 	var body: some Scene {
 		WindowGroup {
 			ContentView().environmentObject(userData)
+						 .environmentObject(parseGPX)
 		}
 		.commands {
 			AdventureCommands()

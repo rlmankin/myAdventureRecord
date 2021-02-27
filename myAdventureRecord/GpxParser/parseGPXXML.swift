@@ -369,7 +369,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 	return
 }
 	
-
+//**************************
 
 class parseGPXXML: NSObject, XMLParserDelegate{
 	
@@ -757,13 +757,13 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 
 class parseController:  ObservableObject {
 	
-	@Published var parsedTracks : [Track]
-	@Published var numberOfTracks : Int
+	@Published var parsedTracks : [Track] = []
+	@Published var numberOfTracks : Int = 0
 	
-	init() {
+	/*init() {
 		parsedTracks = []
 		numberOfTracks = 0
-	}
+	}*/
 	
 	
 	func parseGpxFileList (_ filesArray: [URL]) -> Bool {					// filesArray contains a list of all URLs requested to be parsed.
