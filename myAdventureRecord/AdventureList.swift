@@ -59,6 +59,7 @@ struct AdventureList: View {
 											.navigationTitle("parsingView"),
 								isActive: $parseFile) { EmptyView()}
 			}		// end of List work
+			.frame(width: 385)
 			.toolbar {
 				// this toolbaritem / button snippet place a List/dbTable and Parse button in the navigationview's toolbar
 				ToolbarItemGroup (placement: .automatic) {

@@ -28,20 +28,25 @@ struct AdventureRow: View {
 							.foregroundColor(.yellow)
 					}
 					VStack (alignment: .leading) {
+						HStack {
 						 
-						Text(adventure.name)
-						.foregroundColor(.green)
-						.bold()
-						.italic()
-						.truncationMode(.tail)
-						.frame(width: 255, alignment: .leading)
+							Text(adventure.name)
+							.foregroundColor(.green)
+							.bold()
+							.italic()
+							.truncationMode(.tail)
+							.frame(width: 255, alignment: .leading)
+						
+							Image(systemName: "circle.fill")
+								.resizable()
+								.frame(width: 10, height: 10)
+								.foregroundColor(adventure.difficulty)
+						}
 						Text(adventure.trackData.trackComment + "blah")
 							.font(.caption)
 							.opacity(0.625)
 							.truncationMode(.middle)
-				
-					
-					
+							
 					}
 				}
 				
