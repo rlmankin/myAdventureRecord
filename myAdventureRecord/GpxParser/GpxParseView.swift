@@ -40,11 +40,14 @@ struct GPXParsingView: View {
 									.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
 									.font(.caption)
 							} else {
-								Text(parseGPX.parsedTracks[track].print(true))
-									.font(.footnote)
+								AdventureDetail(adventure: loadAdventureTrack(track: parseGPX.parsedTracks[track]))
 									.tag(track)
 									.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
-									.font(.caption)
+								//Text(parseGPX.parsedTracks[track].print(true))
+								//	.font(.footnote)
+								//	.tag(track)
+								//	.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
+								//	.font(.caption)
 							}
 						}
 					}
@@ -74,26 +77,6 @@ struct GPXParsingView: View {
 			} else {
 				Text(String(parseGPX.numberOfTracks) + String(firstParse))
 			}
-	/*	} else {
-			Text("")
-				.fileImporter(isPresented: .constant(true),
-								allowedContentTypes: [.xml],
-								allowsMultipleSelection: true)
-					{result in
-					   do {
-							let fileURLs = try result.get()
-							 selectedURLs = fileURLs
-							 print(selectedURLs)
-							 let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)
-							firstParse = false
-					   } catch {
-						   print("Fail")
-					   }
-				   }
-		}*/
-			
-		
-		
 	}
 }
 

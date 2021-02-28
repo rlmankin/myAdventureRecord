@@ -15,6 +15,7 @@ struct AdventureList: View {
 	@State private var showingParseDetail : Adventure? = nil		// will contain the adventure data from a parse
 	@State private var parseFile = false							// flag to show if requested to parse a GPX file (true)
 	@State private var firstParse = true
+	@State private var parseFileRequested = false
 	
 	//@State private var selectedURL : URL = URL(string: "nofileselected")!
 	//@State private var tabcount: Int = 1
@@ -47,28 +48,45 @@ struct AdventureList: View {
 		
 			switch (showDBTable, parseFile) {
 				case (false, false) :
-					NavigationView {
-						List  {
-							ForEach(userData.adventures) { adventure in
-								NavigationLink(destination: AdventureDetail(adventure: adventure)) {
-									AdventureRow(adventure: adventure)
-								}.tag(adventure)				}
-						}
-						.toolbar {
-							ToolbarItemGroup (placement: .automatic) {
-								Button("\(showDBTable == true ? "List" : "dbTable")") {
-									showDBTable.toggle()
-								}
-								
-								Button("Parse") {
-									parseFile.toggle()
-									firstParse = true
-									
-								}
+					//if !parseFileRequested {
+						NavigationView {
+							List  {
+								ForEach(userData.adventures) { adventure in
+									NavigationLink(destination: AdventureDetail(adventure: adventure)) {
+										AdventureRow(adventure: adventure)
+									}.tag(adventure)				}
 							}
-						 }
+							.toolbar {
+								ToolbarItemGroup (placement: .automatic) {
+									Button("\(showDBTable == true ? "List" : "dbTable")") {
+										showDBTable.toggle()
+									}
+									
+									Button("Parse") {
+										parseFileRequested.toggle()
+										firstParse = true
+										
+									}
+								}
+							 }
+						}.fileImporter(isPresented: $parseFileRequested,
+									   allowedContentTypes: [.xml],
+											 allowsMultipleSelection: true)
+								 {result in
+									do {
+										 let fileURLs = try result.get()
+										 selectedURLs = fileURLs
+										 parseFile = !selectedURLs.isEmpty
+										 print(selectedURLs)
+										 let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)
+										 firstParse = false
+										 parseFileRequested.toggle()
+								 } catch {
+									 print("Fail")
+								 }
 					}
 				case (true, false) :
+					
 					HikingDBView().toolbar {
 						   ToolbarItem {
 							   
@@ -77,7 +95,7 @@ struct AdventureList: View {
 							   }
 						   
 						   }
-						}
+					}.navigationTitle("tableView")
 				case (false, true) :
 					if firstParse {
 						Text("")
@@ -102,22 +120,27 @@ struct AdventureList: View {
 								ToolbarItem {
 									Button("<Return") {
 										showingParseDetail = nil
+										parseFile = false
+										firstParse = false
+										parseFileRequested = false
 									}
 								}
-							}
+							}.navigationTitle("detailView")
 						} else {
 							GPXParsingView(showingParseDetail: $showingParseDetail, firstParse: $firstParse, parseFile: $parseFile)
 								.toolbar {
 									ToolbarItem (placement: .navigation) {
 										HStack {
 											Button( "<parseBack") {
-												parseFile.toggle()
-												firstParse.toggle()
+												parseFile = false
+												firstParse = false
+												parseFileRequested = false
 											}
 										}
 									
 									}
 								}
+								.navigationTitle("parsingView")
 						}
 			
 						
