@@ -68,27 +68,29 @@ struct MinMaxChart: View {
 						GainTriangleView(readerHeight: readerHeight, startXOffset: startXOffset, endXOffset: endXOffset, startYHeight: startYHeight, endYHeight: endYHeight, distX: distX, distY: distY)
 			
 			// draw the line for the statistic in question
-			ForEach ((startIndex + 1...endIndex) , id: \.self) { index in
-				let trkpt = track.trkptsList[index]
-				Path { p in
-					// x-axis offsets
-					let prevlegDistance = calcLegDistance(index - 1)
-					let currlegDistance = calcLegDistance(index)
-					let prevXOffset = distanceOffset(prevlegDistance, axisWidth: distWidth)
-					let xOffset = distanceOffset(currlegDistance, axisWidth: distWidth)
-					// y-axis offsets
-					let prevYOffset = elevationOffset(self.track.trkptsList[ index - 1].elevation!, yHeight, lowerGridPoint)
-					let currYOffset = elevationOffset(trkpt.elevation!, yHeight, lowerGridPoint)
-					// move to the x,y location of the previous trkpt
-					p.move(to: CGPoint(x: prevXOffset,
-							   y: readerHeight - prevYOffset))
-					// draw line to current trkpoint x,y location
-					p.addLine(to: CGPoint(x: xOffset,
-								  y: readerHeight - currYOffset))
-				}.stroke(color,
-						 style: StrokeStyle(lineWidth: 2))
-				 .offset(x:30, y:0)
-				
+			if startIndex + 1 <= endIndex {
+				ForEach ((startIndex + 1...endIndex) , id: \.self) { index in
+					let trkpt = track.trkptsList[index]
+					Path { p in
+						// x-axis offsets
+						let prevlegDistance = calcLegDistance(index - 1)
+						let currlegDistance = calcLegDistance(index)
+						let prevXOffset = distanceOffset(prevlegDistance, axisWidth: distWidth)
+						let xOffset = distanceOffset(currlegDistance, axisWidth: distWidth)
+						// y-axis offsets
+						let prevYOffset = elevationOffset(self.track.trkptsList[ index - 1].elevation!, yHeight, lowerGridPoint)
+						let currYOffset = elevationOffset(trkpt.elevation!, yHeight, lowerGridPoint)
+						// move to the x,y location of the previous trkpt
+						p.move(to: CGPoint(x: prevXOffset,
+								   y: readerHeight - prevYOffset))
+						// draw line to current trkpoint x,y location
+						p.addLine(to: CGPoint(x: xOffset,
+									  y: readerHeight - currYOffset))
+					}.stroke(color,
+							 style: StrokeStyle(lineWidth: 2))
+					 .offset(x:30, y:0)
+					
+				}
 			}
 		}
     }

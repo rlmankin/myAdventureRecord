@@ -10,148 +10,86 @@ import SwiftUI
 struct AdventureList: View {
 	@EnvironmentObject  var userData: UserData
 	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
-	@State private var selectedAdventure: Adventure?
+	
 	@State private var showDBTable = false							// flag to show the SQL database table (true), or not (false)
-	@State private var showingParseDetail : Adventure? = nil		// will contain the adventure data from a parse
+	//@State private var showingParseDetail : Adventure? = nil		// will contain the adventure data from a parse
 	@State private var parseFile = false							// flag to show if requested to parse a GPX file (true)
-	@State private var firstParse = true
 	@State private var parseFileRequested = false
-	
-	//@State private var selectedURL : URL = URL(string: "nofileselected")!
-	//@State private var tabcount: Int = 1
-	//@State private var selectedTab : Int = 1
-	
-	
-	
-	@State  var selectedURLs : [URL] = []
-	
-	
-	
+	@State private var selectedURLs : [URL] = []
 	
     var body: some View {
 		
-		Group {
-			HStack {
-				Text(String(showDBTable))
-				Text(String(parseFile))
-				Text(String(userData.adventures.count))
-				Text(String(firstParse))
-				if showingParseDetail == nil {
-					Text("nil")
-				} else {
-					Text(showingParseDetail!.name)
+		NavigationView {
+			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
+			List  {
+				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
+				//	detail view (right pane)
+				ForEach(userData.adventures) { adventure in
+					NavigationLink(destination: AdventureDetail(adventure: adventure)) {
+						AdventureRow(adventure: adventure)
+					}.tag(adventure)
 				}
-				
-	
-			}
-		
-		
-			switch (showDBTable, parseFile) {
-				case (false, false) :
-					//if !parseFileRequested {
-						NavigationView {
-							List  {
-								ForEach(userData.adventures) { adventure in
-									NavigationLink(destination: AdventureDetail(adventure: adventure)) {
-										AdventureRow(adventure: adventure)
-									}.tag(adventure)				}
-							}
-							.toolbar {
-								ToolbarItemGroup (placement: .automatic) {
-									Button("\(showDBTable == true ? "List" : "dbTable")") {
-										showDBTable.toggle()
-									}
-									
-									Button("Parse") {
-										parseFileRequested.toggle()
-										firstParse = true
-										
-									}
-								}
-							 }
-						}.fileImporter(isPresented: $parseFileRequested,
-									   allowedContentTypes: [.xml],
-											 allowsMultipleSelection: true)
-								 {result in
-									do {
-										 let fileURLs = try result.get()
-										 selectedURLs = fileURLs
-										 parseFile = !selectedURLs.isEmpty
-										 print(selectedURLs)
-										 let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)
-										 firstParse = false
-										 parseFileRequested.toggle()
-								 } catch {
-									 print("Fail")
-								 }
-					}
-				case (true, false) :
-					
-					HikingDBView().toolbar {
-						   ToolbarItem {
-							   
-							   Button("\(showDBTable == true ? "<dBBack" : "dbTable")") {
-								   showDBTable.toggle()
-							   }
-						   
-						   }
-					}.navigationTitle("tableView")
-				case (false, true) :
-					if firstParse {
-						Text("")
-							.fileImporter(isPresented: .constant(true),
-											allowedContentTypes: [.xml],
-											allowsMultipleSelection: true)
-								{result in
-								   do {
-										let fileURLs = try result.get()
-										selectedURLs = fileURLs
-										print(selectedURLs)
-										let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)
-										firstParse = false
-								   } catch {
-									   print("Fail")
-								   }
-							   }
-							
-					} else {
-						if showingParseDetail != nil {
-							AdventureDetail(adventure: showingParseDetail!).toolbar {
-								ToolbarItem {
-									Button("<Return") {
-										showingParseDetail = nil
-										parseFile = false
-										firstParse = false
-										parseFileRequested = false
-									}
-								}
-							}.navigationTitle("detailView")
-						} else {
-							GPXParsingView(showingParseDetail: $showingParseDetail, firstParse: $firstParse, parseFile: $parseFile)
-								.toolbar {
-									ToolbarItem (placement: .navigation) {
-										HStack {
-											Button( "<parseBack") {
-												parseFile = false
-												firstParse = false
-												parseFileRequested = false
+				//	if the dbTable button is selected, show the database table in the detail view (right pane), but maintain the navigation view list (left pane)
+				NavigationLink(destination: HikingDBView().toolbar {		// display the hikingDBView (dbtable)
+												//  this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar
+												ToolbarItem {
+												   Button("\(showDBTable == true ? "<dBBack" : "dbTable")") {
+													   showDBTable.toggle()		// toggle showDBTable to determine if the dbTable will be displayed.  The
+																				//	navigation link is watching this property for change (isActive below)
+												   }
+												}
 											}
-										}
-									
-									}
-								}
-								.navigationTitle("parsingView")
-						}
-			
+											.navigationTitle("dbTableView"),
+								isActive: $showDBTable)							// isActive: true displays the table, isActive:false make the view disappear
+					{ EmptyView()
+					}.tag("dbTable")											// tag this link with the string "dbTable"
+				//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
+				NavigationLink(destination: GPXParsingView(parseFile: $parseFile)	// display the parsing view (showDetail if requested)
+											.toolbar {
+												//	this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar for parsing.
+												ToolbarItem (placement: .navigation) {
+													HStack {
+														Button( "<parseBack") {	// <parseBack needs to turn off all parsing related flags
+															parseFile = false
+															parseFileRequested = false
+														}
+													}
+												}
+											}
+											.navigationTitle("parsingView"),
+								isActive: $parseFile) { EmptyView()}
+			}		// end of List work
+			.toolbar {
+				// this toolbaritem / button snippet place a List/dbTable and Parse button in the navigationview's toolbar
+				ToolbarItemGroup (placement: .automatic) {
+					Button("\(showDBTable == true ? "List" : "dbTable")") {
+						showDBTable.toggle()
+					}
+					
+					Button("Parse") {
+						parseFileRequested.toggle()
 						
 					}
-				
-				case (true, true) : Text("Error (true,true)")
-			
-			
-			}
-		
+				}
+			 }
 		}
+		// when a parse has been requested, parseFileRequested will be true and the fileImporter dialog will be displayed
+		.fileImporter(isPresented: $parseFileRequested,
+					   allowedContentTypes: [.xml],							//	allow any .xml type.  There is exposure that a non-GPX xml file will be selected
+							 allowsMultipleSelection: true)					//	allow mulitple files to be selected, but not directoies
+				 {result in
+					do {
+							let selectedURLs = try result.get()				//	get the URLs of all the files requested
+							parseFile = !selectedURLs.isEmpty				//	if no files are selected or "cancel" pressed then close the dialog and return to the
+																			//		previous view
+							let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)	// parse all the selected URLs in background
+							parseFileRequested.toggle()						//	turn off parseFileRequested to indicate we have received a set of URLs
+					   } catch {
+						   print("Fail")
+					   }
+				}
+				
+		
 		
 	}
 }
