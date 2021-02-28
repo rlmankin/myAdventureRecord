@@ -79,9 +79,15 @@ struct AdventureDetail: View {
 							.frame(width: 20, height: 20)		// Need frame to keep star small
 							.buttonStyle(PlainButtonStyle())
 						}
-						Text(String(format: "location: %5.3f , %5.3f", adventure.coordinates.latitude,adventure.coordinates.longitude))
-							.font(.headline).italic()
-							.foregroundColor(.secondary)
+						HStack {
+							Image(systemName: "circle.fill")
+								.resizable()
+								.frame(width: 10, height: 10)
+								.foregroundColor(adventure.difficulty)
+							Text(String(format: "location: %5.3f , %5.3f", adventure.coordinates.latitude,adventure.coordinates.longitude))
+								.font(.headline).italic()
+								.foregroundColor(.secondary)
+						}
 						
 					}
 					
