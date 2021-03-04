@@ -39,15 +39,15 @@ struct Adventure: Hashable, Codable, Identifiable {
 	
 	var difficulty : Color {
 		let difficultyScore =  ((trackData.trackSummary.totalAscent * 3.281) * 2 * (trackData.trackSummary.distance/1000)).squareRoot()
-					// from Shenandoah Nation Park Difficulty Rating
+					// from Shenandoah National Park Difficulty Rating
 		switch difficultyScore {
-		case ..<50: return .green
-		case 50 ..< 100: return .blue
-		case 100 ..< 150: return .yellow
-		case 150 ..< 200: return .orange
+		case ..<50: return Color(.green)
+		case 50 ..< 100: return Color(.blue)
+		case 100 ..< 150: return Color(.yellow)
+		case 150 ..< 200: return Color(.orange)
 		
 		default:
-			return .red
+			return Color(.red)
 		}
 	}
 	// future use

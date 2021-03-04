@@ -22,30 +22,39 @@ struct AdventureRow: View {
 				.cornerRadius(4.0)
 			
 			VStack(alignment: .leading) {
-				HStack {
+				HStack (spacing: 2) {
 					if adventure.isFavorite {
 						Image(systemName: "star.fill")
 							.foregroundColor(.yellow)
 					}
 					VStack (alignment: .leading) {
-						HStack {
+						HStack (spacing: 2) {
 						 
 							Text(adventure.name)
 							.foregroundColor(.green)
 							.bold()
 							.italic()
 							.truncationMode(.tail)
-							.frame(width: 255, alignment: .leading)
+							.frame(width: 250, alignment: .leading)
 						
 							Image(systemName: "circle.fill")
 								.resizable()
 								.frame(width: 10, height: 10)
 								.foregroundColor(adventure.difficulty)
+							
+							
+							Text("(\(adventure.trackData.trkptsList.count))")
+								.font(.caption)
+								.frame( alignment: .center)
 						}
-						Text(adventure.trackData.trackComment + "blah")
-							.font(.caption)
-							.opacity(0.625)
-							.truncationMode(.middle)
+						HStack {
+							Text(adventure.hikeDate)
+								.font(.caption)
+							Text(adventure.trackData.trackComment + "blah")
+								.font(.caption)
+								.opacity(0.625)
+								.truncationMode(.middle)
+						}
 							
 					}
 				}
@@ -62,6 +71,6 @@ struct AdventureRow: View {
 
 struct AdventureRow_Previews: PreviewProvider {
     static var previews: some View {
-		AdventureRow(adventure: adventureData[0])
+		AdventureRow(adventure: adventureData[5])
     }
 }

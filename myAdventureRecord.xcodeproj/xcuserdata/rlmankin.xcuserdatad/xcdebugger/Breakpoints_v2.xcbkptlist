@@ -14,8 +14,8 @@
             filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "708"
-            endingLineNumber = "708"
+            startingLineNumber = "713"
+            endingLineNumber = "713"
             landmarkName = "parser(_:didEndElement:namespaceURI:qualifiedName:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "myAdventureRecord/DataStructures/Track.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "798"
-            endingLineNumber = "798"
+            startingLineNumber = "802"
+            endingLineNumber = "802"
             landmarkName = "parseGpxFileList(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "771"
-            endingLineNumber = "771"
+            startingLineNumber = "775"
+            endingLineNumber = "775"
             landmarkName = "parseGpxFileList(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "791"
-            endingLineNumber = "791"
+            startingLineNumber = "795"
+            endingLineNumber = "795"
             landmarkName = "parseGpxFileList(_:)"
             landmarkType = "7">
             <Locations>
@@ -126,8 +126,8 @@
             filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "631"
-            endingLineNumber = "631"
+            startingLineNumber = "636"
+            endingLineNumber = "636"
             landmarkName = "parser(_:foundCharacters:)"
             landmarkType = "7">
             <Locations>
@@ -174,8 +174,8 @@
             filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "781"
-            endingLineNumber = "781"
+            startingLineNumber = "785"
+            endingLineNumber = "785"
             landmarkName = "parseGpxFileList(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -190,8 +190,8 @@
             filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "779"
-            endingLineNumber = "779"
+            startingLineNumber = "783"
+            endingLineNumber = "783"
             landmarkName = "parseGpxFileList(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "786"
-            endingLineNumber = "786"
+            startingLineNumber = "790"
+            endingLineNumber = "790"
             landmarkName = "parseGpxFileList(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -222,8 +222,8 @@
             filePath = "myAdventureRecord/GpxParser/GpxParseView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -461,8 +461,8 @@
             filePath = "myAdventureRecord/GpxParser/GpxParseView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -477,194 +477,10 @@
             filePath = "myAdventureRecord/GpxParser/GpxParseView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "GPXParsingView"
             landmarkType = "14">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "61D4C51E-F7B7-464F-A50D-CC4C67879A80"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "765"
-            endingLineNumber = "765"
-            landmarkName = "parseController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "74927C19-872B-4302-A9E6-206DF2A044F4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "myAdventureRecord/GpxParser/parseGPXXML.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "761"
-            endingLineNumber = "761"
-            landmarkName = "parseController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - f1da439582304515"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "property wrapper backing initializer of myAdventureRecord.parseController.numberOfTracks : Swift.Int"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "761"
-                  endingLineNumber = "761"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - d2add6125b37a568"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.numberOfTracks.getter : Swift.Int"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "761"
-                  endingLineNumber = "761"
-                  offsetFromSymbolStart = "104">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - 1e3fde05459ef104"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.numberOfTracks.setter : Swift.Int"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "761"
-                  endingLineNumber = "761"
-                  offsetFromSymbolStart = "108">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - e765d178954e0692"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.numberOfTracks.modify : Swift.Int"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "52">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - 8413598e8f02a169"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.numberOfTracks.modify : Swift.Int with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "761"
-                  endingLineNumber = "761"
-                  offsetFromSymbolStart = "34">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - 84909ee577d284b7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.$numberOfTracks.getter : Combine.Published&lt;Swift.Int&gt;.Publisher"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "761"
-                  endingLineNumber = "761"
-                  offsetFromSymbolStart = "110">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - 436cc1496a8ce88b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.$numberOfTracks.setter : Combine.Published&lt;Swift.Int&gt;.Publisher"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "761"
-                  endingLineNumber = "761"
-                  offsetFromSymbolStart = "233">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - a5c832d8b367f659"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.$numberOfTracks.modify : Combine.Published&lt;Swift.Int&gt;.Publisher"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/%3Ccompiler-generated%3E"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "53">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - 49db06464cb019f7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.$numberOfTracks.modify : Combine.Published&lt;Swift.Int&gt;.Publisher with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "761"
-                  endingLineNumber = "761"
-                  offsetFromSymbolStart = "17">
-               </Location>
-               <Location
-                  uuid = "74927C19-872B-4302-A9E6-206DF2A044F4 - bdf15866374b513"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "myAdventureRecord.parseController.init() -&gt; myAdventureRecord.parseController"
-                  moduleName = "myAdventureRecord"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/parseGPXXML.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "761"
-                  endingLineNumber = "761"
-                  offsetFromSymbolStart = "307">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -893,8 +709,8 @@
             filePath = "myAdventureRecord/GpxParser/GpxParseView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13"
-            endingLineNumber = "13"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "GPXParsingView"
             landmarkType = "14">
             <Locations>
@@ -1001,8 +817,8 @@
             filePath = "myAdventureRecord/GpxParser/GpxParseView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -1037,6 +853,38 @@
                   offsetFromSymbolStart = "3099">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "921A6EFD-CD4E-49F2-9A6D-B69FA52CF35C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "myAdventureRecord/Supporting Views/DifficultyView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "findColor(difficulty:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C2A73E35-7380-44B4-9335-F26D6B5AB852"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "myAdventureRecord/Supporting Views/DifficultyView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

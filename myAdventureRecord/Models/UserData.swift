@@ -14,7 +14,14 @@ final class	UserData: ObservableObject {
 	func add(_ track: Track) {
 		let adventure = loadAdventureTrack(track: track)
 		self.adventures.append(adventure)
+		self.adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
 		print("adventure count \(self.adventures.count), \(self.adventures[self.adventures.count - 1].name)")
 	}
+	
+	func reload() {
+		adventureData = loadAdventureData()
+		adventures = adventureData
+	}
+	
 	
 }

@@ -275,6 +275,9 @@ func createMileageStats(_ currentTrack: inout Track) {
 	
 	
 	for k in 0 ... (currentTrack.validTrkptsForStatistics.endIndex - 2) {
+		
+		currentTrack.parseProgress = k
+
 		/*DispatchQueue.main.async {												// update the progress bar.  NOTE: the Notification.post is wrapped and dispatched back to
 																				//	the main thread.
 																				//  this is required so that all UI updates are done on the main thread.  Eliminated runTime errors found
@@ -371,7 +374,9 @@ func createMileageStats(_ currentTrack: inout Track) {
 	
 //**************************
 
-class parseGPXXML: NSObject, XMLParserDelegate{
+
+
+class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	
 
 	
@@ -385,7 +390,7 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 	var lastValidEleAndTimeIndex : Int				// The index of the most recent trackpoint to have BOTH a valid elevation & valid timestamp
 	var fcShouldExpect : String
 	var elementsBeingProcessed = ElementProcessingState(value:false)
-	var currentTrack = Track()
+	@Published var currentTrack = Track()
 	var allTracks = [Track]()
 	var currentTrkpt = Trkpt()
 	//*** var parentViewController: MainViewController		// this causes a Runtime warning about this not being in the Main Thread.  Not sure what
@@ -757,24 +762,23 @@ class parseGPXXML: NSObject, XMLParserDelegate{
 
 class parseController:  ObservableObject {
 	
+	
+	
 	@Published var parsedTracks : [Track] = []
 	@Published var numberOfTracks : Int = 0
 	
-	/*init() {
-		parsedTracks = []
-		numberOfTracks = 0
-	}*/
-	
+		
 	
 	func parseGpxFileList (_ filesArray: [URL]) -> Bool {					// filesArray contains a list of all URLs requested to be parsed.
-																			// parseGpxFileList currently always returns true
+		let myparsegpxxml = parseGPXXML()
+		// parseGpxFileList currently always returns true
 		for i in 0 ... filesArray.count-1 {
 			
-				let myparsegpxxml = parseGPXXML()
+				//let myparsegpxxml = parseGPXXML()
 				let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: false)
 				self.numberOfTracks += parseNumTracks
 				if parseNumTracks != 0 {
-				self.parsedTracks += myparsegpxxml.allTracks
+					self.parsedTracks += myparsegpxxml.allTracks
 			}
 				
 			}

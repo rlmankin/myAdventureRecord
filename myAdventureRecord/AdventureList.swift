@@ -30,7 +30,7 @@ struct AdventureList: View {
 					}.tag(adventure)
 				}
 				//	if the dbTable button is selected, show the database table in the detail view (right pane), but maintain the navigation view list (left pane)
-				NavigationLink(destination: HikingDBView().toolbar {		// display the hikingDBView (dbtable)
+				NavigationLink(destination: HikingDBView()/*.toolbar {		// display the hikingDBView (dbtable)
 												//  this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar
 												ToolbarItem {
 												   Button("\(showDBTable == true ? "<dBBack" : "dbTable")") {
@@ -38,8 +38,8 @@ struct AdventureList: View {
 																				//	navigation link is watching this property for change (isActive below)
 												   }
 												}
-											}
-											.navigationTitle("dbTableView"),
+											}*/
+								.navigationTitle(Text("dbTableView").italic()),
 								isActive: $showDBTable)							// isActive: true displays the table, isActive:false make the view disappear
 					{ EmptyView()
 					}.tag("dbTable")											// tag this link with the string "dbTable"
@@ -49,28 +49,33 @@ struct AdventureList: View {
 												//	this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar for parsing.
 												ToolbarItem (placement: .navigation) {
 													HStack {
-														Button( "<parseBack") {	// <parseBack needs to turn off all parsing related flags
-															parseFile = false
-															parseFileRequested = false
-														}
+														Button( action : {
+																	parseFile = false
+																	parseFileRequested = false
+																})
+														{ HStack {
+															Image( systemName: "chevron-left")
+														  	Text( "<return")
+															}
+														}.buttonStyle(DetailButtonStyle())
 													}
 												}
 											}
 											.navigationTitle("parsingView"),
 								isActive: $parseFile) { EmptyView()}
 			}		// end of List work
-			.frame(width: 385)
+			.frame(width: 400)
 			.toolbar {
 				// this toolbaritem / button snippet place a List/dbTable and Parse button in the navigationview's toolbar
 				ToolbarItemGroup (placement: .automatic) {
 					Button("\(showDBTable == true ? "List" : "dbTable")") {
+						userData.reload()
 						showDBTable.toggle()
-					}
+					}.buttonStyle(NavButtonStyle())
 					
 					Button("Parse") {
 						parseFileRequested.toggle()
-						
-					}
+					}.buttonStyle(NavButtonStyle())
 				}
 			 }
 		}

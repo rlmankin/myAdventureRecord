@@ -65,6 +65,7 @@ struct Track: Codable, Hashable, Identifiable{																	// the structure 
 	var id = UUID()
 	var trkIndex: Int								// need to keep around after first parse
 	var header: String					// need to keep around after first parse
+	var parseProgress : Int				// needed for observation of how much of the statistics creation is complete (for ProgressView)
 	var garminSummaryStats = [String: String]()			// need to keep around after first parse
 	var trackSummary: TrkSummaryStats				// need to keep around after first parse
 	var trackURLString : String								// need to keep around after first parse
@@ -77,6 +78,7 @@ struct Track: Codable, Hashable, Identifiable{																	// the structure 
 	init () {
 		self.trkIndex = 0
 		self.header = "init - header set null" //nullString
+		self.parseProgress = 0
 		self.trkptsList.removeAll()
 		self.trackSummary = TrkSummaryStats()
 		self.trackURLString = nullString

@@ -13,7 +13,7 @@ import Foundation
 import SwiftUI
 import ImageIO
 
-let adventureData: [Adventure] = loadAdventureData()
+var adventureData: [Adventure] = loadAdventureData()
 
 func loadAdventureTrack(track: Track) -> Adventure {
 	var adventure = Adventure()
@@ -23,7 +23,7 @@ func loadAdventureTrack(track: Track) -> Adventure {
 	adventure.description = track.trackComment
 	adventure.trackData = track
 	adventure.trackData.trkptsList = track.trkptsList
-	print(adventure.name, adventure.id, track.trkIndex, adventure.trackData.trkptsList.count)
+	//print(adventure.name, adventure.id, track.trkIndex, adventure.trackData.trkptsList.count)
 	if adventure.trackData.trkptsList.count != 0 {
 		adventure.coordinates.latitude = adventure.trackData.trkptsList[0].latitude
 		adventure.coordinates.longitude = adventure.trackData.trkptsList[0].longitude

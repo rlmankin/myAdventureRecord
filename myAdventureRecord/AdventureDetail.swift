@@ -80,10 +80,8 @@ struct AdventureDetail: View {
 							.buttonStyle(PlainButtonStyle())
 						}
 						HStack {
-							Image(systemName: "circle.fill")
-								.resizable()
-								.frame(width: 10, height: 10)
-								.foregroundColor(adventure.difficulty)
+							DifficultyView(hikeDifficulty: adventure.difficulty)
+								.opacity(0.6)
 							Text(String(format: "location: %5.3f , %5.3f", adventure.coordinates.latitude,adventure.coordinates.longitude))
 								.font(.headline).italic()
 								.foregroundColor(.secondary)
