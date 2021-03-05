@@ -672,6 +672,60 @@ class SqlHikingDatabase: NSObject {
 				tempTrack.trackSummary.avgSpeed = key[sqlDbTable.sqlAvgSpeed]
 				tempTrack.trackSummary.avgDescentRate = key[sqlDbTable.sqlAvgDescentRate]
 				
+				tempTrack.trackSummary.eighthMileStats.grade.max.statData = key[sqlDbTable.sqlGradeMaxEighth]
+				tempTrack.trackSummary.eighthMileStats.grade.max.startIndex = key[sqlDbTable.sqlGradeMaxEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.grade.max.endIndex = key[sqlDbTable.sqlGradeMaxEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.grade.min.statData = key[sqlDbTable.sqlGradeMinEighth]
+				tempTrack.trackSummary.eighthMileStats.grade.min.startIndex = key[sqlDbTable.sqlGradeMinEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.grade.min.endIndex = key[sqlDbTable.sqlGradeMinEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.speed.max.statData = key[sqlDbTable.sqlSpeedMaxEighth]
+				tempTrack.trackSummary.eighthMileStats.speed.max.startIndex = key[sqlDbTable.sqlSpeedMaxEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.speed.max.endIndex = key[sqlDbTable.sqlSpeedMaxEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.speed.min.statData = key[sqlDbTable.sqlSpeedMinEighth]
+				tempTrack.trackSummary.eighthMileStats.speed.min.startIndex = key[sqlDbTable.sqlSpeedMinEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.speed.min.endIndex = key[sqlDbTable.sqlSpeedMinEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.ascent.max.statData = key[sqlDbTable.sqlAscentMaxEighth]
+				tempTrack.trackSummary.eighthMileStats.ascent.max.startIndex = key[sqlDbTable.sqlAscentMaxEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.ascent.max.endIndex = key[sqlDbTable.sqlAscentMaxEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.ascent.min.statData = key[sqlDbTable.sqlAscentMinEighth]
+				tempTrack.trackSummary.eighthMileStats.ascent.min.startIndex = key[sqlDbTable.sqlAscentMinEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.ascent.min.endIndex = key[sqlDbTable.sqlAscentMinEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.ascentRate.max.statData = key[sqlDbTable.sqlAscentRateMaxEighth]
+				tempTrack.trackSummary.eighthMileStats.ascentRate.max.startIndex = key[sqlDbTable.sqlAscentRateMaxEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.ascentRate.max.endIndex = key[sqlDbTable.sqlAscentRateMaxEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.ascentRate.min.statData = key[sqlDbTable.sqlAscentRateMinEighth]
+				tempTrack.trackSummary.eighthMileStats.ascentRate.min.startIndex = key[sqlDbTable.sqlAscentRateMinEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.ascentRate.min.endIndex = key[sqlDbTable.sqlAscentRateMinEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.descent.max.statData = key[sqlDbTable.sqlDescentMaxEighth]
+				tempTrack.trackSummary.eighthMileStats.descent.max.startIndex = key[sqlDbTable.sqlDescentMaxEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.descent.max.endIndex = key[sqlDbTable.sqlDescentMaxEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.descent.min.statData = key[sqlDbTable.sqlDescentMinEighth]
+				tempTrack.trackSummary.eighthMileStats.descent.min.startIndex = key[sqlDbTable.sqlDescentMinEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.descent.min.endIndex = key[sqlDbTable.sqlDescentMinEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.descentRate.max.statData = key[sqlDbTable.sqlDescentRateMaxEighth]
+				tempTrack.trackSummary.eighthMileStats.descentRate.max.startIndex = key[sqlDbTable.sqlDescentRateMaxEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.descentRate.max.endIndex = key[sqlDbTable.sqlDescentRateMaxEighthEndIndex]
+				
+				tempTrack.trackSummary.eighthMileStats.descentRate.min.statData = key[sqlDbTable.sqlDescentRateMinEighth]
+				tempTrack.trackSummary.eighthMileStats.descentRate.min.startIndex = key[sqlDbTable.sqlDescentRateMinEighthStartIndex]
+				tempTrack.trackSummary.eighthMileStats.descentRate.min.endIndex = key[sqlDbTable.sqlDescentRateMinEighthEndIndex]
+				
+				
+				
+				
+				
+				
+				
 				tempTrack.trackSummary.mileStats.grade.max.statData = key[sqlDbTable.sqlGradeMaxMile]
 				tempTrack.trackSummary.mileStats.grade.max.startIndex = key[sqlDbTable.sqlGradeMaxMileStartIndex]
 				tempTrack.trackSummary.mileStats.grade.max.endIndex = key[sqlDbTable.sqlGradeMaxMileEndIndex]

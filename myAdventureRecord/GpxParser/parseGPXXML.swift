@@ -806,6 +806,19 @@ class parseController:  ObservableObject {
 		}
 		return true
 	}
+	
+	func parseCommandLineGPX (_ filesArray: [URL]) -> Bool {
+		let myparsegpxxml = parseGPXXML()
+		
+		
+		for i in 0 ... filesArray.count-1 {
+				let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: true)
+					if parseNumTracks != 0 {
+						self.parsedTracks += myparsegpxxml.allTracks
+					}
+		}
+		return true
+	}
 }
 
 
