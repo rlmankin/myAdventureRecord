@@ -14,6 +14,7 @@ struct AdventureList: View {
 	@State private var showDBTable = false							// flag to show the SQL database table (true), or not (false)
 	//@State private var showingParseDetail : Adventure? = nil		// will contain the adventure data from a parse
 	@State private var parseFile = false							// flag to show if requested to parse a GPX file (true)
+	@State private var batchParse = false
 	@State private var parseFileRequested = false
 	@State private var selectedURLs : [URL] = []
 	
@@ -63,6 +64,26 @@ struct AdventureList: View {
 											}
 											.navigationTitle("parsingView"),
 								isActive: $parseFile) { EmptyView()}
+				
+				NavigationLink(destination: BatchParseView()	// display the parsing view (showDetail if requested)
+											.toolbar {
+												//	this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar for parsing.
+												ToolbarItem (placement: .navigation) {
+													HStack {
+														Button( action : {
+																	batchParse = false
+																	parseFileRequested = false
+																})
+														{ HStack {
+															Image( systemName: "chevron-left")
+															Text( "<return")
+															}
+														}.buttonStyle(DetailButtonStyle())
+													}
+												}
+											}
+											.navigationTitle("batchParseView"),
+								isActive: $batchParse) { EmptyView()}
 			}		// end of List work
 			.frame(width: 400)
 			.toolbar {
@@ -75,6 +96,10 @@ struct AdventureList: View {
 					
 					Button("Parse") {
 						parseFileRequested.toggle()
+					}.buttonStyle(NavButtonStyle())
+					
+					Button("batchParse") {
+						batchParse.toggle()
 					}.buttonStyle(NavButtonStyle())
 				}
 			 }

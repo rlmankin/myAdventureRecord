@@ -194,7 +194,7 @@ class SqlHikingDatabase: NSObject {
 		let dbFilePathString = documentHikingDb.getSqlDbFilePath()				// get the path to where the sql database is stored
 		if dbFilePathString != nil {
 			if let tempDbFileHandle = documentHikingDb.sqlDbConnect("\(dbFilePathString! + sqlDbName)") {	// try and form a connection to the sql database returns a Connction?
-				print("\(dbFilePathString! + sqlDbName) connected")
+				//print("\(dbFilePathString! + sqlDbName) connected")
 				sqlDbFileHandle = tempDbFileHandle
 				return documentHikingDb.sqlCreateDbTable()						// create the dbTable, returns Bool (true if table correctly created)
 			} else {
@@ -585,7 +585,7 @@ class SqlHikingDatabase: NSObject {
 						sqlDbTable.sqlGarminMaxDescentRate  <-   track.garminSummaryStats["MaxDescentRate"],
 						sqlDbTable.sqlGarminCalories <-   track.garminSummaryStats["Calories"],
 						sqlDbTable.sqlTrackComment <- nullString))										// initial insert has no comment
-					Swift.print("inserted id: \(rowid)")
+					//Swift.print("inserted id: \(rowid)")
 					//sqlDbFileHandle!.trace( {Swift.print( $0)})
 					return rowid
 				} catch {
@@ -967,7 +967,7 @@ class SqlHikingDatabase: NSObject {
 		let targetDelete = dbTable.filter(sqlDbTable.sqlUniqueID == rowIDExpression)
 		do {
 			if try sqlDbFileHandle!.run(targetDelete.delete()) > 0 {
-				print("row \(rowID) deleted")
+				//print("row \(rowID) deleted")
 				return true
 			} else {
 				print("row \(rowID) not found")

@@ -26,7 +26,7 @@ class SqlTrkptsDatabase: NSObject {
 		super.init()
 		
 		if self.sqlConnectOpenDb() {
-			print("TrkptDB opened successfully in init")
+			//print("TrkptDB opened successfully in init")
 		} else {
 			print("TrkptDB open failed in init")
 		}
@@ -38,7 +38,7 @@ class SqlTrkptsDatabase: NSObject {
 		if dbFilePathString != nil {
 			if let tempDbFileHandle = trkptsDb.sqlDbConnect("\(dbFilePathString! + sqltpDbName)") {
 				// try and form a connection to the sql database returns a Connction?
-				print("\(dbFilePathString! + sqltpDbName) connected")
+				//print("\(dbFilePathString! + sqltpDbName) connected")
 				sqltpDbFileHandle = tempDbFileHandle
 				return trkptsDb.sqlCreateTpTable()
 				// create the dbTable, returns Bool (true if table correctly created)

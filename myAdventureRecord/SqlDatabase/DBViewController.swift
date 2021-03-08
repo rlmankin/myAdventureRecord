@@ -176,7 +176,7 @@ class DBViewController: NSViewController {
 			
 			let trackIdToDelete = sqlHikingDatabase.tracks[i].trkIndex
 			if sqlHikingDatabase.sqlDeleteRecord(trackIdToDelete) {
-				print("delete success")
+				//print("delete success")
 			} else {
 				print("delete failed - retry")
 			}
@@ -355,7 +355,7 @@ extension DBViewController: NSTableViewDelegate {
 		let selectedIndexes = Array(dbTableview.selectedRowIndexes)
 		//print("selection did change ")
         if !selectedIndexes.isEmpty {
-            print("last selected row \(selectedIndexes[0])")
+           // print("last selected row \(selectedIndexes[0])")
         }
 	}
 	

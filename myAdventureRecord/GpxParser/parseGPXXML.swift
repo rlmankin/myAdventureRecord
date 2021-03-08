@@ -327,7 +327,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 			}
 			//print("k: \(k), j: \(j), k.latitude \(trkPtList[k].latitude), j.latitude \(trkPtListJ[j].latitude), legValidDistance: \(legValidDistance)")
 			if (j % 100) == 0 {
-				print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
+				//print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
 			}
 		} // loop j
 		
@@ -350,7 +350,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 		avgAscentRateMile = ((avgAscentRateMile * Double(k)) + overMile.map({$0.ascentSpeed}).reduce(0,max)) / Double(k+1)
 		avgDescentRateMile = ((avgDescentRateMile * Double(k)) + overMile.map({$0.descentSpeed}).reduce(0,min)) / Double(k+1)
 		if (k % 100) == 0 {						// print progress indicator
-			print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
+			//print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
 		}
 	} // loop k
 	overEighthMile.removeAll()													// clear the array
@@ -437,7 +437,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 			returnValue = 0
 		} else {
 			//print("parseQueue: parse ended for \(gpxURL.lastPathComponent)")
-			print("self.allTracks.count = \(self.allTracks.count)")
+			//print("self.allTracks.count = \(self.allTracks.count)")
 			returnValue = self.allTracks.count
 		}
 			
@@ -489,12 +489,12 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	
 	
 	func parserDidStartDocument(_ parser: XMLParser) {
-		print("xml parsing started: \(parseURL.lastPathComponent)")
+		//print("xml parsing started: \(parseURL.lastPathComponent)")
 	}
 	
 	func parserDidEndDocument(_ parser: XMLParser) {
 
-		print("xml parsing documentEnd:\(parseURL.lastPathComponent)")
+		//print("xml parsing documentEnd:\(parseURL.lastPathComponent)")
 	}
 	
 	//	Process Starting Elements.  Those with a < elementName> XML tag  ********************************************
@@ -690,7 +690,9 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 					//print("unexpected foundCharacters in 'time' '\(foundCharacters)'")
 				}
 			default :
-				print(" unexpected characters in '\(fcShouldExpect)': '\(foundCharacters)': file: \(parseURL.lastPathComponent)")
+				
+				//print(" unexpected characters in '\(fcShouldExpect)': '\(foundCharacters)': file: \(parseURL.lastPathComponent)")
+				break
 			}
 		}
 		//print("foundCharacters: '\(foundCharacters)'")
@@ -782,9 +784,9 @@ class parseController:  ObservableObject {
 			}
 				
 			}
-		print("firstParse number of tracks - \(self.numberOfTracks)")
+		//print("firstParse number of tracks - \(self.numberOfTracks)")
 		for i in (0 ..< self.numberOfTracks) {
-			print("header[\(i)] = \(self.parsedTracks[i].header)")
+			//print("header[\(i)] = \(self.parsedTracks[i].header)")
 		}
 		
 		for i in 0 ... filesArray.count-1 {
