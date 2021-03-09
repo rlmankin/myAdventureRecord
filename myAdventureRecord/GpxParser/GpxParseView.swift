@@ -23,7 +23,6 @@ struct GPXParsingView: View {
 	@State  var selectedURLs : [URL] = []
 	@State private var selectedTab : Int = 0
 	@State private var tabInserted: [Bool] = [false]
-	@Binding var parseFile : Bool
 	
 	// simple function to test if the tabInserted[selectedTab] is valid.  Needed due to compiler limitations on type checking
 	func testForValidTab() -> Bool {

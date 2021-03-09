@@ -45,7 +45,7 @@ struct AdventureList: View {
 					{ EmptyView()
 					}.tag("dbTable")											// tag this link with the string "dbTable"
 				//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
-				NavigationLink(destination: GPXParsingView(parseFile: $parseFile)	// display the parsing view (showDetail if requested)
+				NavigationLink(destination: GPXParsingView()	// display the parsing view (showDetail if requested)
 											.toolbar {
 												//	this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar for parsing.
 												ToolbarItem (placement: .navigation) {
@@ -56,7 +56,7 @@ struct AdventureList: View {
 																})
 														{ HStack {
 															Image( systemName: "chevron-left")
-														  	Text( "<return")
+														  	Text( "<preturn")
 															}
 														}.buttonStyle(DetailButtonStyle())
 													}
@@ -72,11 +72,11 @@ struct AdventureList: View {
 													HStack {
 														Button( action : {
 																	batchParse = false
-																	parseFileRequested = false
+																	//parseFileRequested = false
 																})
 														{ HStack {
 															Image( systemName: "chevron-left")
-															Text( "<return")
+															Text( "<bpreturn")
 															}
 														}.buttonStyle(DetailButtonStyle())
 													}
@@ -96,10 +96,12 @@ struct AdventureList: View {
 					
 					Button("Parse") {
 						parseFileRequested.toggle()
+						batchParse = false
 					}.buttonStyle(NavButtonStyle())
 					
 					Button("batchParse") {
 						batchParse.toggle()
+						parseFile = false
 					}.buttonStyle(NavButtonStyle())
 				}
 			 }

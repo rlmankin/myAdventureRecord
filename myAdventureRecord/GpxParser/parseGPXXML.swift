@@ -252,6 +252,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 	var validTrkptsForStatistics = currentTrack.trkptsList
 					.filter({$0.hasValidTimeStamp && $0.hasValidElevation})		//  get only those trackpoints that have a valid elevation and a valid timeStamp
 	let validElevationArray = currentTrack.trkptsList.filter({$0.hasValidElevation})
+	print("\(currentTrack.header) : ")
 	if validTrkptsForStatistics.count < 2 {										// not enough time and elevation trackpoints
 		currentTrack.noValidTimeEle = true
 		//print("not enough TimeAndEle")
@@ -327,7 +328,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 			}
 			//print("k: \(k), j: \(j), k.latitude \(trkPtList[k].latitude), j.latitude \(trkPtListJ[j].latitude), legValidDistance: \(legValidDistance)")
 			if (j % 100) == 0 {
-				//print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
+				print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
 			}
 		} // loop j
 		
@@ -350,7 +351,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 		avgAscentRateMile = ((avgAscentRateMile * Double(k)) + overMile.map({$0.ascentSpeed}).reduce(0,max)) / Double(k+1)
 		avgDescentRateMile = ((avgDescentRateMile * Double(k)) + overMile.map({$0.descentSpeed}).reduce(0,min)) / Double(k+1)
 		if (k % 100) == 0 {						// print progress indicator
-			//print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
+			print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
 		}
 	} // loop k
 	overEighthMile.removeAll()													// clear the array
@@ -399,6 +400,8 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	//*** var gpxDocumentArray = [Document]()											// holds the documents created when a track is found
 	var gpxTrackArray = [Track]()					// changed from Document type to Track type to reflect change to SwiftUI
 	var withStats : Bool
+	var parseStarted : Bool = false
+	var parseEnded : Bool = false
 	
 	
 	
@@ -454,7 +457,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 			garminSummaryStats.contains(elementName) {
 				currentTrack.garminSummaryStats[elementName] = "waitingforfoundCharacters"		//  Should be in the Summary area of the xml (i.e. trk && !trkSeg
 				fcShouldExpect = elementName
-				//print(elementName)
+				print(elementName)
 		}
 		
 		if elementsBeingProcessed.trk &&
@@ -489,12 +492,14 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	
 	
 	func parserDidStartDocument(_ parser: XMLParser) {
-		//print("xml parsing started: \(parseURL.lastPathComponent)")
+		print("xml parsing started: \(parseURL.lastPathComponent)")
+		parseStarted.toggle()
 	}
 	
 	func parserDidEndDocument(_ parser: XMLParser) {
 
-		//print("xml parsing documentEnd:\(parseURL.lastPathComponent)")
+		print("xml parsing documentEnd:\(parseURL.lastPathComponent)")
+		parseEnded.toggle()
 	}
 	
 	//	Process Starting Elements.  Those with a < elementName> XML tag  ********************************************
@@ -691,7 +696,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 				}
 			default :
 				
-				//print(" unexpected characters in '\(fcShouldExpect)': '\(foundCharacters)': file: \(parseURL.lastPathComponent)")
+				print(" unexpected characters in '\(fcShouldExpect)': '\(foundCharacters)': file: \(parseURL.lastPathComponent)")
 				break
 			}
 		}
@@ -809,15 +814,11 @@ class parseController:  ObservableObject {
 		return true
 	}
 	
-	func parseCommandLineGPX (_ filesArray: [URL]) -> Bool {
+	func parseSingleFile (_ file: URL) -> Bool {
 		let myparsegpxxml = parseGPXXML()
-		
-		
-		for i in 0 ... filesArray.count-1 {
-				let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: true)
-					if parseNumTracks != 0 {
-						self.parsedTracks += myparsegpxxml.allTracks
-					}
+		let parseNumTracks = myparsegpxxml.parseURL(gpxURL: file, withStats: true)
+		if parseNumTracks != 0 {
+			self.parsedTracks += myparsegpxxml.allTracks
 		}
 		return true
 	}
