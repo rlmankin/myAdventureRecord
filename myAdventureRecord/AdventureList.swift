@@ -7,7 +7,17 @@
 
 import SwiftUI
 
+struct BPReturnButton: View {
+	var body: some View {
+		HStack {
+			Image( systemName: "chevron-left")
+			Text( "bpreturn ")	//\(String(batchParse))")
+			}
+	}
+}
+
 struct AdventureList: View {
+	
 	@EnvironmentObject  var userData: UserData
 	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
 	
@@ -20,7 +30,9 @@ struct AdventureList: View {
 	
     var body: some View {
 		
-		NavigationView {
+		print("adventureList body")
+		
+		return NavigationView {
 			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
 			List  {
 				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
@@ -31,59 +43,18 @@ struct AdventureList: View {
 					}.tag(adventure)
 				}
 				//	if the dbTable button is selected, show the database table in the detail view (right pane), but maintain the navigation view list (left pane)
-				NavigationLink(destination: HikingDBView()/*.toolbar {		// display the hikingDBView (dbtable)
-												//  this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar
-												ToolbarItem {
-												   Button("\(showDBTable == true ? "<dBBack" : "dbTable")") {
-													   showDBTable.toggle()		// toggle showDBTable to determine if the dbTable will be displayed.  The
-																				//	navigation link is watching this property for change (isActive below)
-												   }
-												}
-											}*/
+				NavigationLink(destination: HikingDBView()
 								.navigationTitle(Text("dbTableView").italic()),
 								isActive: $showDBTable)							// isActive: true displays the table, isActive:false make the view disappear
-					{ EmptyView()
-					}.tag("dbTable")											// tag this link with the string "dbTable"
+					{ EmptyView()}.tag("dbTable")											// tag this link with the string "dbTable"
 				//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
 				NavigationLink(destination: GPXParsingView()	// display the parsing view (showDetail if requested)
-											.toolbar {
-												//	this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar for parsing.
-												ToolbarItem (placement: .navigation) {
-													HStack {
-														Button( action : {
-																	parseFile = false
-																	parseFileRequested = false
-																})
-														{ HStack {
-															Image( systemName: "chevron-left")
-														  	Text( "<preturn")
-															}
-														}.buttonStyle(DetailButtonStyle())
-													}
-												}
-											}
-											.navigationTitle("parsingView"),
-								isActive: $parseFile) { EmptyView()}
+								.navigationTitle("parsingView"),
+							   	isActive: $parseFile) { EmptyView()}.tag("parse")
 				
 				NavigationLink(destination: BatchParseView()	// display the parsing view (showDetail if requested)
-											.toolbar {
-												//	this toolbaritem / button snippet creates a button in the toolbar of the detailview toolbar for parsing.
-												ToolbarItem (placement: .navigation) {
-													HStack {
-														Button( action : {
-																	batchParse = false
-																	//parseFileRequested = false
-																})
-														{ HStack {
-															Image( systemName: "chevron-left")
-															Text( "<bpreturn")
-															}
-														}.buttonStyle(DetailButtonStyle())
-													}
-												}
-											}
-											.navigationTitle("batchParseView"),
-								isActive: $batchParse) { EmptyView()}
+								.navigationTitle("batchParseView"),
+							  	 isActive: $batchParse) { EmptyView()}.tag("batchParse")
 			}		// end of List work
 			.frame(width: 400)
 			.toolbar {
@@ -96,12 +67,13 @@ struct AdventureList: View {
 					
 					Button("Parse") {
 						parseFileRequested.toggle()
-						batchParse = false
+						//batchParse = false
 					}.buttonStyle(NavButtonStyle())
 					
 					Button("batchParse") {
+						print("before: \(batchParse)")
 						batchParse.toggle()
-						parseFile = false
+						print("after: \(batchParse)")
 					}.buttonStyle(NavButtonStyle())
 				}
 			 }

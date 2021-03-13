@@ -22,7 +22,7 @@ struct AdventureDetail: View {
 	var body: some View {
 		
 		
-		ScrollView {
+		ScrollView (.horizontal) {
 			ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom)) {
 					// ZStack for the map and 'open in maps' overlay
 				

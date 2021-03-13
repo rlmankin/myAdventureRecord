@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 let nullString = ""
 let metersperMile = 1609.344
@@ -74,4 +75,39 @@ func roundUptoNearest( nearest: Double, _ x : Double) -> Double {
 }
 func roundDowntoNearest( nearest: Double, _ x : Double) -> Double {
 	return floor(Double(nearest) * Double(Int(x/Double(nearest))))
+}
+
+struct ReturnStruct {
+	enum parseProgress {
+		case notStarted
+		case inProgress
+		case done
+	}
+	
+	
+	var url: URL
+	var creationDate: Date
+	var parseInProgress = parseProgress.notStarted
+	var color: Color {
+		get {
+			switch parseInProgress {
+				case .notStarted : return Color.white
+				case .inProgress : return Color.yellow
+				case .done : return Color.green
+			}
+		}
+	}
+	var numTracks : Int = 0
+	var numTrkpts : [Int] = []
+	var trackRow : [Int] = []
+	var trkptRow : [Int] = []
+	
+	mutating func clean() {
+		numTracks = 0
+		numTrkpts = []
+		trackRow  = []
+		trkptRow  = []
+	}
+	
+	
 }

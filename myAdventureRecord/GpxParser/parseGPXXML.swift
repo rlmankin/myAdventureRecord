@@ -244,15 +244,14 @@ func createMileageStats(_ currentTrack: inout Track) {
 	var avgAscentRateMile = 0.0
 	let progressBarMax = Double(currentTrack.trkptsList.count)					// the maximum value used by the deterministic progress bar in the View
 	let progressBarMin = 0.0													// used by the progressBar
-	let progressBarIncr = 1.0													// used by the progressBar
-	let userInfo = ["min": progressBarMin, "max": progressBarMax, "increment": progressBarIncr]	// dictionary used by Notification.post (see Apple developer documentation)
+	let progressBarIncr = 1.0													// used by the progressBa	let userInfo = ["min": progressBarMin, "max": progressBarMax, "increment": progressBarIncr]	// dictionary used by Notification.post (see Apple developer documentation)
 	
 	
 	//	Sequence through the validTimeAndEleArray to calculate the the distance, gain, and speed for all possible legs
 	var validTrkptsForStatistics = currentTrack.trkptsList
 					.filter({$0.hasValidTimeStamp && $0.hasValidElevation})		//  get only those trackpoints that have a valid elevation and a valid timeStamp
 	let validElevationArray = currentTrack.trkptsList.filter({$0.hasValidElevation})
-	print("\(currentTrack.header) : ")
+	//print("\(currentTrack.header) : ")
 	if validTrkptsForStatistics.count < 2 {										// not enough time and elevation trackpoints
 		currentTrack.noValidTimeEle = true
 		//print("not enough TimeAndEle")
@@ -328,7 +327,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 			}
 			//print("k: \(k), j: \(j), k.latitude \(trkPtList[k].latitude), j.latitude \(trkPtListJ[j].latitude), legValidDistance: \(legValidDistance)")
 			if (j % 100) == 0 {
-				print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
+				//print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
 			}
 		} // loop j
 		
@@ -351,7 +350,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 		avgAscentRateMile = ((avgAscentRateMile * Double(k)) + overMile.map({$0.ascentSpeed}).reduce(0,max)) / Double(k+1)
 		avgDescentRateMile = ((avgDescentRateMile * Double(k)) + overMile.map({$0.descentSpeed}).reduce(0,min)) / Double(k+1)
 		if (k % 100) == 0 {						// print progress indicator
-			print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
+			//print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
 		}
 	} // loop k
 	overEighthMile.removeAll()													// clear the array
@@ -457,7 +456,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 			garminSummaryStats.contains(elementName) {
 				currentTrack.garminSummaryStats[elementName] = "waitingforfoundCharacters"		//  Should be in the Summary area of the xml (i.e. trk && !trkSeg
 				fcShouldExpect = elementName
-				print(elementName)
+				//print(elementName)
 		}
 		
 		if elementsBeingProcessed.trk &&
@@ -552,14 +551,14 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 				elementsBeingProcessed.other = true
 				processElement(elementName: elementName, qName: qName, attributes: attributes)
 		}
-		/*print("\n\ndidStartElement Calls > \(numCalls)")
-		print("didStartElement: \(elementName)")
-		print("namespaceURI: \(namespaceURI!)")
-		print("qualifiedName: \(qName!)")
-		for (key, value) in attributes {
+		//print("\n\ndidStartElement Calls > \(numCalls)")
+		//print("didStartElement: \(elementName)")
+		//print("namespaceURI: \(namespaceURI!)")
+		//print("qualifiedName: \(qName!)")
+		//for (key, value) in attributes {
 			//let x = attributes[key]
-			print("[\(key)::\n\t\(value)]")
-		}*/
+		//	print("[\(key)::\n\t\(value)]")
+		//}
 		
 		
 	}
@@ -696,7 +695,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 				}
 			default :
 				
-				print(" unexpected characters in '\(fcShouldExpect)': '\(foundCharacters)': file: \(parseURL.lastPathComponent)")
+				//print(" unexpected characters in '\(fcShouldExpect)': '\(foundCharacters)': file: \(parseURL.lastPathComponent)")
 				break
 			}
 		}

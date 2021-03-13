@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		EE0BFF7F25CCA303007ACA9D /* AdventureCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */; };
 		EE1492A125F5433F00DE184A /* BatchParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A025F5433F00DE184A /* BatchParseView.swift */; };
+		EE1492A325F7B76800DE184A /* BParseRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A225F7B76800DE184A /* BParseRow.swift */; };
+		EE1492A525F7B99600DE184A /* BPListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A425F7B99600DE184A /* BPListView.swift */; };
+		EE1492A725F7CB1C00DE184A /* XMLFilesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A625F7CB1C00DE184A /* XMLFilesData.swift */; };
 		EE3EB17F25D1F212004C149B /* SummaryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3EB17E25D1F212004C149B /* SummaryTab.swift */; };
 		EE87E98725F04F98005C5669 /* DifficultyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87E98625F04F98005C5669 /* DifficultyView.swift */; };
 		EE87FAC225CB5DA400BA5BA0 /* myAdventureRecordApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */; };
@@ -83,6 +86,9 @@
 /* Begin PBXFileReference section */
 		EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureCommands.swift; sourceTree = "<group>"; };
 		EE1492A025F5433F00DE184A /* BatchParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchParseView.swift; sourceTree = "<group>"; };
+		EE1492A225F7B76800DE184A /* BParseRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BParseRow.swift; sourceTree = "<group>"; };
+		EE1492A425F7B99600DE184A /* BPListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BPListView.swift; sourceTree = "<group>"; };
+		EE1492A625F7CB1C00DE184A /* XMLFilesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLFilesData.swift; sourceTree = "<group>"; };
 		EE1D66DF25CCB48A0050EB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE3EB17E25D1F212004C149B /* SummaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryTab.swift; sourceTree = "<group>"; };
 		EE87E98625F04F98005C5669 /* DifficultyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyView.swift; sourceTree = "<group>"; };
@@ -224,6 +230,7 @@
 				EE87FAE225CB5E0300BA5BA0 /* Data.swift */,
 				EE87FAE325CB5E0300BA5BA0 /* UserData.swift */,
 				EE87FAE425CB5E0300BA5BA0 /* Adventure.swift */,
+				EE1492A625F7CB1C00DE184A /* XMLFilesData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -301,6 +308,8 @@
 				EEDA19A625D4992D00B72577 /* parseGPXXML.swift */,
 				EEDA19A825D56FF300B72577 /* GpxParseView.swift */,
 				EE1492A025F5433F00DE184A /* BatchParseView.swift */,
+				EE1492A425F7B99600DE184A /* BPListView.swift */,
+				EE1492A225F7B76800DE184A /* BParseRow.swift */,
 			);
 			path = GpxParser;
 			sourceTree = "<group>";
@@ -379,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE1492A525F7B99600DE184A /* BPListView.swift in Sources */,
 				EE87FB0325CB5E0400BA5BA0 /* StatsStructs.swift in Sources */,
 				EE87FB1725CB5E0500BA5BA0 /* MapView.swift in Sources */,
 				EE87FB0425CB5E0400BA5BA0 /* Track.swift in Sources */,
@@ -410,12 +420,14 @@
 				EE87FB1C25CB5E0500BA5BA0 /* DistGrdMainChart.swift in Sources */,
 				EE87FB1E25CB5E0500BA5BA0 /* DistEleMainChart.swift in Sources */,
 				EE87FB0725CB5E0500BA5BA0 /* GlobalConstants.swift in Sources */,
+				EE1492A325F7B76800DE184A /* BParseRow.swift in Sources */,
 				EE0BFF7F25CCA303007ACA9D /* AdventureCommands.swift in Sources */,
 				EE87FB0525CB5E0400BA5BA0 /* ParsingStructs.swift in Sources */,
 				EE1492A125F5433F00DE184A /* BatchParseView.swift in Sources */,
 				EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */,
 				EE87FB0F25CB5E0500BA5BA0 /* Data.swift in Sources */,
 				EE87E98725F04F98005C5669 /* DifficultyView.swift in Sources */,
+				EE1492A725F7CB1C00DE184A /* XMLFilesData.swift in Sources */,
 				EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */,
 				EE87FB1825CB5E0500BA5BA0 /* CircleImage.swift in Sources */,
 			);

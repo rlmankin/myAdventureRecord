@@ -11,7 +11,7 @@ struct SummaryTab: View {
 	
 	var adventure: Adventure
     var body: some View {
-		ScrollView {
+		ScrollView (.horizontal) {
 			Text(adventure.trackData.print())
 				.font(.caption)
 		}
