@@ -19,6 +19,44 @@ import Foundation
 import CoreLocation
 
 
+typealias Categorizable = CaseIterable
+						& Identifiable
+						& Hashable
+						& CustomStringConvertible
+
+struct CategoryPicker<Enum: Categorizable, Label: View>: View {
+	
+	private let label: Label
+	
+	@Binding private var selection: Enum
+
+	var body: some View {
+		Picker(selection: $selection, label: label) {
+			ForEach(Array(Enum.allCases)) { value in
+				Text(value.description).tag(value)
+			}
+			
+		}
+	}
+	
+	init(selection: Binding<Enum>, label: Label) {
+		self.label = label
+		_selection = selection
+	}
+}
+extension CategoryPicker where Label == Text {
+
+	init(_ titleKey: LocalizedStringKey, selection: Binding<Enum>) {
+		label = Text(titleKey)
+		_selection = selection
+	}
+
+	init<S: StringProtocol>(_ title: S, selection: Binding<Enum>) {
+		label = Text(title)
+		_selection = selection
+	}
+}
+
 struct Adventure: Hashable, Codable, Identifiable {
 	var id: Int
 	var name: String
@@ -51,15 +89,27 @@ struct Adventure: Hashable, Codable, Identifiable {
 		}
 	}
 	// future use
-	enum Category : String, CaseIterable, Identifiable, Codable {
-		case hike = "Hike"
-		case walkabout = "Walkabout"
-		case orv = "Off Road"
-		case scenicDrive = "Scenic Drive"
-		case snowshoe = "Snowshoe"
-		case none = "Not Categorized"
+	enum Category : String, Codable,  Categorizable {
+		case hike
+		case walkabout
+		case orv
+		case scenicDrive
+		case snowshoe
+		case none
 		
 		var id : Category { self }
+		
+		var description: String {
+			switch self {
+			case .hike: return "Hike"
+			case .walkabout: return "Walkabout"
+			case .orv : return "Off Road"
+			case .scenicDrive: return "Scenic Drive"
+			case .snowshoe : return "Snowshoe"
+			case .none : return "Not Categorized"
+			
+			}
+		}
 	}
 	
 	var hikeCategory : Category

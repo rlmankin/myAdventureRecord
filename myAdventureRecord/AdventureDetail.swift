@@ -55,12 +55,19 @@ struct AdventureDetail: View {
 					//	.offset(x:10, y: -50)
 					//	.frame(width: 200, height:200)
 					//	.background(Color.gray)
-					Text(adventure.hikeCategory.rawValue)
-						.frame(width: 150,height: 150,  alignment: .bottom)
-						
+//*** edit field (category)
+					Form {
+						CategoryPicker("Category", selection: $userData.adventures[adventureIndex].hikeCategory)
+					}.frame(width: 159, height: 159, alignment: .bottom)
+					
+					//TextField("", text: adventure.hikeCategory.rawValue)
+					//	.frame(width: 150,height: 150,  alignment: .bottom)
+//***
 					VStack(alignment: .center) {
 						HStack (alignment: .center) {
+//*** edit field (name)
 							Text(adventure.name).font(.title).italic()
+//***
 							Button(action: {
 								self.userData.adventures[self.adventureIndex]
 									.isFavorite.toggle()
@@ -104,11 +111,13 @@ struct AdventureDetail: View {
 							.italic()
 							.background(Color.gray)
 							.font(.headline)
+//*** edit field (track comment)
 						TextField("",text: $userData.adventures[adventureIndex].trackData.trackComment)
 								.lineLimit(1)			// doesn't seem to work
 								.foregroundColor(.green)
 								.font(.headline)
 								//.frame(height: 30, alignment: .leading)
+//***
 						//Spacer()
 						if let x = adventure.trackData.trackSummary.startTime {
 							Text(x, style: .date).padding(.trailing, 30)
@@ -116,7 +125,7 @@ struct AdventureDetail: View {
 						
 						
 					}.frame(height: 30)
-					
+//*** edit field (description)
 					TextEditor(text: $userData.adventures[adventureIndex].description)
 						.lineLimit(3)			// doesn't seem to work
 						//.fixedSize(horizontal: true, vertical: true)
@@ -124,6 +133,7 @@ struct AdventureDetail: View {
 						.offset(x:10)
 						.foregroundColor(.green)
 						.frame(minWidth: 400, idealWidth: 810, maxWidth: 810, minHeight: 0, idealHeight: 30, maxHeight: 50, alignment: .leading)
+//***
 				}.offset(x:10)
 				
 			}//.background(Color.orange)
