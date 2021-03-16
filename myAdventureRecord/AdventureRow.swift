@@ -48,12 +48,16 @@ struct AdventureRow: View {
 								.frame( alignment: .center)
 						}
 						HStack {
+							Text(adventure.area + "Colorado")
+								.font(.caption)
+								.frame(width: 100)
 							Text(adventure.hikeDate)
 								.font(.caption)
 							Text(adventure.trackData.trackComment + "blah")
 								.font(.caption)
 								.opacity(0.625)
 								.truncationMode(.middle)
+							
 						}
 							
 					}

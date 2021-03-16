@@ -51,12 +51,18 @@ struct Adventure: Hashable, Codable, Identifiable {
 		}
 	}
 	// future use
-	enum Category {
-		case hike
-		case walkabout
-		case orv
-		case scenicDrive
+	enum Category : String, CaseIterable, Identifiable, Codable {
+		case hike = "Hike"
+		case walkabout = "Walkabout"
+		case orv = "Off Road"
+		case scenicDrive = "Scenic Drive"
+		case snowshoe = "Snowshoe"
+		case none = "Not Categorized"
+		
+		var id : Category { self }
 	}
+	
+	var hikeCategory : Category
 	
 	init() {
 		self.id = 0
@@ -69,6 +75,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 		self.hikeDate = ""
 		self.longitudeSpan = CLLocationDegrees(0.02)
 		self.latitudeSpan = CLLocationDegrees(0.02)
+		self.hikeCategory = Category.none
 		
 	}
 }
