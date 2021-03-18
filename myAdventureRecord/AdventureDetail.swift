@@ -11,6 +11,14 @@ import MapKit
 struct AdventureDetail: View {
 	
 	@EnvironmentObject var userData: UserData
+	@State private var section2Editing : Bool = false
+	
+	// Editing State varialbles
+	@State private var editName : String = "null"
+	@State private var editTrackComment : String = "null"
+	@State private var editDescription : String = "null"
+	@State private var editHikeCategory  = Adventure.HikeCategory.none
+	@State private var editArea : String = "Colorado"
 	
 
 	var adventure: Adventure
@@ -46,7 +54,36 @@ struct AdventureDetail: View {
 				//	.frame(width: 150, height:150)
 				
 			}
-			AdventureSection2View(adventure: adventure)
+			
+			AdventureSection2View(section2Editing: $section2Editing, editName: $editName, editTrackComment: $editTrackComment, editDescription: $editDescription, editHikeCategory: $editHikeCategory, editArea:  $editArea, adventure: adventure)
+				.overlay(
+					GeometryReader { proxy in
+						
+						Button("\(section2Editing == true ? "Done" : "Edit")") {
+							if section2Editing {
+								print( "do the userData and database updates here")
+								userData.adventures[adventureIndex].name = editName
+								userData.adventures[adventureIndex].trackData.header = editName
+								userData.adventures[adventureIndex].trackData.trackComment = editTrackComment
+								userData.adventures[adventureIndex].description = editDescription
+								userData.adventures[adventureIndex].hikeCategory =  editHikeCategory
+								userData.adventures[adventureIndex].area = editArea
+								//userData.reload()
+								
+							}
+							section2Editing.toggle()
+						}
+						.frame(width: proxy.size.width, height: proxy.size.height, alignment: .topTrailing)
+						.offset(x: section2Editing ? -80 : -10, y: 10)
+						
+						if section2Editing {
+							Button("Cancel") {
+								section2Editing.toggle()
+							}.frame(width: proxy.size.width, height: proxy.size.height, alignment: .topTrailing)
+							.offset(x: -10, y: 10)
+						
+						}
+					})
 			
 			
 			
