@@ -40,103 +40,15 @@ struct AdventureDetail: View {
 							.offset(x: -10, y: -10)
 						}
 					)
-				CircleImage(image: adventure.image.resizable())
-					.offset(x:5, y: 135)
+				//CircleImage(image: adventure.image.resizable())
+				//	.offset(x:5, y: 135)
 					
-					.frame(width: 150, height:150)
+				//	.frame(width: 150, height:150)
 				
 			}
+			AdventureSection2View(adventure: adventure)
 			
-			VStack (alignment: .leading, spacing: 0) {
-				// Vstack for all Text, impages, and graphs
-				HStack( alignment: .center, spacing: 12) {
-					// HStack for image, title, and coordinates
-					//CircleImage(image: adventure.image.resizable())
-					//	.offset(x:10, y: -50)
-					//	.frame(width: 200, height:200)
-					//	.background(Color.gray)
-//*** edit field (category)
-					Form {
-						CategoryPicker("Category", selection: $userData.adventures[adventureIndex].hikeCategory)
-					}.frame(width: 159, height: 159, alignment: .bottom)
-					
-					//TextField("", text: adventure.hikeCategory.rawValue)
-					//	.frame(width: 150,height: 150,  alignment: .bottom)
-//***
-					VStack(alignment: .center) {
-						HStack (alignment: .center) {
-//*** edit field (name)
-							Text(adventure.name).font(.title).italic()
-//***
-							Button(action: {
-								self.userData.adventures[self.adventureIndex]
-									.isFavorite.toggle()
-							}) {
-								if userData.adventures[self.adventureIndex].isFavorite {
-									Image("star-filled")
-										.resizable()
-										.renderingMode(.template)
-										.accessibility(label: Text("Remove from favorites"))
-								} else {
-									Image("star-empty")
-										.resizable()
-										.renderingMode(.template)
-										.foregroundColor(.gray)
-										.accessibility(label: Text("Add to favorites"))
-								}
-							}	//button
-							.frame(width: 20, height: 20)		// Need frame to keep star small
-							.buttonStyle(PlainButtonStyle())
-						}
-						HStack {
-							DifficultyView(hikeDifficulty: adventure.difficulty)
-								.opacity(0.6)
-							Text(String(format: "location: %5.3f , %5.3f", adventure.coordinates.latitude,adventure.coordinates.longitude))
-								.italic()
-								.foregroundColor(.secondary)
-							Text(adventure.area + "Colorado")
-								.italic()
-								
-							
-						}.font(.headline)
-						
-					}
-					
-				} //HStack
-				VStack( alignment: .leading) {
-					// Vstack for Description Title and Description
-					Divider()
-					HStack (alignment: .center, spacing: 20) {
-						Text("About: \(adventure.name) - ")
-							.italic()
-							.background(Color.gray)
-							.font(.headline)
-//*** edit field (track comment)
-						TextField("",text: $userData.adventures[adventureIndex].trackData.trackComment)
-								.lineLimit(1)			// doesn't seem to work
-								.foregroundColor(.green)
-								.font(.headline)
-								//.frame(height: 30, alignment: .leading)
-//***
-						//Spacer()
-						if let x = adventure.trackData.trackSummary.startTime {
-							Text(x, style: .date).padding(.trailing, 30)
-						}
-						
-						
-					}.frame(height: 30)
-//*** edit field (description)
-					TextEditor(text: $userData.adventures[adventureIndex].description)
-						.lineLimit(3)			// doesn't seem to work
-						//.fixedSize(horizontal: true, vertical: true)
-						//.background(Color.blue)
-						.offset(x:10)
-						.foregroundColor(.green)
-						.frame(minWidth: 400, idealWidth: 810, maxWidth: 810, minHeight: 0, idealHeight: 30, maxHeight: 50, alignment: .leading)
-//***
-				}.offset(x:10)
-				
-			}//.background(Color.orange)
+			
 			
 			// TabView for graphing buttons
 			TabView {
