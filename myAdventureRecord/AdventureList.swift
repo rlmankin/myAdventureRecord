@@ -31,6 +31,9 @@ struct AdventureList: View {
     var body: some View {
 		
 		print("adventureList body")
+		for item in userData.adventures {
+			print("adventure = \(item.name)")
+		}
 		
 		return NavigationView {
 			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
@@ -38,7 +41,7 @@ struct AdventureList: View {
 				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
 				//	detail view (right pane)
 				ForEach(userData.adventures) { adventure in
-					NavigationLink(destination: AdventureDetail(adventure: adventure)) {
+					NavigationLink(destination: AdventureDetail(adventure: adventure, beenInserted: true)) {
 						AdventureRow(adventure: adventure)
 					}.tag(adventure)
 				}

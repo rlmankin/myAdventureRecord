@@ -13,12 +13,88 @@ class SqlHikingDatabase: NSObject {
 	
 	var sqlDbURL : URL
 	var sqlDbTable : TrkSqlTable
+	var sqltpDbTable : TrkptsSqlTable
+	var sqladvTable : AdventureSqlTable
+	
 	var sqlDbFileHandle : Connection?
 	let sqlDbName : String = "/hikingdb.sqlite"
 	let sqlDbTableName : String = "hikingdbTable"
+	let sqltpDbTableName : String = "tpdbTable"
+	let sqladvTableName : String = "advdbTable"
 	
 	let selectAllString = "SELECT uniqueID, header from "						// SQL query to get the uniqueID and the header from the database
 	var tracks = [Track]()
+	var trkpts = [Trkpt]()
+	var adventures = [Adventure]()
+	
+	
+	override init() {
+		self.sqlDbURL = URL(string:sqlDbName)!									//  initialize to the sql database name
+		self.sqlDbTable = TrkSqlTable()											//	create the database table
+		self.sqltpDbTable = TrkptsSqlTable()									//	create the trkpts table
+		self.sqladvTable = AdventureSqlTable()
+		self.sqlDbFileHandle = nil												//	init the file handle to nil
+		super.init()
+		if self.sqlConnectOpenDb() {											//	connect and open the sql database
+			tracks = self.sqlGetAllRows()										// 	populate 'tracks' with all the rows in the database (not sure how this works if the DB gets large)
+			trkpts = self.sqlGetAllTpRows()
+			adventures = self.sqlGetAllAdvRows()
+		} else {
+			print("error opening sqlDB in init")								//	for some reason we could not open and connect to the dB
+		}
+	}
+	
+	
+	func sqlConnectOpenDb() -> Bool {
+		let hikingDB = self
+		let trkptsDb = self
+		let dbFilePathString = hikingDB.getSqlDbFilePath()				// get the path to where the sql database is stored
+		if dbFilePathString != nil {
+			if let tempDbFileHandle = hikingDB.sqlDbConnect("\(dbFilePathString! + sqlDbName)") {	// try and form a connection to the sql database returns a Connction?
+				//print("\(dbFilePathString! + sqlDbName) connected")
+				sqlDbFileHandle = tempDbFileHandle
+				let hikingDBSuccess =  hikingDB.sqlCreateDbTable()		// create the dbTable, returns Bool (true if table correctly created)
+				let trkptsDbSuccess =  hikingDB.sqlCreateTpTable()			// create the trkpts Table, returns Bool (true if table correctly created)
+				let advDbSuccess = hikingDB.sqlCreateAdvTable()			// create the adventure table, return Bool (true if table correctly created)
+				
+				return hikingDBSuccess && trkptsDbSuccess && advDbSuccess					// have to successfully open both tables
+				
+			} else {
+				return false
+			}
+		} else {
+			print("Error in database string creation")
+			return false
+		}
+	}
+	
+	func getSqlDbFilePath() -> String? {										// Return a string with the path to the default dB found in Bundle.main.bundleIdentifier.
+		let dbFileString = NSSearchPathForDirectoriesInDomains(					// find the appropriate location for the sql database (per Apple requriements).  The creation and open
+			.documentDirectory, .userDomainMask, true					// of the database will NOT succeed if given an arbitrary path.  Not sure why, think it has something to do with sandbox.
+			).first! +  "/hiking/hikingDatabase"
+		// create parent directory iff it doesn’t exist
+		do {
+			try FileManager.default.createDirectory(
+				atPath: dbFileString, withIntermediateDirectories: true, attributes: nil)
+				return dbFileString
+		} catch {
+			Swift.print("path creation issue?  Error: \(error)")
+			return nil
+		}
+	}
+	
+	func sqlDbConnect(_ databaseString: String) -> Connection? {					// databaseString contains the absolute path to the hiking sql database
+		do {
+			let sqlFilehandle = try Connection(databaseString)					// see if a connection can be made to the sql database.
+																				//	'Connection' will create a database if there is not one
+			//Swift.print("Connection to \(databaseString) succeeded")
+			return sqlFilehandle
+		} catch {																// the connection to the hiking sql database can't be made.  Hopefully 'error' will tell why.
+			Swift.print("Connection to \(databaseString) failed.  Error: \(error)")
+			return nil
+		}
+	}
+
 	
 	struct TrkSqlTable {														// this sets the format and structure of the SQl database table.  It should mirror the structure Track
 		///
@@ -177,76 +253,163 @@ class SqlHikingDatabase: NSObject {
 		var sqlTrackComment = Expression<String>("trackComment")
 	}
 	
-	override init() {
-		self.sqlDbURL = URL(string:sqlDbName)!									//  initialize to the sql database name
-		self.sqlDbTable = TrkSqlTable()											//	create the database table
-		self.sqlDbFileHandle = nil												//	init the file handle to nil
-		super.init()
-		if self.sqlConnectOpenDb() {											//	connect and open the sql database
-			tracks = self.sqlGetAllRows()										// 	populate 'tracks' with all the rows in the database (not sure how this works if the DB gets large)
-		} else {
-			print("error opening sqlDB in init")								//	for some reason we could not open and connect to the dB
-		}		
+	struct TrkptsSqlTable {			// track points database table, should mirror trkpt structure
+									//	plus some overhead for links to corresponding track structure
+		
+		
+		var sqltpUniqueID = Expression<Int>("tpuniqueID")
+		
+		// Link to track of which this track point is a member.  Use the sqlUniqueID
+		var sqltpAssociatedTrackID = Expression<Int>("tpAssociatedTrackID")
+		
+		// Flat representation of structures within TrkPt
+		
+		// mirror of FromValidEleTime  structure in Trkpt structure
+		//	use acronym FVET to correspond to FromValidEleTime
+		var sqlFVETlastValidIndex = Expression<Int>("FVETlastValidIndex")
+		var sqlFVETdistance = Expression<Double>("FVETdistance")
+		var sqlFVETgain = Expression<Double>("FVETgain")
+		var sqlFVETelapsedTime = Expression<Double>("FVETelapsedTime")
+		
+		// mirror of FromValidDistTime  structure in Trkpt structure
+		//	use acronym FVDT to correspond to FromValidDistTime
+		var sqlFVDTlastValidIndex = Expression<Int>("FVDTlastValidIndex")
+		var sqlFVDTdistance = Expression<Double>("FVDTdistance")
+		var sqlFVDTelapsedTime = Expression<Double>("FVDTelapsedTime")
+		
+		// mirror of FromValidEleTrkPt  structure in Trkpt structure
+		//	use acronym FVETp to correspond to FromValidEleTrkPt
+		var sqlFVETplastValidIndex = Expression<Int>("FVETplastValidIndex")
+		var sqlFVETpdistance = Expression<Double>("FVETpdistance")
+		var sqlFVETpgain = Expression<Double>("FVETpgain")
+		var sqlFVETpelapsedTime = Expression<Double>("FVETpelapsedTime")
+		
+		
+		// mirror of FromLastTrkPt  structure in Trkpt structure
+		//	use acronym FLTp to correspond to FromLastTrkPt
+		var sqlFLTplastValidIndex = Expression<Int>("FLTplastValidIndex")
+		var sqlFLTpdistance = Expression<Double>("FLTpdistance")
+		var sqlFLTpgain = Expression<Double>("FLTpgain")
+		
+		// mirror of StatisticsTrkPt  structure in Trkpt structure
+		//	use acronym STp to correspond to StatisticsTrkPt
+		var sqlSTplastValidIndex = Expression<Int>("STplastValidIndex")
+		var sqlSTpdistance = Expression<Double>("STpdistance")
+		var sqlSTpgain = Expression<Double>("STpgain")
+		var sqlSTpelapsedTime = Expression<Double>("STpelapsedTime")
+		
+		// mirror properties of TrkPt
+		//	use acronym Tp to correspond to TrkPt (help distinguish from Track properties
+		var sqlIndex = Expression<Int>("TpIndex")
+		var sqlHasValidElevation = Expression<Bool>("TphasValidElevation")
+		var sqlHasValidTimeStamp = Expression<Bool>("TphasValidTimeStamp")
+		var sqlLatitude = Expression<Double>("Tplatitude")
+		var sqlLongitude = Expression<Double>("Tplongitude")
+		var sqlElevation = Expression<Double?>("Tpelevation")
+		var sqlTimeStamp = Expression<Date?>("TptimeStamp")
+		
+		// property lastTimeEleTrkpt mirrored in sqlFVET psuedoStruct (above)
+		// property lastTimeDistTrkpt mirrored in sqlFVDT psuedoStruct (above)
+		// property lastEleTrkpt mirrored in sqlFEDTp psuedoStruct (above)
+		// property lastTrkpt mirrored in sqlFLTp psuedoStruct (above)
+		// property statisticsTrkpt mirrored in sqlSTp psuedoStruct (above)
+		
 	}
 	
-	func sqlConnectOpenDb() -> Bool {
-		let documentHikingDb = self
-		let dbFilePathString = documentHikingDb.getSqlDbFilePath()				// get the path to where the sql database is stored
-		if dbFilePathString != nil {
-			if let tempDbFileHandle = documentHikingDb.sqlDbConnect("\(dbFilePathString! + sqlDbName)") {	// try and form a connection to the sql database returns a Connction?
-				//print("\(dbFilePathString! + sqlDbName) connected")
-				sqlDbFileHandle = tempDbFileHandle
-				return documentHikingDb.sqlCreateDbTable()						// create the dbTable, returns Bool (true if table correctly created)
-			} else {
-				return false
-			}
-		} else {
-			print("Error in database string creation")
-			return false
-		}
+	struct AdventureSqlTable {		// adventure table, should mirror adventure structure minus some duplications
+									//	already captured in either the trackpoints table or the track table
+		var sqladvTrkID = Expression<Int>("advuniqueID")
+		var sqladvAssociatedTrackID = Expression<Int>("advAssociatedTrackID")
+		var sqladvImageName = Expression<String>("advImageName")
+		var sqladvDescription = Expression<String>("advDescription")
+		var sqladvArea = Expression<String>("advArea")
+		var sqladvIsFav = Expression<Bool>("advIsFav")
+		var sqladvHikeCat = Expression<String>("advHikeCat")
 	}
 	
-	func getSqlDbFilePath() -> String? {										// Return a string with the path to the default dB found in Bundle.main.bundleIdentifier.
-		let dbFileString = NSSearchPathForDirectoriesInDomains(					// find the appropriate location for the sql database (per Apple requriements).  The creation and open
-			.documentDirectory, .userDomainMask, true					// of the database will NOT succeed if given an arbitrary path.  Not sure why, think it has something to do with sandbox.
-			).first! +  "/hiking/hikingDatabase"
-		// create parent directory iff it doesn’t exist
-		do {
-			try FileManager.default.createDirectory(
-				atPath: dbFileString, withIntermediateDirectories: true, attributes: nil)
-				return dbFileString
-		} catch {
-			Swift.print("path creation issue?  Error: \(error)")
-			return nil
-		}
-	}
-	
-	func sqlDbConnect(_ databaseString: String) -> Connection? {					// databaseString contains the absolute path to the hiking sql database
-		do {
-			let sqlFilehandle = try Connection(databaseString)					// see if a connection can be made to the sql database.
-																				//	'Connection' will create a database if there is not one
-			//Swift.print("Connection to \(databaseString) succeeded")
-			return sqlFilehandle
-		} catch {																// the connection to the hiking sql database can't be made.  Hopefully 'error' will tell why.
-			Swift.print("Connection to \(databaseString) failed.  Error: \(error)")
-			return nil
-		}
-	}
-
-	
-		// Drops the table from the database.  Currently (12/19/2019) not used
-	func sqlDropTable() -> Bool {
+	func sqlCreateAdvTable() -> Bool {
 		if sqlDbFileHandle != nil {
 			do {
-				let dbTable = Table(sqlDbTableName)
-				try sqlDbFileHandle!.run(dbTable.drop(ifExists: true))
+				let advTable = Table(sqladvTableName)
+				try sqlDbFileHandle!.run(advTable.create(ifNotExists: true) { t in
+					t.column(sqladvTable.sqladvTrkID, primaryKey: .autoincrement)
+					t.column(sqladvTable.sqladvAssociatedTrackID, unique: false)
+					t.column(sqladvTable.sqladvImageName)
+					t.column(sqladvTable.sqladvDescription)
+					t.column(sqladvTable.sqladvArea)
+					t.column(sqladvTable.sqladvIsFav, unique: false)
+					t.column(sqladvTable.sqladvHikeCat, unique: false)
+				})
 				return true
 			} catch {
+				Swift.print("catch - create advTable failed \(error)")
 				return false
 			}
-		} else {
-			return false
+			
 		}
+		return false
+	}
+	
+	func sqlCreateTpTable() -> Bool {
+		if sqlDbFileHandle != nil {
+			do {
+				let tpTable = Table(sqltpDbTableName)
+				
+				try sqlDbFileHandle!.run(tpTable.create(ifNotExists: true) {t in
+					t.column(sqltpDbTable.sqltpUniqueID, primaryKey: .autoincrement)
+					t.column(sqltpDbTable.sqltpAssociatedTrackID, unique: false)
+					
+					// mirror of FromValidEleTime  structure in Trkpt structure
+					//	use acronym FVET to correspond to FromValidEleTime
+					t.column(sqltpDbTable.sqlFVETlastValidIndex, unique: false)
+					t.column(sqltpDbTable.sqlFVETdistance, unique: false)
+					t.column(sqltpDbTable.sqlFVETgain, unique: false)
+					t.column(sqltpDbTable.sqlFVETelapsedTime, unique: false)
+					
+					// mirror of FromValidDistTime  structure in Trkpt structure
+					//	use acronym FVDT to correspond to FromValidDistTime
+					t.column(sqltpDbTable.sqlFVDTlastValidIndex, unique: false)
+					t.column(sqltpDbTable.sqlFVDTdistance, unique: false)
+					t.column(sqltpDbTable.sqlFVDTelapsedTime, unique: false)
+					
+					// mirror of FromValidEleTrkPt  structure in Trkpt structure
+					//	use acronym FVETp to correspond to FromValidEleTrkPt
+					t.column(sqltpDbTable.sqlFVETplastValidIndex, unique: false)
+					t.column(sqltpDbTable.sqlFVETpdistance, unique: false)
+					t.column(sqltpDbTable.sqlFVETpgain, unique: false)
+					t.column(sqltpDbTable.sqlFVETpelapsedTime, unique: false)
+					
+					// mirror of FromLastTrkPt  structure in Trkpt structure
+					//	use acronym FLTp to correspond to FromLastTrkPt
+					t.column(sqltpDbTable.sqlFLTplastValidIndex, unique: false)
+					t.column(sqltpDbTable.sqlFLTpdistance, unique: false)
+					t.column(sqltpDbTable.sqlFLTpgain, unique: false)
+					
+					// mirror of StatisticsTrkPt  structure in Trkpt structure
+					//	use acronym STp to correspond to StatisticsTrkPt
+					t.column(sqltpDbTable.sqlSTplastValidIndex, unique: false)
+					t.column(sqltpDbTable.sqlSTpdistance, unique: false)
+					t.column(sqltpDbTable.sqlSTpgain, unique: false)
+					t.column(sqltpDbTable.sqlSTpelapsedTime, unique: false)
+					
+					// mirror properties of TrkPt
+					//	use acronym Tp to correspond to TrkPt (help distinguish from Track properties
+					t.column(sqltpDbTable.sqlIndex, unique: false)
+					t.column(sqltpDbTable.sqlHasValidElevation, unique: false)
+					t.column(sqltpDbTable.sqlHasValidTimeStamp, unique: false)
+					t.column(sqltpDbTable.sqlLatitude, unique: false)
+					t.column(sqltpDbTable.sqlLongitude, unique: false)
+					t.column(sqltpDbTable.sqlElevation, unique: false)
+					t.column(sqltpDbTable.sqlTimeStamp, unique: false)
+								
+				})
+				return true
+			} catch {
+				Swift.print("catch - create tpTable failed \(error)")
+				return false
+			}
+		}
+		return false
 	}
 	
 	func sqlCreateDbTable() -> Bool {				// This creates the actual DbTable in the SQL database.  This must mirror the structure 'TrkSQLTable'
@@ -438,7 +601,7 @@ class SqlHikingDatabase: NSObject {
 					
 					let dbTable = Table(sqlDbTableName)
 					let rowid = try sqlDbFileHandle!.run(dbTable.insert(			//  Insert the track into a row in the SQL database.  This must match the structure of the DbTable
-						sqlDbTable.sqlId <- Int(track.trkIndex),
+						sqlDbTable.sqlId <- Int(track.trkUniqueID),
 						sqlDbTable.sqlTrackURLString <-  track.trackURLString,
 						sqlDbTable.sqlNumberOfDatapoints <- track.trackSummary.numberOfDatapoints,
 						sqlDbTable.sqlHeader <-  track.header,
@@ -584,7 +747,7 @@ class SqlHikingDatabase: NSObject {
 						sqlDbTable.sqlGarminAvgDescentRate  <-   track.garminSummaryStats["AvgDescentRate"],
 						sqlDbTable.sqlGarminMaxDescentRate  <-   track.garminSummaryStats["MaxDescentRate"],
 						sqlDbTable.sqlGarminCalories <-   track.garminSummaryStats["Calories"],
-						sqlDbTable.sqlTrackComment <- nullString))										// initial insert has no comment
+															sqlDbTable.sqlTrackComment <- track.trackComment))										// initial insert has no comment
 					//Swift.print("inserted id: \(rowid)")
 					//sqlDbFileHandle!.trace( {Swift.print( $0)})
 					return rowid
@@ -597,10 +760,239 @@ class SqlHikingDatabase: NSObject {
 				return -1
 			}
 		}
+	
+	func sqlInsertTpRow( _ trackRowID: Int, _ trkpt: Trkpt) -> Int64 {								// insert a track into the sql database, return the row ID when the track was inserted.
+			if sqlDbFileHandle != nil {											// must have a valid file handle
+				do {
+								
+					let tpTable = Table(sqltpDbTableName)
+					let rowid = try sqlDbFileHandle!.run(tpTable.insert(
+						
+						sqltpDbTable.sqltpAssociatedTrackID <- trackRowID,
+						
+						sqltpDbTable.sqlFVETlastValidIndex <- trkpt.lastTimeEleTrkpt.lastValidIndex,
+						sqltpDbTable.sqlFVETdistance <- trkpt.lastTimeEleTrkpt.distance,
+						sqltpDbTable.sqlFVETgain <- trkpt.lastTimeEleTrkpt.gain,
+						sqltpDbTable.sqlFVETelapsedTime <- trkpt.lastTimeEleTrkpt.elapsedTime,
+						
+						sqltpDbTable.sqlFVDTlastValidIndex <- trkpt.lastTimeDistTrkpt.lastValidIndex,
+						sqltpDbTable.sqlFVDTdistance <- trkpt.lastTimeDistTrkpt.distance,
+						sqltpDbTable.sqlFVDTelapsedTime <- trkpt.lastTimeDistTrkpt.elapsedTime,
+						
+						sqltpDbTable.sqlFVETplastValidIndex <- trkpt.lastEleTrkpt.lastValidIndex,
+						sqltpDbTable.sqlFVETpdistance <- trkpt.lastEleTrkpt.distance,
+						sqltpDbTable.sqlFVETpgain <- trkpt.lastEleTrkpt.gain,
+						sqltpDbTable.sqlFVETpelapsedTime <- trkpt.lastEleTrkpt.elapsedTime,
+						
+						sqltpDbTable.sqlFLTplastValidIndex <- trkpt.lastTrkpt.lastValidIndex,
+						sqltpDbTable.sqlFLTpdistance <- trkpt.lastTrkpt.distance,
+						sqltpDbTable.sqlFLTpgain <- trkpt.lastTrkpt.gain,
+						
+						sqltpDbTable.sqlSTplastValidIndex <- trkpt.statisticsTrkpt.lastValidIndex,
+						sqltpDbTable.sqlSTpdistance <- trkpt.statisticsTrkpt.distance,
+						sqltpDbTable.sqlSTpgain <- trkpt.statisticsTrkpt.gain,
+						sqltpDbTable.sqlSTpelapsedTime <- trkpt.statisticsTrkpt.elapsedTime,
+						
+						sqltpDbTable.sqlIndex <- trkpt.index,
+						sqltpDbTable.sqlHasValidElevation <- trkpt.hasValidElevation,
+						sqltpDbTable.sqlHasValidTimeStamp <- trkpt.hasValidTimeStamp,
+						sqltpDbTable.sqlLatitude <- trkpt.latitude,
+						sqltpDbTable.sqlLongitude <- trkpt.longitude,
+						sqltpDbTable.sqlElevation <- trkpt.elevation,
+						sqltpDbTable.sqlTimeStamp <- trkpt.timeStamp
+																				
+					))
+					
+					return rowid
+				} catch {
+					Swift.print("insertion failed: \(error)")
+					return -1
+				}
+			} else {
+				Swift.print("\(sqltpDbTableName) is empty")
+				return -1
+			}
+		}
+	
+	func sqlInsertTrkptList( _ trackRowID: Int64, _ trkptList: [Trkpt]) -> Int {
+		var trkptsAdded : Int = 0
+		for trkptrow in 0 ... trkptList.count - 1 {
+			let tpRowID = sqlInsertTpRow(Int(trackRowID), trkptList[trkptrow])
+			if tpRowID >= 0 {
+				trkptsAdded += 1
+			}
+		}
+		return trkptsAdded
+		
+	}
+	
+	func sqlUpdateAdvRow(_ trackRowID: Int, _ partial: inout Adventure) -> Int64 {
+		if let advFileHandle = sqlDbFileHandle {
+			let rowIDExpression = Expression<Int>(String(trackRowID))
+			let advdbTable = Table(sqladvTableName)
+			let query = advdbTable.filter(sqladvTable.sqladvTrkID == rowIDExpression)
+			do {
+				let rowid = try advFileHandle.run( query.update(
+					// add name update
+								sqladvTable.sqladvImageName <- partial.imageName,
+								sqladvTable.sqladvDescription <- partial.description,
+								sqladvTable.sqladvIsFav <- partial.isFavorite,
+								sqladvTable.sqladvHikeCat <- partial.hikeCategory.description,
+								sqladvTable.sqladvArea <- partial.area
+								)
+							)
+				return Int64(rowid)
+				
+			} catch {
+				print("update failed \(error)")
+				return -2
+			}
+		} else {
+			Swift.print("\(sqladvTable) is empty")
+			return -3
+		}
+	}
+	
+	func sqlUpdateTrkRow(_ trackRowID: Int, _ adventure: Adventure) -> Int64 {
+		if let trkFileHandle = sqlDbFileHandle {
+			let rowIDExpression = Expression<Int>(String(trackRowID))
+			let trkdbTable = Table(sqlDbTableName)
+			let query = trkdbTable.filter(sqlDbTable.sqlUniqueID == rowIDExpression)
+			do {
+				let rowid = try trkFileHandle.run( query.update(
+					sqlDbTable.sqlHeader <- adventure.trackData.header,
+					sqlDbTable.sqlTrackComment <- adventure.trackData.trackComment
+					)
+				)
+				return Int64(rowid)
+				
+			} catch {
+				print("update failed \(error)")
+				return -2
+			}
+		} else {
+			Swift.print("\(sqladvTable) is empty")
+			return -3
+		}
+	}
+	
+	func sqlInsertToAllTables( track : Track) {
+			//	open and connect to the hinkingdbTable of the SQL hiking database
+		let trackRow = self.sqlInsertDbRow(track)
+		let trkptRow = self.sqlInsertTrkptList(trackRow, track.trkptsList)
+		let tempAdv = loadAdventureTrack(track: track)
+		let advRow = self.sqlInsertAdvRow(trackRow, tempAdv)
+	}
+	
+	
+	func sqlInsertAdvRow( _ trackRowID: Int64, _ adventure: Adventure) -> Int64 {
+		if sqlDbFileHandle != nil {
+			do {
+				let advTable = Table(sqladvTableName)
+				let rowid = try sqlDbFileHandle!.run(advTable.insert(
+					sqladvTable.sqladvAssociatedTrackID	 <- Int(trackRowID),
+					sqladvTable.sqladvImageName <- adventure.imageName,
+					sqladvTable.sqladvDescription <- adventure.description,
+					sqladvTable.sqladvArea <- adventure.area,
+					sqladvTable.sqladvIsFav <- adventure.isFavorite,
+					sqladvTable.sqladvHikeCat <- adventure.hikeCategory.description
+					
+				))
+				
+				return rowid
+			} catch {
+				Swift.print("insertion faild: \(error)")
+				return -1
+			}
+		} else {
+			Swift.print("\(sqladvTable) is empty")
+			return -1
+		}
+	}
+	
+	func sqlRetrieveAdventure(_ trackRowID: Int, _ partial: inout Adventure) {
+		let rowIDExpression = Expression<Int>(String(trackRowID))
+		let advdbTable = Table(sqladvTableName)
+		let query = advdbTable.filter(sqladvTable.sqladvTrkID == rowIDExpression)
+		//var adventure = Adventure()
+		if let advFileHandle = sqlDbFileHandle {
+			let results = try! advFileHandle.prepare(query)
+			for key in results {
+				partial.associatedTrackID = key[sqladvTable.sqladvAssociatedTrackID]
+				partial.imageName = key[sqladvTable.sqladvImageName]
+				partial.description = key[sqladvTable.sqladvDescription]
+				partial.area = key[sqladvTable.sqladvArea]
+				partial.isFavorite = key[sqladvTable.sqladvIsFav]
+				switch key[sqladvTable.sqladvHikeCat] {
+					case "Hike": partial.hikeCategory = Adventure.HikeCategory.hike
+					case "Walkabout" : partial.hikeCategory = Adventure.HikeCategory.walkabout
+					case "Off Road": partial.hikeCategory = Adventure.HikeCategory.orv
+					case "Scenic Drive" : partial.hikeCategory = Adventure.HikeCategory.scenicDrive
+					case "Snowshoe" : partial.hikeCategory = Adventure.HikeCategory.snowshoe
+					case "Not Categorized" : partial.hikeCategory = Adventure.HikeCategory.none
+					default : partial.hikeCategory = Adventure.HikeCategory.none
+				}
+			}
+		}
+	}
+
+	func sqlRetrieveTrkptlist(_ trackRowID: Int) -> [Trkpt] {
+		let rowIDexpression = Expression<Int>(String(trackRowID))
+		let tpdbTable = Table(sqltpDbTableName)
+		let query = tpdbTable.filter(sqltpDbTable.sqltpAssociatedTrackID == rowIDexpression)
+		var trkptsList = [Trkpt]()
+				
+		if let tpFileHandle = sqlDbFileHandle {
+			let results = try! tpFileHandle.prepare(query)
+			var temptp = Trkpt()
+			for key in results {
+				
+				temptp.lastTimeEleTrkpt.lastValidIndex = key[sqltpDbTable.sqlFVETlastValidIndex]
+				temptp.lastTimeEleTrkpt.distance = key[sqltpDbTable.sqlFVETdistance]
+				temptp.lastTimeEleTrkpt.gain = key[sqltpDbTable.sqlFVETgain]
+				temptp.lastTimeEleTrkpt.elapsedTime = key[sqltpDbTable.sqlFVETelapsedTime]
+				
+				temptp.lastTimeDistTrkpt.lastValidIndex = key[sqltpDbTable.sqlFVDTlastValidIndex]
+				temptp.lastTimeDistTrkpt.distance = key[sqltpDbTable.sqlFVDTdistance]
+				temptp.lastTimeDistTrkpt.elapsedTime = key[sqltpDbTable.sqlFVDTelapsedTime]
+				
+				temptp.lastEleTrkpt.lastValidIndex = key[sqltpDbTable.sqlFVETplastValidIndex]
+				temptp.lastEleTrkpt.distance = key[sqltpDbTable.sqlFVETpdistance]
+				temptp.lastEleTrkpt.gain = key[sqltpDbTable.sqlFVETpgain]
+				temptp.lastEleTrkpt.elapsedTime = key[sqltpDbTable.sqlFVETpelapsedTime]
+				
+				temptp.lastTrkpt.lastValidIndex = key[sqltpDbTable.sqlFLTplastValidIndex]
+				temptp.lastTrkpt.distance = key[sqltpDbTable.sqlFLTpdistance]
+				temptp.lastTrkpt.gain = key[sqltpDbTable.sqlFLTpgain]
+				
+				temptp.statisticsTrkpt.lastValidIndex = key[sqltpDbTable.sqlSTplastValidIndex]
+				temptp.statisticsTrkpt.distance = key[sqltpDbTable.sqlSTpdistance]
+				temptp.statisticsTrkpt.gain = key[sqltpDbTable.sqlSTpgain]
+				temptp.statisticsTrkpt.elapsedTime = key[sqltpDbTable.sqlSTpelapsedTime]
+				
+				temptp.index = key[sqltpDbTable.sqlIndex]
+				temptp.hasValidElevation = key[sqltpDbTable.sqlHasValidElevation]
+				temptp.hasValidTimeStamp = key[sqltpDbTable.sqlHasValidTimeStamp]
+				temptp.latitude = key[sqltpDbTable.sqlLatitude]
+				temptp.longitude = key[sqltpDbTable.sqlLongitude]
+				temptp.elevation = key[sqltpDbTable.sqlElevation]
+				temptp.timeStamp = key[sqltpDbTable.sqlTimeStamp]
+				trkptsList.append(temptp)
+				temptp = .init()
+				
+			}
+		}
+		
+		return trkptsList
+	}
+	
+	
 	func reloadTracks(someRows : [Int] = []) {									// Provide an array of row numbers (uniqueID)
 		if someRows.isEmpty {
 			self.tracks.removeAll()
 			self.tracks = self.sqlGetAllRows()
+			self.trkpts = self.sqlGetAllTpRows()
+			self.adventures = self.sqlGetAllAdvRows()
 		} else {
 			self.tracks.removeAll()
 			self.tracks = self.sqlGetSomeRows(someRows)
@@ -617,7 +1009,7 @@ class SqlHikingDatabase: NSObject {
 				let results = try! sqlFileHandle.prepare(query)
 				var tempTrack = Track()
 				for key in results {
-					tempTrack.trkIndex = key[sqlDbTable.sqlUniqueID]
+					tempTrack.trkUniqueID = key[sqlDbTable.sqlUniqueID]
 					tempTrack.header = String(key[sqlDbTable.sqlHeader])
 					tempTrack.trackSummary.startTime = key[sqlDbTable.sqlHikeDate]
 					tempTrack.trackSummary.distance = Double(key[sqlDbTable.sqlDistance])
@@ -646,7 +1038,7 @@ class SqlHikingDatabase: NSObject {
 		if let sqlFileHandle = sqlDbFileHandle {
 			for key in try! sqlFileHandle.prepare(dbTable) {
 				rowCount += 1
-				tempTrack.trkIndex = key[sqlDbTable.sqlUniqueID]
+				tempTrack.trkUniqueID = key[sqlDbTable.sqlUniqueID]
 				tempTrack.header = String(key[sqlDbTable.sqlHeader])
 				tempTrack.trackSummary.startTime = key[sqlDbTable.sqlHikeDate]
 				tempTrack.trackSummary.distance = Double(key[sqlDbTable.sqlDistance])
@@ -774,7 +1166,7 @@ class SqlHikingDatabase: NSObject {
 				///
 				// Garmin calculated stats
 				///
-				tempTrack.header = key[sqlDbTable.sqlGarminName] ?? nullString
+				//tempTrack.header = key[sqlDbTable.sqlGarminName] ?? nullString
 				tempTrack.garminSummaryStats["TimerTime"] = key[sqlDbTable.sqlGarminTimerTime]
 				tempTrack.garminSummaryStats["Distance"] = key[sqlDbTable.sqlGarminDistance]
 				tempTrack.garminSummaryStats["TotalElapsedTime"] =  key[sqlDbTable.sqlGarminTotalElapsedTime]
@@ -799,6 +1191,60 @@ class SqlHikingDatabase: NSObject {
 		return trackDb
 	}
 	
+	func sqlGetAllTpRows() -> [Trkpt] {
+		var trkptDb = [Trkpt]()
+		var tempTP = Trkpt()
+				
+		let trkptDbTable = Table(sqltpDbTableName)
+		var rowCount: Int = 0
+		
+		if let tpFileHandle = sqlDbFileHandle {
+			for key in try! tpFileHandle.prepare(trkptDbTable) {
+				rowCount += 1
+				//tempTP.trkIndex = key[sqltpDbTable.sqlTrkID]
+				tempTP.index = key[sqltpDbTable.sqlIndex]
+				tempTP.hasValidElevation = key[sqltpDbTable.sqlHasValidElevation]
+				tempTP.hasValidTimeStamp = key[sqltpDbTable.sqlHasValidTimeStamp]
+				tempTP.latitude = key[sqltpDbTable.sqlLatitude]
+				tempTP.longitude = key[sqltpDbTable.sqlLongitude]
+				tempTP.elevation = key[sqltpDbTable.sqlElevation]
+				tempTP.timeStamp = key[sqltpDbTable.sqlTimeStamp]
+				trkptDb.append(tempTP)
+				
+			}
+		}
+		return trkptDb
+	}
+	
+	func sqlGetAllAdvRows() -> [Adventure] {
+		var advDb = [Adventure]()
+		var tempAdventure = Adventure()
+		let advDbTable = Table(sqladvTableName)
+		var rowCount: Int = 0
+		
+		if let advFileHandle = sqlDbFileHandle {
+			for key in try! advFileHandle.prepare(advDbTable) {
+				rowCount += 1
+				tempAdventure.description = key[sqladvTable.sqladvDescription]
+				tempAdventure.area = key[sqladvTable.sqladvArea]
+				tempAdventure.imageName = key[sqladvTable.sqladvImageName]
+				tempAdventure.isFavorite = key[sqladvTable.sqladvIsFav]
+				switch key[sqladvTable.sqladvHikeCat] {
+					case "Hike": tempAdventure.hikeCategory = Adventure.HikeCategory.hike
+					case "Walkabout" :tempAdventure.hikeCategory = Adventure.HikeCategory.walkabout
+					case "Off Road": tempAdventure.hikeCategory = Adventure.HikeCategory.orv
+					case "Scenic Drive" : tempAdventure.hikeCategory = Adventure.HikeCategory.scenicDrive
+					case "Snowshoe" : tempAdventure.hikeCategory = Adventure.HikeCategory.snowshoe
+					case "Not Categorized" : tempAdventure.hikeCategory = Adventure.HikeCategory.none
+					default : tempAdventure.hikeCategory = Adventure.HikeCategory.none
+				}
+				advDb.append(tempAdventure)
+			}
+		}
+		return advDb
+			
+	}
+	
 	//		Commenting is still required.  Very touchy/fragile routine.  Any mistake in handling the creation of the structure from the SQL retrieve
 	//			will garble the resulting track
 	func sqlRetrieveRecord(_ rowID: Int) -> Track?{
@@ -812,7 +1258,7 @@ class SqlHikingDatabase: NSObject {
 				tempTrack.trackURLString = key[sqlDbTable.sqlTrackURLString]
 				tempTrack.trackComment = key[sqlDbTable.sqlTrackComment]
 				tempTrack.trackSummary.numberOfDatapoints = key[sqlDbTable.sqlNumberOfDatapoints]
-				tempTrack.trkIndex = Int(key[sqlDbTable.sqlId])
+				tempTrack.trkUniqueID = Int(key[sqlDbTable.sqlId])
 				tempTrack.header = key[sqlDbTable.sqlHeader]
 				tempTrack.trackSummary.distance = key[sqlDbTable.sqlDistance]
 				tempTrack.trackSummary.startElevation = key[sqlDbTable.sqlStartElevation]
@@ -997,5 +1443,7 @@ class SqlHikingDatabase: NSObject {
 		}
 		return returnResults
 	}
+	
+	
 	
 }  //HikingDataBase

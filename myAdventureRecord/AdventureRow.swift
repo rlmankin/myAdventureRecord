@@ -50,7 +50,7 @@ struct AdventureRow: View {
 						HStack {
 							Text(adventure.area)
 								.font(.caption)
-								.frame(width: 100)
+								.frame(width: 50)
 							Text(adventure.hikeDate)
 								.font(.caption)
 							Text(adventure.trackData.trackComment)
@@ -75,6 +75,6 @@ struct AdventureRow: View {
 
 struct AdventureRow_Previews: PreviewProvider {
     static var previews: some View {
-		AdventureRow(adventure: adventureData[5])
+		AdventureRow(adventure: adventureData[1])
     }
 }

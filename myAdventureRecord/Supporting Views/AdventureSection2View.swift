@@ -23,7 +23,11 @@ struct AdventureSection2View: View {
 	var adventure: Adventure
 	
 	var adventureIndex: Int {
-		userData.adventures.firstIndex(where: { $0.id == adventure.id})!
+		userData.adventures.firstIndex(where: { $0.id == adventure.id}) ?? 0
+	}
+	
+	var associatedTrackIndex: Int {
+		userData.adventures.firstIndex(where: { $0.associatedTrackID == adventure.associatedTrackID}) ?? 0
 	}
 	
 	
@@ -63,11 +67,21 @@ struct AdventureSection2View: View {
 							} else {
 								Text(adventure.name).font(.title).italic()
 							}
-							Button(action: {
-								self.userData.adventures[self.adventureIndex]
+							Button(action: {  // the favorite button can be selected outside of edit mode.  Just need to update the .isFavorite element of the adventure table
+								//updateDatabases()
+								self.userData.adventures[self.associatedTrackIndex]
 									.isFavorite.toggle()
+								let trackDb = sqlHikingData
+								let rowID = userData.adventures[associatedTrackIndex].trackData.trkUniqueID
+								let updatedAdvRow = trackDb.sqlUpdateAdvRow(rowID, &userData.adventures[associatedTrackIndex])
+								// updates all field in adventure Table rows associated with this track
+								let updatedTrkRow = trackDb.sqlUpdateTrkRow(rowID, userData.adventures[associatedTrackIndex])
+								// updates the trackdata.trackComment field in the track Table
+								//let retrievedTrack = trackDb.sqlRetrieveRecord(rowID) //	open and connect to the hikingdbTable of the SQL hiking database
+								//retrievedTrack?.print()
+								print("isFavorite updated - \(self.userData.adventures[self.associatedTrackIndex].isFavorite)")
 							}) {
-								if userData.adventures[self.adventureIndex].isFavorite {
+								if userData.adventures[self.associatedTrackIndex].isFavorite {
 									Image("star-filled")
 										.resizable()
 										.renderingMode(.template)
@@ -79,6 +93,8 @@ struct AdventureSection2View: View {
 										.foregroundColor(.gray)
 										.accessibility(label: Text("Add to favorites"))
 								}
+								
+								
 							}	//button
 							.frame(width: 20, height: 20)		// Need frame to keep star small
 							.buttonStyle(PlainButtonStyle())

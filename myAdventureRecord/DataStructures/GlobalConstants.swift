@@ -77,6 +77,8 @@ func roundDowntoNearest( nearest: Double, _ x : Double) -> Double {
 	return floor(Double(nearest) * Double(Int(x/Double(nearest))))
 }
 
+
+
 struct ReturnStruct {
 	enum parseProgress {
 		case notStarted

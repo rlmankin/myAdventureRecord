@@ -24,6 +24,7 @@ struct GPXParsingView: View {
 	@State private var selectedTab : Int = 0
 	@State private var tabInserted: [Bool] = [false]
 	
+	
 	// simple function to test if the tabInserted[selectedTab] is valid.  Needed due to compiler limitations on type checking
 	func testForValidTab() -> Bool {
 		return selectedTab < tabInserted.count ? tabInserted[selectedTab] : false
@@ -48,9 +49,13 @@ struct GPXParsingView: View {
 									.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
 							} else {
 								//	the track has finishing parsing, so make an 'adventure' out of it and display the detail view
-								AdventureDetail(adventure: loadAdventureTrack(track: parseGPX.parsedTracks[track]))
-									.tag(track)
-									.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
+								if userData.adventures.count == 0 {
+									Text(parseGPX.parsedTracks[track].print())
+								} else {
+									AdventureDetail(adventure: loadAdventureTrack(track: parseGPX.parsedTracks[track]), beenInserted: tabInserted[selectedTab])
+										.tag(track)
+										.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
+								}
 							}
 						}
 					}
@@ -60,20 +65,22 @@ struct GPXParsingView: View {
 					//	this toolbarItem / button snippet places the insert into the detail view toolbar status area
 					ToolbarItemGroup (placement: .status) {
 						Button("DbInsert") {
-							let trackDb = SqlHikingDatabase()		//	open and connect to the hinkingdbTable of the SQL hiking database
-							let trkptDb = SqlTrkptsDatabase()		//	connect to the trkptsTable of the SQL hiking database
-							let trackRow = trackDb.sqlInsertDbRow(parseGPX.parsedTracks[selectedTab])
-							let trkptRow = trkptDb.sqlInsertTrkptList(trackRow, parseGPX.parsedTracks[selectedTab].trkptsList)
+							// this is an initial insert of a parsedTrack into all tables in the database
+							
+							
+							let trackDb =   sqlHikingData		//	open and connect to the hinkingdbTable of the SQL hiking database
+							trackDb.sqlInsertToAllTables(track: parseGPX.parsedTracks[selectedTab])
+							//let trackRow = trackDb.sqlInsertDbRow(parseGPX.parsedTracks[selectedTab])
+							//let trkptRow = trackDb.sqlInsertTrkptList(trackRow, parseGPX.parsedTracks[selectedTab].trkptsList)
+							//let tempTrack = parseGPX.parsedTracks[selectedTab]
+							//let tempAdv = loadAdventureTrack(track: tempTrack)
+							//let advRow = trackDb.sqlInsertAdvRow(trackRow, tempAdv)
 							//print(x, y )
-							userData.add(parseGPX.parsedTracks[selectedTab])	// append the selected track into the datbase
-							tabInserted[selectedTab].toggle()		// disable the "insertDB" button to keep the user from adding the same parse many times
+							
+							userData.reload()
+							//userData.add(parseGPX.parsedTracks[selectedTab])	// append the selected track into the datbase							tabInserted[selectedTab].toggle()		// disable the "insertDB" button to keep the user from adding the same parse many times
 						}.buttonStyle(DetailButtonStyle())
 						 .disabled( testForValidTab() )
-						
-						/*Button("showDetail") {
-							showingParseDetail = loadAdventureTrack(track: parseGPX.parsedTracks[selectedTab])
-						}*/
-						   
 					}
 				}
 			} else {

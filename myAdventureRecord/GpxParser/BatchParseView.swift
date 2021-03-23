@@ -69,12 +69,20 @@ struct BatchParseView: View {
 				for track in parseGPX.parsedTracks {
 					bpFiles.xmlFiles[fileIndex].numTrkpts.append(track.trackSummary.numberOfDatapoints)
 					if insert {
+						
+						// this is the actual insert of a parsed track.  Using updateDatabases() is not appropriate here.  May need to add a new function
 						//track.print()
-						let trackDb = SqlHikingDatabase()		//	open and connect to the hinkingdbTable of the SQL hiking database
-						let trkptDb = SqlTrkptsDatabase()		//	connect to the trkptsTable of the SQL hiking database
-						let trackRow = trackDb.sqlInsertDbRow(track)
-						let trkptRow = trkptDb.sqlInsertTrkptList(trackRow, track.trkptsList)
-						bpFiles.xmlFiles[fileIndex].trackRow.append(trkptRow)
+						let trackDb = sqlHikingData						//	open and connect to the hinkingdbTable of the SQL hiking database
+						//let trkptDb = SqlTrkptsDatabase()						//	connect to the trkptsTable of the SQL hiking database
+						let trackRow = trackDb.sqlInsertDbRow(track)			// trackRow is the row in the hikingdbTable where the track was inserted
+						let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackRow, track.trkptsList)
+							// trkptRow is the number of rows in the trackptTable where the trackpoint list was inserted
+							//	trackRow is placed into the associatedTrackID field in the trackpointdbTable
+						let advRow = trackDb.sqlInsertAdvRow(trackRow, loadAdventureTrack(track: track))
+							// advRow is the row in the adventuredbTable where the adventure was inserted,
+							//	trackRow is place into the associatedTrackID field in the adventuredbTable
+						
+						bpFiles.xmlFiles[fileIndex].trackRow.append(numberOfTrkptRows)
 						
 						//print("GPX file: \(track.header) - inserted @ row: \(trackRow), trkPts @ row: \(trkptRow)")
 						}

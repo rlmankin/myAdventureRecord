@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+
 struct Track: Codable, Hashable, Identifiable{																	// the structure of a track.  This needs to be modified to create an init as well as some logging/print methods
 	
 	struct TrkSummaryStats: Codable, Hashable {
@@ -63,7 +65,7 @@ struct Track: Codable, Hashable, Identifiable{																	// the structure 
 	}
 	
 	var id = UUID()
-	var trkIndex: Int								// need to keep around after first parse
+	var trkUniqueID: Int								// need to keep around after first parse
 	var header: String					// need to keep around after first parse
 	var parseProgress : Int				// needed for observation of how much of the statistics creation is complete (for ProgressView)
 	var garminSummaryStats = [String: String]()			// need to keep around after first parse
@@ -76,7 +78,7 @@ struct Track: Codable, Hashable, Identifiable{																	// the structure 
 	var validTrkptsForStatistics: [Trkpt]
 	
 	init () {
-		self.trkIndex = 0
+		self.trkUniqueID = 0
 		self.header = "init - header set null" //nullString
 		self.parseProgress = 0
 		self.trkptsList.removeAll()
@@ -89,7 +91,7 @@ struct Track: Codable, Hashable, Identifiable{																	// the structure 
 	}
 	
 	mutating func clean() {
-		trkIndex = 0
+		trkUniqueID = 0
 		header = nullString
 		garminSummaryStats = [:]
 		trkptsList.removeAll()

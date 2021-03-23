@@ -25,7 +25,6 @@
 		EE87FB0725CB5E0500BA5BA0 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAD825CB5E0300BA5BA0 /* GlobalConstants.swift */; };
 		EE87FB0825CB5E0500BA5BA0 /* DistanceSpeedChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAD925CB5E0300BA5BA0 /* DistanceSpeedChart.swift */; };
 		EE87FB0925CB5E0500BA5BA0 /* DistanceElevationChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADA25CB5E0300BA5BA0 /* DistanceElevationChart.swift */; };
-		EE87FB0A25CB5E0500BA5BA0 /* SqlTrkPtsDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADC25CB5E0300BA5BA0 /* SqlTrkPtsDatabase.swift */; };
 		EE87FB0B25CB5E0500BA5BA0 /* DBViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADD25CB5E0300BA5BA0 /* DBViewControllerRepresentable.swift */; };
 		EE87FB0C25CB5E0500BA5BA0 /* DBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADE25CB5E0300BA5BA0 /* DBViewController.swift */; };
 		EE87FB0D25CB5E0500BA5BA0 /* SqlHikingDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FADF25CB5E0300BA5BA0 /* SqlHikingDatabase.swift */; };
@@ -106,7 +105,6 @@
 		EE87FAD825CB5E0300BA5BA0 /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		EE87FAD925CB5E0300BA5BA0 /* DistanceSpeedChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceSpeedChart.swift; sourceTree = "<group>"; };
 		EE87FADA25CB5E0300BA5BA0 /* DistanceElevationChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceElevationChart.swift; sourceTree = "<group>"; };
-		EE87FADC25CB5E0300BA5BA0 /* SqlTrkPtsDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqlTrkPtsDatabase.swift; sourceTree = "<group>"; };
 		EE87FADD25CB5E0300BA5BA0 /* DBViewControllerRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		EE87FADE25CB5E0300BA5BA0 /* DBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBViewController.swift; sourceTree = "<group>"; };
 		EE87FADF25CB5E0300BA5BA0 /* SqlHikingDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqlHikingDatabase.swift; sourceTree = "<group>"; };
@@ -219,7 +217,6 @@
 			isa = PBXGroup;
 			children = (
 				EE87FADF25CB5E0300BA5BA0 /* SqlHikingDatabase.swift */,
-				EE87FADC25CB5E0300BA5BA0 /* SqlTrkPtsDatabase.swift */,
 				EE87FADD25CB5E0300BA5BA0 /* DBViewControllerRepresentable.swift */,
 				EE87FADE25CB5E0300BA5BA0 /* DBViewController.swift */,
 			);
@@ -416,7 +413,6 @@
 				EE87FB1D25CB5E0500BA5BA0 /* DistanceGradeChart.swift in Sources */,
 				EE87FB1625CB5E0500BA5BA0 /* HikingDBView.swift in Sources */,
 				EE87FB1B25CB5E0500BA5BA0 /* MinMaxChart.swift in Sources */,
-				EE87FB0A25CB5E0500BA5BA0 /* SqlTrkPtsDatabase.swift in Sources */,
 				EE87FB0825CB5E0500BA5BA0 /* DistanceSpeedChart.swift in Sources */,
 				EE87FB1025CB5E0500BA5BA0 /* UserData.swift in Sources */,
 				EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */,

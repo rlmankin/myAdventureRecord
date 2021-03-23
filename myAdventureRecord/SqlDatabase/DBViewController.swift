@@ -12,7 +12,7 @@ class DBViewController: NSViewController {
 	
 	
 	
-	let sqlHikingDatabase = SqlHikingDatabase()
+	let sqlHikingDatabase = sqlHikingData //SqlHikingDatabase()
 	
 	/*override func loadView() {
 		self.view = NSView()
@@ -52,8 +52,8 @@ class DBViewController: NSViewController {
 	@IBAction func doRetrieveDetail(_ sender: NSMenuItem) {
 			// Retrieve the track point list from a selected row.  Currently that is all the routine does.  This is WIP
 			//	as a precurser to building a graphing/charting part of the code
-		let tpDB = SqlTrkptsDatabase()								// bring up the track point table
-		let trkptList = tpDB.sqlRetrieveTrkptlist(sqlHikingDatabase.tracks[dbTableview.clickedRow].trkIndex)
+		let tpDB = sqlHikingDatabase //SqlTrkptsDatabase()								// bring up the track point table
+		let trkptList = tpDB.sqlRetrieveTrkptlist(sqlHikingDatabase.tracks[dbTableview.clickedRow].trkUniqueID)
 	}
 	@IBAction func doDbContextRetrieve(_ sender: NSMenuItem) {
 		//	this function retrieves the track data from the sql database for all selected rows, then individually
@@ -103,7 +103,7 @@ class DBViewController: NSViewController {
 			//	that row
 		var tuserInfo = [String:Track]()								//	variable to hold the track 'userInfo' for the notification
 		for i in selectedRows {											//	retrieve each record and display
-            let trackIdToRetrieve = sqlHikingDatabase.tracks[i].trkIndex
+            let trackIdToRetrieve = sqlHikingDatabase.tracks[i].trkUniqueID
             if let trackretrieved = sqlHikingDatabase.sqlRetrieveRecord(trackIdToRetrieve){
 			// 	retrieve the track record.
 				tuserInfo["track"] =  trackretrieved
@@ -123,7 +123,7 @@ class DBViewController: NSViewController {
 		
 		var trackJSONString: String = nullString
 		for row in selectedRows {
-			if let trackRetrieved = sqlHikingDatabase.sqlRetrieveRecord(sqlHikingDatabase.tracks[row].trkIndex) {
+			if let trackRetrieved = sqlHikingDatabase.sqlRetrieveRecord(sqlHikingDatabase.tracks[row].trkUniqueID) {
 				let trackJSONData = try! JSONEncoder().encode(trackRetrieved)
 				if let tempJSONString = String(data: trackJSONData, encoding: .utf8) {
 					trackJSONString += tempJSONString
@@ -148,13 +148,13 @@ class DBViewController: NSViewController {
 		var trackCSVString: String = nullString
 		var headerDone: Bool = false
 		for row in selectedRows {
-			if let trackRetrieved = sqlHikingDatabase.sqlRetrieveRecord(sqlHikingDatabase.tracks[row].trkIndex) {
+			if let trackRetrieved = sqlHikingDatabase.sqlRetrieveRecord(sqlHikingDatabase.tracks[row].trkUniqueID) {
 				if !headerDone {
 					trackCSVString = trackRetrieved.exportCSVLine(true)
 					//print(trackCSVString)
 					headerDone = true
 				}
-				trackCSVString += String(format: "%3d, ", sqlHikingDatabase.tracks[row].trkIndex) + trackRetrieved.exportCSVLine(false)
+				trackCSVString += String(format: "%3d, ", sqlHikingDatabase.tracks[row].trkUniqueID) + trackRetrieved.exportCSVLine(false)
 				
 			}
 		}
@@ -174,7 +174,7 @@ class DBViewController: NSViewController {
 																				//	selected the 'clicked' Row, then there will be two entries for that row
 		for i in selectedRows {
 			
-			let trackIdToDelete = sqlHikingDatabase.tracks[i].trkIndex
+			let trackIdToDelete = sqlHikingDatabase.tracks[i].trkUniqueID
 			if sqlHikingDatabase.sqlDeleteRecord(trackIdToDelete) {
 				//print("delete success")
 			} else {
@@ -213,7 +213,7 @@ extension DBViewController: NSTableViewDelegate {
 		case NSUserInterfaceItemIdentifier(rawValue: "idColumn"):
 			let cellIdentifier = NSUserInterfaceItemIdentifier(rawValue: "idCell")
 			guard let cellView = tableView.makeView(withIdentifier: cellIdentifier, owner: self) as? NSTableCellView else {return nil}
-			cellView.textField?.integerValue = currentTrack.trkIndex
+			cellView.textField?.integerValue = currentTrack.trkUniqueID
 			return cellView
 			
 		case NSUserInterfaceItemIdentifier(rawValue: "descriptionColumn"):
@@ -339,9 +339,9 @@ extension DBViewController: NSTableViewDelegate {
 			}
 		default:
 			if sortDescriptors[0].ascending {
-				sqlHikingDatabase.tracks.sort(by: {$0.trkIndex >= $1.trkIndex})
+				sqlHikingDatabase.tracks.sort(by: {$0.trkUniqueID >= $1.trkUniqueID})
 			} else {
-				sqlHikingDatabase.tracks.sort(by: {$0.trkIndex < $1.trkIndex})
+				sqlHikingDatabase.tracks.sort(by: {$0.trkUniqueID < $1.trkUniqueID})
 			}
 		}
 		

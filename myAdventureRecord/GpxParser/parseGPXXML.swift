@@ -273,7 +273,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 		//print("using validTimeElevationArray")
 	}
 	
-	
+print("\(currentTrack.header) - \(currentTrack.trkptsList.count)")
 	for k in 0 ... (currentTrack.validTrkptsForStatistics.endIndex - 2) {
 		
 		currentTrack.parseProgress = k
@@ -327,7 +327,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 			}
 			//print("k: \(k), j: \(j), k.latitude \(trkPtList[k].latitude), j.latitude \(trkPtListJ[j].latitude), legValidDistance: \(legValidDistance)")
 			if (j % 100) == 0 {
-				//print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
+				print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
 			}
 		} // loop j
 		
@@ -350,7 +350,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 		avgAscentRateMile = ((avgAscentRateMile * Double(k)) + overMile.map({$0.ascentSpeed}).reduce(0,max)) / Double(k+1)
 		avgDescentRateMile = ((avgDescentRateMile * Double(k)) + overMile.map({$0.descentSpeed}).reduce(0,min)) / Double(k+1)
 		if (k % 100) == 0 {						// print progress indicator
-			//print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
+			print("", separator: "", terminator: "\n")							// enter a newline indicator when operation from the console
 		}
 	} // loop k
 	overEighthMile.removeAll()													// clear the array
@@ -516,7 +516,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 					// document at this time
 				elementsBeingProcessed.trk = true								// set track processing flag
 				currentTrackIndex += 1											// increment the local track ID
-				currentTrack.trkIndex = currentTrackIndex								// set the current track's id
+				currentTrack.trkUniqueID = currentTrackIndex								// set the current track's id
 				currentTrack.trackURLString = self.parseURL.absoluteString		// set the current track's URL to the URL passed in to init
 				currentTrkptIndex = -1											// new track starts a new sequence of trackpoints
 				lastValidTrkptTimestampIndex = -1

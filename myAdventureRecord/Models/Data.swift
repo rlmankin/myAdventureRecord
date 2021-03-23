@@ -14,13 +14,17 @@ import SwiftUI
 import ImageIO
 
 var adventureData: [Adventure] = loadAdventureData()
+let sqlHikingData = SqlHikingDatabase()
+
+
 
 func loadAdventureTrack(track: Track) -> Adventure {
 	var adventure = Adventure()
-	adventure.id = track.trkIndex
+	
+	
+	adventure.id = track.trkUniqueID
 	adventure.name = track.header
-	adventure.imageName = "myHikingRecordIcon"
-	adventure.description = track.trackComment
+	
 	adventure.trackData = track
 	adventure.trackData.trkptsList = track.trkptsList
 	//print(adventure.name, adventure.id, track.trkIndex, adventure.trackData.trkptsList.count)
@@ -46,21 +50,35 @@ func loadAdventureTrack(track: Track) -> Adventure {
 	return adventure
 }
 
+func loadPartialAdventure(partial: Adventure, target: inout Adventure) {
+	
+	target.imageName = partial.imageName
+	target.area = partial.area
+	target.description = partial.description
+	target.hikeCategory = partial.hikeCategory
+	target.isFavorite = partial.isFavorite
+	
+}
+
+
 func loadAdventureData() -> [Adventure] {
 	var adventure = Adventure()
 	var adventures = [Adventure]()
-	let sqlHikingData = SqlHikingDatabase()
-	let sqlTrkptsData = SqlTrkptsDatabase()
+	
 	for var item in sqlHikingData.tracks {
-		//var track = item
-		item.trkptsList = sqlTrkptsData.sqlRetrieveTrkptlist(item.trkIndex)
-		
-		adventure = loadAdventureTrack(track: item)
-
+		item.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(item.trkUniqueID)
+		adventure = loadAdventureTrack(track: item)								// load track parameters into the adventure
+		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &adventure)		// load adventure parameters into the adventure
 		adventures.append(adventure)
 		adventure = Adventure()	// reinit the adventure
 	}
+	for i in (0...adventures.count - 1) {
+		print("presort: adventures[\(i)].associatedTrackID = \(adventures[i].associatedTrackID)")
+	}
 	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
+	for i in (0...adventures.count - 1) {
+		print("postsort: adventures[\(i)].associatedTrackID = \(adventures[i].associatedTrackID)")
+	}
 	return adventures
 }
 //****************

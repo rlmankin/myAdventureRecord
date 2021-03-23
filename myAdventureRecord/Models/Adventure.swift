@@ -59,6 +59,7 @@ extension CategoryPicker where Label == Text {
 
 struct Adventure: Hashable, Codable, Identifiable {
 	var id: Int
+	var associatedTrackID : Int
 	var name: String
 	var imageName: String = "myHikingRecordIcon"
 	var hikeDate : String
@@ -116,6 +117,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 	
 	init() {
 		self.id = 0
+		self.associatedTrackID = 0
 		self.isFavorite = true
 		self.name = ""
 		//self.imageName = ""
