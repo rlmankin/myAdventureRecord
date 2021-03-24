@@ -13,72 +13,85 @@ import Foundation
 import SwiftUI
 import ImageIO
 
-var adventureData: [Adventure] = loadAdventureData()
-let sqlHikingData = SqlHikingDatabase()
-
-
+var adventureData: [Adventure] = loadAdventureData()				// 	create adventures from track data in the databse
+let sqlHikingData = SqlHikingDatabase()								// 	open and load the various tables from the database
 
 func loadAdventureTrack(track: Track) -> Adventure {
+	// loadAdventureTrack fills all applicable adventure fields from a track structure
+	// 	the trackpoints list is retrieved in the parent function or is already carried within the track structure
+	// this function is called throughout the app, so there should be no time consuming acticities in here (e.g.
+	//	calls to retrieve information from the database
 	var adventure = Adventure()
 	
+	adventure.id = track.trkUniqueID								// 	trkUniqueID is the critical field.  It is used to link all table entries
+																	// 	to a specific track in the database
+	adventure.name = track.header									// 	the track header will always be used to name the adventure
+	adventure.trackData = track										// 	load the trackData field with the track.
 	
-	adventure.id = track.trkUniqueID
-	adventure.name = track.header
-	
-	adventure.trackData = track
-	adventure.trackData.trkptsList = track.trkptsList
-	//print(adventure.name, adventure.id, track.trkIndex, adventure.trackData.trkptsList.count)
+	//	DO NOT replace this line will a call to retrieve the trackpoint list.
+		adventure.trackData.trkptsList = track.trkptsList
+		//	if there are no trackpoints the there is no need to calculate andy additional fields
 	if adventure.trackData.trkptsList.count != 0 {
+			//	coordinates set the center of the map at the starting location and hold the maximum/minimum latitude/longitude to set the area
+			//	of the track.  This is used to set the center and area of the map
 		adventure.coordinates.latitude = adventure.trackData.trkptsList[0].latitude
+																	//	find the latitude of the start of the track
 		adventure.coordinates.longitude = adventure.trackData.trkptsList[0].longitude
-		
+																	//	find the longitude of the start of the track
+				// find the maximum latitude and longitude.
+			//	probably should 'guard' these to avoid an unexpected crash for nil
 		adventure.coordinates.maxLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).max()!
 		adventure.coordinates.maxLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).max()!
+				// find the minumum latitude and longitude
 		adventure.coordinates.minLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).min()!
 		adventure.coordinates.minLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).min()!
+				// calculate the 'span' of the latitude and longitude.  This sets the various 'corners' of the map
 		adventure.latitudeSpan = CLLocationDegrees( max( abs( adventure.coordinates.latitude - adventure.coordinates.maxLatitude),
 									  abs( adventure.coordinates.latitude - adventure.coordinates.minLatitude)))
 		adventure.longitudeSpan = CLLocationDegrees(max( abs( adventure.coordinates.longitude - adventure.coordinates.maxLongitude),
 									  abs( adventure.coordinates.longitude - adventure.coordinates.minLongitude)))
 	}
-	adventure.hikeDate = {
+	adventure.hikeDate = {											//	set the hike date, using the 'usual' Apple date functions
 		let dateFmt = DateFormatter()
 		dateFmt.timeZone = TimeZone.current
 		dateFmt.dateFormat =  "MMM dd, yyyy"
+			//	probably should 'guard' this to avoid an unexpected crash for nil
 		return String(format: "\(dateFmt.string(from: track.trackSummary.startTime!))")
 	}()
+		// return, NOTE: this is not a complete adventure, only the parts of the adventure structure used by a track
 	return adventure
 }
 
 func loadPartialAdventure(partial: Adventure, target: inout Adventure) {
-	
+	//	loadPartialAdventure loads those parts of the adventure structure that are carried in the 'adventureTable' in the database
+	//		NOTE: target is a inout parameter, thus making it pass-by-reference.  This is necessary to insure the same instance of
+	//				adventure is modified and not a new one
 	target.imageName = partial.imageName
 	target.area = partial.area
 	target.description = partial.description
 	target.hikeCategory = partial.hikeCategory
 	target.isFavorite = partial.isFavorite
-	
 }
 
 
 func loadAdventureData() -> [Adventure] {
-	var adventure = Adventure()
+	//	loadAdventureData loops through all tracks in the database and creates the adventure structure for all entries.
+	//	returns and array of adventures.  This array is later used & published by the UserData class for use throughout
+	//	the application
+	var localAdventure = Adventure()
 	var adventures = [Adventure]()
 	
 	for var item in sqlHikingData.tracks {
+			
 		item.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(item.trkUniqueID)
-		adventure = loadAdventureTrack(track: item)								// load track parameters into the adventure
-		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &adventure)		// load adventure parameters into the adventure
-		adventures.append(adventure)
-		adventure = Adventure()	// reinit the adventure
+																	//	retrieve the trackspoint list from the trackpointlist table in the database
+		localAdventure = loadAdventureTrack(track: item)					// load track parameters into the adventure
+		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &localAdventure)
+																	// load adventure parameters into the adventure
+		adventures.append(localAdventure)
+		localAdventure = Adventure()										// reinit the adventure
 	}
-	for i in (0...adventures.count - 1) {
-		print("presort: adventures[\(i)].associatedTrackID = \(adventures[i].associatedTrackID)")
-	}
-	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
-	for i in (0...adventures.count - 1) {
-		print("postsort: adventures[\(i)].associatedTrackID = \(adventures[i].associatedTrackID)")
-	}
+	
 	return adventures
 }
 //****************
