@@ -816,6 +816,10 @@ class SqlHikingDatabase: NSObject {
 	
 	func sqlInsertTrkptList( _ trackRowID: Int64, _ trkptList: [Trkpt]) -> Int {
 		var trkptsAdded : Int = 0
+		guard !trkptList.isEmpty else {
+			print("trkptsList count is 0")
+			return 0
+		}
 		for trkptrow in 0 ... trkptList.count - 1 {
 			let tpRowID = sqlInsertTpRow(Int(trackRowID), trkptList[trkptrow])
 			if tpRowID >= 0 {

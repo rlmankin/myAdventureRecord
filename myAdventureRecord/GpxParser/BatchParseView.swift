@@ -54,47 +54,52 @@ struct BatchParseView: View {
 	
 	func parseAndInsertParseList(  insert: Bool) -> Bool {
 		
-		
+		guard !bpFiles.xmlFiles.isEmpty else {
+			return false
+		}
 		for fileIndex in (0 ... bpFiles.xmlFiles.count - 1) {
 			print("pAIPL: launch parse \(bpFiles.xmlFiles[fileIndex].url)")
-			let parseGPX = parseController()
+			if bpFiles.xmlFiles[fileIndex].parseThis {
 			
-			DispatchQueue.main.async {
-				bpFiles.xmlFiles[fileIndex].parseInProgress = .inProgress
-				print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
-			}
-			let  parseSuccess = parseGPX.parseSingleFile(bpFiles.xmlFiles[fileIndex].url)
-			if parseSuccess {
+				let parseGPX = parseController()
 				
-				for track in parseGPX.parsedTracks {
-					bpFiles.xmlFiles[fileIndex].numTrkpts.append(track.trackSummary.numberOfDatapoints)
-					if insert {
-						
-						// this is the actual insert of a parsed track.  Using updateDatabases() is not appropriate here.  May need to add a new function
-						//track.print()
-						let trackDb = sqlHikingData						//	open and connect to the hinkingdbTable of the SQL hiking database
-						//let trkptDb = SqlTrkptsDatabase()						//	connect to the trkptsTable of the SQL hiking database
-						let trackRow = trackDb.sqlInsertDbRow(track)			// trackRow is the row in the hikingdbTable where the track was inserted
-						let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackRow, track.trkptsList)
-							// trkptRow is the number of rows in the trackptTable where the trackpoint list was inserted
-							//	trackRow is placed into the associatedTrackID field in the trackpointdbTable
-						let advRow = trackDb.sqlInsertAdvRow(trackRow, loadAdventureTrack(track: track))
-							// advRow is the row in the adventuredbTable where the adventure was inserted,
-							//	trackRow is place into the associatedTrackID field in the adventuredbTable
-						
-						bpFiles.xmlFiles[fileIndex].trackRow.append(numberOfTrkptRows)
-						
-						//print("GPX file: \(track.header) - inserted @ row: \(trackRow), trkPts @ row: \(trkptRow)")
-						}
-
+				DispatchQueue.main.async {
+					bpFiles.xmlFiles[fileIndex].parseInProgress = .inProgress
+					print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
 				}
-			}
-			DispatchQueue.main.async {
-				bpFiles.xmlFiles[fileIndex].numTracks = parseGPX.parsedTracks.count
-				bpFiles.xmlFiles[fileIndex].parseInProgress = .done
-				
-				
-				print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
+				let  parseSuccess = parseGPX.parseSingleFile(bpFiles.xmlFiles[fileIndex].url)
+				if parseSuccess {
+					
+					for track in parseGPX.parsedTracks {
+						bpFiles.xmlFiles[fileIndex].numTrkpts.append(track.trackSummary.numberOfDatapoints)
+						if insert {
+							
+							// this is the actual insert of a parsed track.  Using updateDatabases() is not appropriate here.  May need to add a new function
+							//track.print()
+							let trackDb = sqlHikingData						//	open and connect to the hinkingdbTable of the SQL hiking database
+							//let trkptDb = SqlTrkptsDatabase()						//	connect to the trkptsTable of the SQL hiking database
+							let trackRow = trackDb.sqlInsertDbRow(track)			// trackRow is the row in the hikingdbTable where the track was inserted
+							let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackRow, track.trkptsList)
+								// trkptRow is the number of rows in the trackptTable where the trackpoint list was inserted
+								//	trackRow is placed into the associatedTrackID field in the trackpointdbTable
+							let advRow = trackDb.sqlInsertAdvRow(trackRow, loadAdventureTrack(track: track))
+								// advRow is the row in the adventuredbTable where the adventure was inserted,
+								//	trackRow is place into the associatedTrackID field in the adventuredbTable
+							
+							bpFiles.xmlFiles[fileIndex].trackRow.append(numberOfTrkptRows)
+							
+							//print("GPX file: \(track.header) - inserted @ row: \(trackRow), trkPts @ row: \(trkptRow)")
+							}
+
+					}
+				}
+				DispatchQueue.main.async {
+					bpFiles.xmlFiles[fileIndex].numTracks = parseGPX.parsedTracks.count
+					bpFiles.xmlFiles[fileIndex].parseInProgress = .done
+					
+					
+					print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
+				}
 			}
 		}
 		
@@ -104,7 +109,7 @@ struct BatchParseView: View {
 	func getFile(startDate: Date, endDate: Date) -> [ReturnStruct]
 	{
 		
-		var returnItem = ReturnStruct(url:URL(string:"blah")!, creationDate: Date(), parseInProgress: .notStarted,
+		var returnItem = ReturnStruct(url:URL(string:"blah")!, parseThis: true, creationDate: Date(), parseInProgress: .notStarted,
 									  numTrkpts: [0], trackRow: [0], trkptRow: [0])
 		var returnString = [ReturnStruct]()
 		let fm = FileManager.default
@@ -178,12 +183,13 @@ struct BatchParseView: View {
 			} else {
 				
 				HStack {
+					Text("doNotParse")
 					Spacer()
 					Button( action: {
 							let parseQueue = DispatchQueue(label: "batchParseQueue", attributes: .concurrent)
 							print("Body: bpFiles.xmlFiles @ button dispatch: \(bpFiles.xmlFiles)")
 							parseQueue.async {
-								parseAndInsertParseList(insert: false)
+								parseAndInsertParseList(insert: insertInDb)
 								beenParsed = true
 							}
 					})

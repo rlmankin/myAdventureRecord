@@ -88,6 +88,7 @@ struct ReturnStruct {
 	
 	
 	var url: URL
+	var parseThis : Bool
 	var creationDate: Date
 	var parseInProgress = parseProgress.notStarted
 	var color: Color {

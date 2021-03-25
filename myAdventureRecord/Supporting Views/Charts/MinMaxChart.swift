@@ -65,7 +65,7 @@ struct MinMaxChart: View {
 			// determine the distance, gain values for GainTriangleView
 			let distX = Double((endLegDistance - startLegDistance)/metersperMile)
 			let distY = Double((endPointElevation - startPointElevation)*feetperMeter)
-						GainTriangleView(readerHeight: readerHeight, startXOffset: startXOffset, endXOffset: endXOffset, startYHeight: startYHeight, endYHeight: endYHeight, distX: distX, distY: distY)
+			GainTriangleView(readerHeight: readerHeight, startXOffset: startXOffset, endXOffset: endXOffset, startYHeight: startYHeight, endYHeight: endYHeight, distX: distX, distY: distY, color: color)
 			
 			// draw the line for the statistic in question
 			if startIndex + 1 <= endIndex {

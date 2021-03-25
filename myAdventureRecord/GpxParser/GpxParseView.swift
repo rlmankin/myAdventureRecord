@@ -78,6 +78,7 @@ struct GPXParsingView: View {
 							//print(x, y )
 							
 							userData.reload()
+							tabInserted[selectedTab].toggle()
 							//userData.add(parseGPX.parsedTracks[selectedTab])	// append the selected track into the datbase							tabInserted[selectedTab].toggle()		// disable the "insertDB" button to keep the user from adding the same parse many times
 						}.buttonStyle(DetailButtonStyle())
 						 .disabled( testForValidTab() )

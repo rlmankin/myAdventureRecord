@@ -10,7 +10,6 @@ import SwiftUI
 
 struct BPListView: View {
 	@EnvironmentObject var bpFiles : BPFiles
-	//@Binding var xmlFiles : [ReturnStruct]
 	
 	func colorToString( color: Color) -> String {
 		switch color {

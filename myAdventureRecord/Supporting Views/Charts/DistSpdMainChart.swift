@@ -17,7 +17,9 @@ struct DistSpdMainChart: View {
 	
 	
 	var body: some View {
+		
 	
+		
 		let verticalGridSpacing = 0.5		// every 5 mps (feet when converted - not implemented yet)
 		let lowerGridPoint =  0.0
 		//let upperGridPoint =  roundUptoNearest(nearest: verticalGridSpacing, track.trackSummary.mileStats.speed.max.statData)
@@ -27,9 +29,11 @@ struct DistSpdMainChart: View {
 
 
 		let totalDistance = track.trackSummary.distance
-	
+		
+		
 		GeometryReader { reader in
 		// elevation chart line
+			
 			ForEach( (1...self.track.trkptsList.count - 1), id: \.self ) { item in
 				let trkpt = self.track.trkptsList[item]
 				Path { p in
@@ -55,6 +59,7 @@ struct DistSpdMainChart: View {
 			}
 
 		}
+	
 	}
 }
 

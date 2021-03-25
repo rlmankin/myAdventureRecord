@@ -41,6 +41,10 @@ struct AdventureDetail: View {
 	}
 	
 	func loadUserDataProperties() {
+		guard !userData.adventures.isEmpty else {
+			print("loadUserDataProperties - userData.adventures = 0")
+			return
+		}
 		for item in (0 ... userData.adventures.count - 1) {
 			print("userData.adventures[\(item)] - \(userData.adventures[item].id),\(userData.adventures[item].associatedTrackID),\(userData.adventures[item].name), \(userData.adventures[item].trackData.header)")
 		}
@@ -116,9 +120,10 @@ struct AdventureDetail: View {
 							}
 							section2Editing.toggle()
 							
-						}
+						}.disabled(!beenInserted)
 						.frame(width: proxy.size.width, height: proxy.size.height, alignment: .topTrailing)
 						.offset(x: section2Editing ? -80 : -10, y: 10)
+						
 						
 						if section2Editing {
 							Button("Cancel") {

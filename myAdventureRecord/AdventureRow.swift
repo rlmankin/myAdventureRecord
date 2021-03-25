@@ -75,6 +75,6 @@ struct AdventureRow: View {
 
 struct AdventureRow_Previews: PreviewProvider {
     static var previews: some View {
-		AdventureRow(adventure: adventureData[1])
+		AdventureRow(adventure: adventureData[0])
     }
 }
