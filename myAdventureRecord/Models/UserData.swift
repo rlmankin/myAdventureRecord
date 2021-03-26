@@ -21,9 +21,15 @@ final class	UserData: ObservableObject {
 	}
 	
 	func reload() {
+		for item in self.adventures {
+			print("reload:  prereload[ \(item.name)")
+		}
 		sqlHikingData.reloadTracks()
 		adventureData = loadAdventureData()
 		adventures = adventureData
+		for item in self.adventures {
+			print("reload:  postreload \(item.name)")
+		}
 	}
 	
 	

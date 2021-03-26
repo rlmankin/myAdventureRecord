@@ -16,6 +16,11 @@ import ImageIO
 var adventureData: [Adventure] = loadAdventureData()				// 	create adventures from track data in the databse
 let sqlHikingData = SqlHikingDatabase()								// 	open and load the various tables from the database
 
+
+func loadTrackFromAdventure(adventure: Adventure) -> Track {
+	return adventure.trackData
+}
+
 func loadAdventureTrack(track: Track) -> Adventure {
 	// loadAdventureTrack fills all applicable adventure fields from a track structure
 	// 	the trackpoints list is retrieved in the parent function or is already carried within the track structure

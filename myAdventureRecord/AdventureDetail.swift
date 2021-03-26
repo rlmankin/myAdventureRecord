@@ -97,11 +97,6 @@ struct AdventureDetail: View {
 							.offset(x: -10, y: -10)
 						}
 					)
-				//CircleImage(image: adventure.image.resizable())
-				//	.offset(x:5, y: 135)
-					
-				//	.frame(width: 150, height:150)
-				
 			}
 			
 			AdventureSection2View(section2Editing: $section2Editing, editName: $editName, editTrackComment: $editTrackComment, editDescription: $editDescription, editHikeCategory: $editHikeCategory, editArea:  $editArea, adventure: adventure)
@@ -110,7 +105,7 @@ struct AdventureDetail: View {
 						
 						Button("\(section2Editing == true ? "Done" : "Edit")") {
 							if section2Editing {
-								print( "do the userData and database updates here")
+								print( "do the userData and database updates here - \(adventureIndex)")
 								if beenInserted {
 									loadUserDataProperties()
 									updateDatabases()

@@ -880,12 +880,13 @@ class SqlHikingDatabase: NSObject {
 		}
 	}
 	
-	func sqlInsertToAllTables( track : Track) {
+	func sqlInsertToAllTables( track : Track) -> Int64 {
 			//	open and connect to the hinkingdbTable of the SQL hiking database
 		let trackRow = self.sqlInsertDbRow(track)
 		let trkptRow = self.sqlInsertTrkptList(trackRow, track.trkptsList)
 		let tempAdv = loadAdventureTrack(track: track)
 		let advRow = self.sqlInsertAdvRow(trackRow, tempAdv)
+		return trackRow
 	}
 	
 	

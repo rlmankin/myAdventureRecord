@@ -16,6 +16,29 @@ struct ParsingProgressView: View {
 	}
 }
 
+struct whichAdventureView : View {
+	@EnvironmentObject var userData: UserData
+	@EnvironmentObject var parseGPX :  parseController
+	
+	var trackIndex : Int
+	var beenInserted : Bool
+	
+	var body: some View {
+		if beenInserted {
+			let userDataTrackIndex = userData.adventures.firstIndex(where: {($0.id == parseGPX.parsedTracks[trackIndex].trkUniqueID)})!
+			AdventureDetail(adventure: userData.adventures[userDataTrackIndex], beenInserted: beenInserted)
+				.tag(trackIndex)
+				.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
+		} else {
+			AdventureDetail(adventure: loadAdventureTrack(track: parseGPX.parsedTracks[trackIndex]), beenInserted: beenInserted)
+				.tag(trackIndex)
+				.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
+		}
+	}
+}
+
+
+
 struct GPXParsingView: View {
 	@EnvironmentObject var userData: UserData
 	@EnvironmentObject var parseGPX :  parseController
@@ -30,32 +53,29 @@ struct GPXParsingView: View {
 		return selectedTab < tabInserted.count ? tabInserted[selectedTab] : false
 	}
 	
+	
+	
 	var body: some View {
 			
 			//  if there were no GPX tracks found in the requested URL, then generate a Text view to tell user something is amiss
 			//		likely a non-GPX XML file.
+		Group {
 			if parseGPX.numberOfTracks != 0 {
 				//	make a tabview of all the tracks found in the set of parses
 				TabView (selection: $selectedTab) {						//	allow the user to select tabs - $selectedTab
 					if parseGPX.parsedTracks.count != 0 {
 						//	loop through each track and display the relevant track detail information
-						ForEach( 0 ... parseGPX.parsedTracks.count - 1, id:\.self) {track in
+						ForEach( 0 ... parseGPX.parsedTracks.count - 1, id:\.self) {trackIndex in
 							//	if the validTrkprtsForStatistics array is empty implies that the track is still being parsed,
 							//		so show a progress wheel.  Note: to make this work, I changed the parseGPXXML to do a two-pass parse
 							//		the first pass to find all the tracks and corresponding header (if any) in the file,
 							//		the second to actually parse and gather statistics
-							if parseGPX.parsedTracks[track].validTrkptsForStatistics.isEmpty {
+							if parseGPX.parsedTracks[trackIndex].validTrkptsForStatistics.isEmpty {
 								ParsingProgressView()
-									.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
+									.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 							} else {
 								//	the track has finishing parsing, so make an 'adventure' out of it and display the detail view
-								if userData.adventures.count == 0 {
-									Text(parseGPX.parsedTracks[track].print())
-								} else {
-									AdventureDetail(adventure: loadAdventureTrack(track: parseGPX.parsedTracks[track]), beenInserted: tabInserted[selectedTab])
-										.tag(track)
-										.tabItem { Text("\(parseGPX.parsedTracks[track].header)")}
-								}
+								whichAdventureView(trackIndex: trackIndex, beenInserted: tabInserted[selectedTab])
 							}
 						}
 					}
@@ -67,16 +87,12 @@ struct GPXParsingView: View {
 						Button("DbInsert") {
 							// this is an initial insert of a parsedTrack into all tables in the database
 							
-							
+							print("inserting adventure into Db")
 							let trackDb =   sqlHikingData		//	open and connect to the hinkingdbTable of the SQL hiking database
-							trackDb.sqlInsertToAllTables(track: parseGPX.parsedTracks[selectedTab])
-							//let trackRow = trackDb.sqlInsertDbRow(parseGPX.parsedTracks[selectedTab])
-							//let trkptRow = trackDb.sqlInsertTrkptList(trackRow, parseGPX.parsedTracks[selectedTab].trkptsList)
-							//let tempTrack = parseGPX.parsedTracks[selectedTab]
-							//let tempAdv = loadAdventureTrack(track: tempTrack)
-							//let advRow = trackDb.sqlInsertAdvRow(trackRow, tempAdv)
-							//print(x, y )
-							
+							// setting the trkUniqueID places the database rowID where the track was inserted to be available
+							//	to AdventureDetail when it is updated.  This is necessary inorder to insure that edit done after
+							//	insertion but before navigating away from the detail view will be captured.
+							parseGPX.parsedTracks[selectedTab].trkUniqueID = Int(trackDb.sqlInsertToAllTables(track: parseGPX.parsedTracks[selectedTab]))
 							userData.reload()
 							tabInserted[selectedTab].toggle()
 							//userData.add(parseGPX.parsedTracks[selectedTab])	// append the selected track into the datbase							tabInserted[selectedTab].toggle()		// disable the "insertDB" button to keep the user from adding the same parse many times
@@ -87,6 +103,7 @@ struct GPXParsingView: View {
 			} else {
 				Text(" number of Track is \(parseGPX.numberOfTracks).  Likely a non-GPX XML file")
 			}
+		}
 	}
 }
 
