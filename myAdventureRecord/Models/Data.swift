@@ -97,6 +97,7 @@ func loadAdventureData() -> [Adventure] {
 		localAdventure = Adventure()										// reinit the adventure
 	}
 	
+	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
 	return adventures
 }
 //****************

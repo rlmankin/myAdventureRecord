@@ -27,6 +27,8 @@ final class	UserData: ObservableObject {
 		sqlHikingData.reloadTracks()
 		adventureData = loadAdventureData()
 		adventures = adventureData
+		self.adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
+		
 		for item in self.adventures {
 			print("reload:  postreload \(item.name)")
 		}
