@@ -57,6 +57,11 @@ struct BatchParseView: View {
 		guard !bpFiles.xmlFiles.isEmpty else {
 			return false
 		}
+		
+		
+		let disableSleeping = disableScreenSleep()
+		print("disableSleeping = \(disableSleeping)")
+		
 		for fileIndex in (0 ... bpFiles.xmlFiles.count - 1) {
 			print("pAIPL: launch parse \(bpFiles.xmlFiles[fileIndex].url)")
 			if bpFiles.xmlFiles[fileIndex].parseThis {
@@ -102,6 +107,8 @@ struct BatchParseView: View {
 				}
 			}
 		}
+		let enableSleeping = enableScreenSleep()
+		print("enable Sleeping \(enableSleeping)")
 		
 		return true
 	}

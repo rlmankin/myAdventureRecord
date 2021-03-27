@@ -36,24 +36,14 @@ struct BParseRow: View {
 				let xmlFile = bpFiles.xmlFiles[index]						// temporary to not have to type bpFiles... every time
 				HStack (spacing: 0) {
 					Text("\(xmlFile.numTracks): [")
-					ForEach (1 ... xmlFile.numTrkpts.count - 1, id: \.self) { itemIndex in
-						Text("\(xmlFile.numTrkpts[itemIndex])")
-						if itemIndex < xmlFile.numTrkpts.count-1 { Text(", ")}	// add ", " except on the last iteration
-						
-					}
-					Text("]")
+					
 					if xmlFile.trackRow.count > 1 {
-						Text(": ")
 						ForEach (1 ... xmlFile.trackRow.count - 1, id: \.self) { itemIndex in
 							Text("\(xmlFile.trackRow[itemIndex]) ")
 							if itemIndex < xmlFile.trackRow.count-1 { Text(", ")}// add ", " except on the last iteration
 							
 						}
-						ForEach (1 ... xmlFile.trkptRow.count - 1, id: \.self) { itemIndex in
-							Text("\(xmlFile.trkptRow[itemIndex]) ")
-							
-						}
-					Text("], ")
+					Text("]")
 					}
 					
 					
