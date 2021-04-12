@@ -53,12 +53,12 @@ func createEleGridPoints( minEle: Double, maxEle: Double, stepSize: Double) -> [
 func distanceWidth(_ width: CGFloat, _ totalDistance : Double) -> CGFloat {
 			// calculated horizontal grid size for the distance of the track
 			//	(pixel/<unit distance>
-	
 	return width / CGFloat(totalDistance)
 }
 
-func distanceOffset(_ legDistance: Double, axisWidth: CGFloat) -> CGFloat {
-	let legOffset = (legDistance) * Double(axisWidth)
+func distanceOffset(_ legDistance: Double, pixelPerMeter: CGFloat) -> CGFloat {
+	// distance from axis origin to the pixel position corresponding to the distance (e.g. 1000 m * (0.05 pixel/m) = 50 pixel position
+	let legOffset = (legDistance) * Double(pixelPerMeter)
 	//print("legOffset[\(distanceIndex)] = \(legDistance),  / \(totalDistance) = \(legOffset), axisWidth \(Double(axisWidth))")
 	return CGFloat(legOffset)
 }
@@ -137,3 +137,11 @@ func  enableScreenSleep() -> Bool {
 	}
 	return false
 }
+
+func timeStampLog(message: String) {
+	let now = Date()
+	let df = DateFormatter()
+	df.dateFormat = "yyyyMMddd HH:mm:ss.S"
+	print("\(df.string(from: now)) :  \(message)")
+}
+

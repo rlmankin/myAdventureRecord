@@ -26,6 +26,8 @@ struct YAxisView: View {
 	
 	var body: some View {
 		
+		
+		timeStampLog(message: "XAxisView")
 		let readerScale =  CGFloat(1.0)
 		// elevation grid computed properties
 		//let verticalGridSpacing = 5.0		// every 5 meters (feet when converted - not implemented yet)
@@ -36,7 +38,7 @@ struct YAxisView: View {
 		
 		
 		//  y-axis (elevation) Gridlines
-		GeometryReader { reader in
+		return GeometryReader { reader in
 			//VStack {
 			ForEach( verticalGridPoints, id: \.self) { elevation in
 				let scaledReaderHeight = reader.size.height * readerScale

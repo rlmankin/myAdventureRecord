@@ -14,14 +14,14 @@ struct XAxisView: View {
 	
 	
 	
-	func createXaxisGridPoints( minEle: Double, maxEle: Double, stepSize: Double) -> [Double] {
-		var eleGridline : [Double] = []
-		var i = minEle
-		while ( i <= maxEle) {
-			eleGridline.append(i)
+	func createXaxisGridPoints( minValue: Double, maxValue: Double, stepSize: Double) -> [Double] {
+		var gridLine : [Double] = []
+		var i = minValue
+		while ( i <= maxValue) {
+			gridLine.append(i)
 			i += Double(stepSize)
 		}
-		return eleGridline
+		return gridLine
 	}
 	
 	
@@ -33,20 +33,23 @@ struct XAxisView: View {
 	var body: some View {
 		
 		
+		timeStampLog(message: "YAxisView")
+		
+		
 		let horizontalGridSpacing = Double(0.125*metersperMile) //0.125*metersperMile //0.25*1000	// every 1/4 kilometer (mile when converted - not implemented yet_
 		let totalDistance = track.trkptsList.compactMap({$0.lastTrkpt.distance}).reduce(0,+)
 		let rightGridpoint = Double(totalDistance)
-		let horizontalGridPoints = createXaxisGridPoints(minEle: 0.0, maxEle: rightGridpoint, stepSize: horizontalGridSpacing)
+		let horizontalGridPoints = createXaxisGridPoints(minValue: 0.0, maxValue: rightGridpoint, stepSize: horizontalGridSpacing)
 		let readerScale =  CGFloat(1.0)
 		//  y-axis (elevation) Gridlines
 		
-		GeometryReader { reader in
+		return GeometryReader { reader in
 			let scaledReaderHeight = reader.size.height * readerScale
 			let scaledReaderWidth = reader.size.width * readerScale
 			
 			ForEach (horizontalGridPoints, id: \.self) { distance in
-				let distWidth = distanceWidth(scaledReaderWidth, totalDistance)
-				let xOffset = distanceOffset(distance, axisWidth: distWidth)
+				let distWidth = distanceWidth(scaledReaderWidth, totalDistance)	// pixel per unit distance (e.g. pixel/meter)
+				let xOffset = distanceOffset(distance, pixelPerMeter: distWidth)	
 				let modDistance =  Int(round(distance/horizontalGridSpacing)) % 4
 				Path { p in
 					
@@ -79,6 +82,6 @@ struct XAxisView: View {
 
 struct XAxisView_Previews: PreviewProvider {
     static var previews: some View {
-		XAxisView(track: adventureData[0].trackData)
+		XAxisView(track: adventureData[1].trackData)
     }
 }

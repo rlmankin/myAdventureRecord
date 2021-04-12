@@ -45,7 +45,7 @@ struct DistSpdMainChart: View {
 					let yHeight = elevationHeight(readerHeight, upperGridPoint, lowerGridPoint)
 					let currlegDistance = calcLegDistance(item)
 						//self.trkptList[...(item)].compactMap({$0.lastTrkpt.distance}).reduce(0,+)
-					let xOffset = distanceOffset(currlegDistance, axisWidth: distWidth)
+					let xOffset = distanceOffset(currlegDistance, pixelPerMeter: distWidth)
 					let currYOffset = elevationOffset(trkpt.lastTimeDistTrkpt.trailSpeed, yHeight, lowerGridPoint)
 					//print("\t \(distWidth), \(yHeight), \(xOffset), \(prevYOffset), \(currYOffset) \n")
 					p.move(to: CGPoint(x: xOffset,

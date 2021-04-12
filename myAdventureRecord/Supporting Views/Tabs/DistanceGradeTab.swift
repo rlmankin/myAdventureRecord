@@ -10,7 +10,9 @@ import SwiftUI
 struct DistanceGradeTab: View {
 	var adventure : Adventure
 	var body: some View {
-		VStack (alignment: .center) {
+		
+		timeStampLog(message: "DistanceGradeTab")
+		return VStack (alignment: .center) {
 			Text("Grade: \(adventure.name)")
 			 HStack {
 				Text(String(format: "Min Elevation: %5.2f", adventure.trackData.trackSummary.elevationStats.min.elevation*feetperMeter))

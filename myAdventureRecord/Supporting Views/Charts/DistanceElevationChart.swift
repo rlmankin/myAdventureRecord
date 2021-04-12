@@ -15,8 +15,9 @@ struct DistanceElevationChart: View {
 	var body: some View {
 	
 		
+		timeStampLog(message: "DistanceElevationChart")
 		
-		ZStack (alignment: .topLeading) {
+		return ZStack (alignment: .topLeading) {
 		
 			GeometryReader { reader in
 				if reader.size.height != 0.0 {	// when GeometryReader iterates, sometime reader.size.height is - which

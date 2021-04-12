@@ -26,6 +26,8 @@ struct MinMaxChart: View {
 	
 
     var body: some View {
+		
+		timeStampLog(message: "->MinMaxChart")
 		let verticalGridSpacing = 5.0		// every 5 meters (feet when converted - not implemented yet)
 		// localize all statistics in question
 		//let startIndex = track.trackSummary.mileStats.grade.max.startIndex		// changes
@@ -43,7 +45,7 @@ struct MinMaxChart: View {
 		let endLegDistance = calcLegDistance(endIndex)
 		let endPointElevation = track.trkptsList[endIndex].elevation!		// fix this force-unwrap
 		
-		GeometryReader { reader in
+		return GeometryReader { reader in
 			let readerWidth = reader.size.width
 			let readerHeight = reader.size.height
 			// determine the grid distance for height and width of chart
@@ -52,9 +54,9 @@ struct MinMaxChart: View {
 			
 			// determine height and offset for the start/end index text information (i.e. statData)
 			let startYHeight = elevationOffset(startPointElevation, yHeight, lowerGridPoint)
-			let startXOffset = distanceOffset(startLegDistance, axisWidth: distWidth)
+			let startXOffset = distanceOffset(startLegDistance, pixelPerMeter: distWidth)
 			let endYHeight = elevationOffset(endPointElevation, yHeight, lowerGridPoint)
-			let endXOffset = distanceOffset(endLegDistance, axisWidth: distWidth)
+			let endXOffset = distanceOffset(endLegDistance, pixelPerMeter: distWidth)
 			// draw the requested statData value
 			Text(String(format: stringFormat, statData))
 			  	.font(.footnote)
@@ -75,8 +77,8 @@ struct MinMaxChart: View {
 						// x-axis offsets
 						let prevlegDistance = calcLegDistance(index - 1)
 						let currlegDistance = calcLegDistance(index)
-						let prevXOffset = distanceOffset(prevlegDistance, axisWidth: distWidth)
-						let xOffset = distanceOffset(currlegDistance, axisWidth: distWidth)
+						let prevXOffset = distanceOffset(prevlegDistance, pixelPerMeter: distWidth)
+						let xOffset = distanceOffset(currlegDistance, pixelPerMeter: distWidth)
 						// y-axis offsets
 						let prevYOffset = elevationOffset(self.track.trkptsList[ index - 1].elevation!, yHeight, lowerGridPoint)
 						let currYOffset = elevationOffset(trkpt.elevation!, yHeight, lowerGridPoint)

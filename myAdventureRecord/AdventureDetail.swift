@@ -76,7 +76,7 @@ struct AdventureDetail: View {
 	
 	var body: some View {
 		
-		print("AdventureDetail body")
+		timeStampLog(message: "AdventureDetail body")
 		
 		
 		return ScrollView  {

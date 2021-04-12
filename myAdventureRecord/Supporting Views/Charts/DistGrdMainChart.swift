@@ -63,9 +63,9 @@ struct DistGrdMainChart: View {
 							// self.trkptList[...(item - 1)].compactMap({$0.lastTrkpt.distance}).reduce(0,+)
 					let currlegDistance = calcLegDistance(item)
 							//self.trkptList[...(item)].compactMap({$0.lastTrkpt.distance}).reduce(0,+)
-					let prevXOffset = distanceOffset(prevlegDistance, axisWidth: distWidth)
+					let prevXOffset = distanceOffset(prevlegDistance, pixelPerMeter: distWidth)
 					let prevYOffset = elevationOffset(self.track.trkptsList[ item - 1].elevation!, yHeight, lowerGridPoint)
-					let xOffset = distanceOffset(currlegDistance, axisWidth: distWidth)
+					let xOffset = distanceOffset(currlegDistance, pixelPerMeter: distWidth)
 					let currYOffset = elevationOffset(trkpt.elevation!, yHeight, lowerGridPoint)
 					//print("\t \(distWidth), \(yHeight), \(xOffset), \(prevYOffset), \(currYOffset) \n")
 					p.move(to: CGPoint(x: prevXOffset,

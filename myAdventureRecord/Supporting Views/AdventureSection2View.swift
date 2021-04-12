@@ -34,7 +34,7 @@ struct AdventureSection2View: View {
 	
     var body: some View {
 		
-		print("AdventureSection2View")
+		timeStampLog(message: "AdventureSection2View")
 		
 		return ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom)) {
 				CircleImage(image: adventure.image.resizable())

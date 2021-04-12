@@ -29,6 +29,7 @@ class SqlHikingDatabase: NSObject {
 	
 	
 	override init() {
+		timeStampLog(message: "-> SqlHikingDatabase.init")
 		self.sqlDbURL = URL(string:sqlDbName)!									//  initialize to the sql database name
 		self.sqlDbTable = TrkSqlTable()											//	create the database table
 		self.sqltpDbTable = TrkptsSqlTable()									//	create the trkpts table
@@ -37,15 +38,18 @@ class SqlHikingDatabase: NSObject {
 		super.init()
 		if self.sqlConnectOpenDb() {											//	connect and open the sql database
 			tracks = self.sqlGetAllRows()										// 	populate 'tracks' with all the rows in the database (not sure how this works if the DB gets large)
-			trkpts = self.sqlGetAllTpRows()
-			adventures = self.sqlGetAllAdvRows()
+			//trkpts = self.sqlGetAllTpRows()
+			//adventures = self.sqlGetAllAdvRows()
 		} else {
 			print("error opening sqlDB in init")								//	for some reason we could not open and connect to the dB
 		}
+		timeStampLog(message: "<- SqlHikingDatabase.init")
+		
 	}
 	
 	
 	func sqlConnectOpenDb() -> Bool {
+		timeStampLog(message: "->sqlConnectOpendb")
 		let hikingDB = self
 		let trkptsDb = self
 		let dbFilePathString = hikingDB.getSqlDbFilePath()				// get the path to where the sql database is stored
@@ -66,6 +70,8 @@ class SqlHikingDatabase: NSObject {
 			print("Error in database string creation")
 			return false
 		}
+		timeStampLog(message: "<-sqlConnectOpendb")
+		
 	}
 	
 	func getSqlDbFilePath() -> String? {										// Return a string with the path to the default dB found in Bundle.main.bundleIdentifier.
@@ -1034,6 +1040,7 @@ class SqlHikingDatabase: NSObject {
 	
 	func sqlGetAllRows() -> [Track] {											// This method will get all rows in the 'sqlHikingDatabase' and
 																				//	place them in the collection 'trackDb'
+		timeStampLog(message: "->sqlGetAllRows")
 		var trackDb = [Track]()													// the collection of rows to be returned
 		var tempTrack = Track()													// a single track to place all column entries for a particular row
 		let dateFmt = DateFormatter()
@@ -1193,10 +1200,12 @@ class SqlHikingDatabase: NSObject {
 				
 			}
 		}
+		timeStampLog(message: "<- sqlGetAllRows")
 		return trackDb
 	}
 	
 	func sqlGetAllTpRows() -> [Trkpt] {
+		timeStampLog(message: "->sqlGetAllTpRows")
 		var trkptDb = [Trkpt]()
 		var tempTP = Trkpt()
 				
@@ -1218,10 +1227,13 @@ class SqlHikingDatabase: NSObject {
 				
 			}
 		}
+		timeStampLog(message: "<-sqlGetAllTpRows")
+		
 		return trkptDb
 	}
 	
 	func sqlGetAllAdvRows() -> [Adventure] {
+		timeStampLog(message: "->sqlGetAllAdvRows")
 		var advDb = [Adventure]()
 		var tempAdventure = Adventure()
 		let advDbTable = Table(sqladvTableName)
@@ -1246,6 +1258,8 @@ class SqlHikingDatabase: NSObject {
 				advDb.append(tempAdventure)
 			}
 		}
+		timeStampLog(message: "<-sqlGetAllAdvRows")
+		
 		return advDb
 			
 	}

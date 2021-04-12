@@ -11,7 +11,9 @@ struct SummaryTab: View {
 	
 	var adventure: Adventure
     var body: some View {
-		ScrollView (.horizontal) {
+		
+		timeStampLog(message: "SummaryTab")
+		return ScrollView (.horizontal) {
 			Text(adventure.trackData.print())
 				.font(.caption)
 		}

@@ -14,7 +14,9 @@ struct DistanceElevationTab: View {
 	
 	var adventure : Adventure
     var body: some View {
-		VStack (alignment: .center) {
+		
+		timeStampLog(message: "DistanceElevationTab")
+		return VStack (alignment: .center) {
 		 	Text("Elevations - \(adventure.name)")
 			 HStack {
 				Text(String(format: "Min Elevation: %5.2f", adventure.trackData.trackSummary.elevationStats.min.elevation*feetperMeter))

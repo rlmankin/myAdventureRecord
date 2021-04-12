@@ -192,3 +192,5 @@ struct Trkpt: Codable, Hashable, Identifiable {
 		print(outputstring)
 	}
 }
+
+

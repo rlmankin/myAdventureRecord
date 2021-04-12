@@ -30,10 +30,10 @@ struct AdventureList: View {
 	
     var body: some View {
 		
-		print("adventureList body")
-		for item in userData.adventures {
-			print("adventure = \(item.name)")
-		}
+		timeStampLog(message: "-> adventureList body")
+		//for item in userData.adventures {
+		//	print("adventure = \(item.name)")
+		//}
 		
 		return NavigationView {
 			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure

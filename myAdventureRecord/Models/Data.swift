@@ -1,5 +1,4 @@
 //
-//  GetSqlDatabase.swift
 //  myHikingRecord
 //
 //  Created by Robb Mankin on 12/6/20.
@@ -83,21 +82,28 @@ func loadAdventureData() -> [Adventure] {
 	//	loadAdventureData loops through all tracks in the database and creates the adventure structure for all entries.
 	//	returns and array of adventures.  This array is later used & published by the UserData class for use throughout
 	//	the application
+	timeStampLog(message: "-> loadAdventureData")
 	var localAdventure = Adventure()
 	var adventures = [Adventure]()
 	
 	for var item in sqlHikingData.tracks {
-			
+		//timeStampLog(message: "-> \(item.header)")
 		item.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(item.trkUniqueID)
 																	//	retrieve the trackspoint list from the trackpointlist table in the database
+		//timeStamp(message: "-> item.adventure")
 		localAdventure = loadAdventureTrack(track: item)					// load track parameters into the adventure
 		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &localAdventure)
 																	// load adventure parameters into the adventure
+		//timeStamp(message: "<- item.adventure")
+		
 		adventures.append(localAdventure)
 		localAdventure = Adventure()										// reinit the adventure
+		//timeStamp(message: "<- \(item.header)")
+		
 	}
 	
 	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
+	timeStampLog(message: "<-loadAdventureData")
 	return adventures
 }
 //****************
