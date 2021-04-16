@@ -13,6 +13,7 @@ struct YAxisView: View {
 	//var trkptList : [Trkpt]		// array of track elevations.  The relevant fields are .elevation?
 									//	and lastTrkPt.distance
 	var track : Track
+	//var reader : GeometryProxy
 	var verticalGridSpacing : Double
 	var minValue : Double
 	var maxValue : Double
@@ -27,7 +28,7 @@ struct YAxisView: View {
 	var body: some View {
 		
 		
-		timeStampLog(message: "XAxisView")
+		timeStampLog(message: "->XAxisView")
 		let readerScale =  CGFloat(1.0)
 		// elevation grid computed properties
 		//let verticalGridSpacing = 5.0		// every 5 meters (feet when converted - not implemented yet)
@@ -38,7 +39,8 @@ struct YAxisView: View {
 		
 		
 		//  y-axis (elevation) Gridlines
-		return GeometryReader { reader in
+		return //Group {
+			GeometryReader { reader in
 			//VStack {
 			ForEach( verticalGridPoints, id: \.self) { elevation in
 				let scaledReaderHeight = reader.size.height * readerScale
@@ -83,7 +85,7 @@ struct YAxisView: View {
 	}
 }
 
-struct YAxisView_Previews: PreviewProvider {
+/*struct YAxisView_Previews: PreviewProvider {
     static var previews: some View {
         YAxisView(track: adventureData[0].trackData,
 				  verticalGridSpacing: 5.0,
@@ -97,4 +99,4 @@ struct YAxisView_Previews: PreviewProvider {
 				  maxValue: adventureData[0].trackData.trackSummary.mileStats.speed.max.statData/metersperMile*secondsperHour,
 				  metric2English: secondsperHour/metersperMile)
     }
-}
+}*/

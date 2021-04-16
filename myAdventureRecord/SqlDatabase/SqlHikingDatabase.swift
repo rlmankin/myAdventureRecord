@@ -826,7 +826,7 @@ class SqlHikingDatabase: NSObject {
 			print("trkptsList count is 0")
 			return 0
 		}
-		for trkptrow in 0 ... trkptList.count - 1 {
+		for trkptrow in 0 ..< trkptList.endIndex {
 			let tpRowID = sqlInsertTpRow(Int(trackRowID), trkptList[trkptrow])
 			if tpRowID >= 0 {
 				trkptsAdded += 1

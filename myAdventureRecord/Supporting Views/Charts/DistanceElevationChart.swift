@@ -23,9 +23,10 @@ struct DistanceElevationChart: View {
 				if reader.size.height != 0.0 {	// when GeometryReader iterates, sometime reader.size.height is - which
 												//	causes a runtime warning on the frame because of a negative height.
 												//	That warning is not fatal, but just want to get rid of it.
-					DistEleMainChart(track: track)
+					DistEleMainChart(track: track, reader: reader)
 						.frame(width: reader.size.width - 30, height: reader.size.height - 30)
 					MinMaxChart(track:track,
+								reader: reader,
 								startIndex: track.trackSummary.mileStats.grade.max.startIndex,
 								endIndex: track.trackSummary.mileStats.grade.max.endIndex,
 								statData: track.trackSummary.mileStats.grade.max.statData*100,
@@ -33,6 +34,7 @@ struct DistanceElevationChart: View {
 								color: Color.red)
 						.frame(width: reader.size.width - 30, height: reader.size.height - 30)
 					MinMaxChart(track:track,
+								reader: reader,
 								startIndex: track.trackSummary.mileStats.grade.min.startIndex,
 								endIndex: track.trackSummary.mileStats.grade.min.endIndex,
 								statData: -track.trackSummary.mileStats.grade.min.statData*100,
@@ -40,6 +42,7 @@ struct DistanceElevationChart: View {
 								color: Color.green)
 						.frame(width: reader.size.width - 30, height: reader.size.height - 30)
 					MinMaxChart(track:track,
+								reader: reader,
 								startIndex: track.trackSummary.mileStats.speed.max.startIndex,
 								endIndex: track.trackSummary.mileStats.speed.max.endIndex,
 								statData: track.trackSummary.mileStats.speed.max.statData/metersperMile*secondsperHour,
@@ -47,6 +50,7 @@ struct DistanceElevationChart: View {
 								color: Color(NSColor.systemTeal))
 						.frame(width: reader.size.width - 30, height: reader.size.height - 30)
 					MinMaxChart(track:track,
+								reader: reader,
 								startIndex: track.trackSummary.mileStats.speed.min.startIndex,
 								endIndex: track.trackSummary.mileStats.speed.min.endIndex,
 								statData: track.trackSummary.mileStats.speed.min.statData/metersperMile*secondsperHour,

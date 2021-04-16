@@ -33,7 +33,7 @@ struct MapView : View {
 	
 		guard !trkpts.isEmpty else { return locations }	// return just in case
 					// the trackpoint list is empty
-			for i in 0 ... trkpts.count - 1 {
+			for i in 0 ..< trkpts.endIndex {
 				let location = CLLocationCoordinate2D(latitude: trkpts[i].latitude,
 													  longitude: trkpts[i].longitude)
 				locations.append(location)
@@ -56,7 +56,7 @@ struct MapView : View {
 		var annotations =  [MKPointAnnotation]()
 		guard !locations.isEmpty else {return annotations}
 		
-		for i in 0 ... locations.count-1 {
+		for i in 0 ..< locations.endIndex {
 			let annotation = MKPointAnnotation()
 			location = locations[i]
 			annotation.coordinate = location

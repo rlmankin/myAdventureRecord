@@ -104,9 +104,15 @@ struct AdventureSection2View: View {
 							HStack {
 								DifficultyView(hikeDifficulty: adventure.difficulty)
 									.opacity(0.6)
-								Text(String(format: "location: %5.3f , %5.3f", adventure.coordinates.latitude,adventure.coordinates.longitude))
-									.italic()
-									.foregroundColor(.secondary)
+								VStack {
+									Text(String(format: "location: %5.3f , %5.3f", adventure.coordinates.latitude,adventure.coordinates.longitude))
+										.italic()
+										.foregroundColor(.secondary)
+									Text(String(format: "distance:  %3.2f miles", adventure.trackData.trackSummary.distance / metersperMile))
+										.italic()
+										.foregroundColor(.secondary)
+								}
+								
 								if section2Editing {
 									TextField("", text: $editArea)
 										.onAppear {self.editArea = adventure.area}

@@ -13,9 +13,6 @@ struct AdventureRow: View {
 	
 	var body: some View {
 		HStack(alignment: .center) {
-			//Text(String(format: " %3d, %3d", adventure.trackData.trkptsList.count, adventure.id-1))
-			//	.frame(width: 55, alignment: .leading)
-			
 			adventure.image
 				.resizable()
 				.frame(width: 40, height: 40)
@@ -41,11 +38,6 @@ struct AdventureRow: View {
 								.resizable()
 								.frame(width: 10, height: 10)
 								.foregroundColor(adventure.difficulty)
-							
-							
-							Text("(\(adventure.trackData.trkptsList.count))")
-								.font(.caption)
-								.frame( alignment: .center)
 						}
 						HStack {
 							Text(adventure.area)

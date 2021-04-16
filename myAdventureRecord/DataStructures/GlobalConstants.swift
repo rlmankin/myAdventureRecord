@@ -20,6 +20,13 @@ let garminSummaryStats = ["name", "Distance", "TimerTime",  "TotalElapsedTime",
 						  "MaxAscentRate", "AvgDescentRate","MaxDescentRate",
 						  "Calories"]
 // helper functions
+extension Date {
+
+	static func - (lhs: Date, rhs: Date) -> TimeInterval {
+		return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+	}
+
+}
 // elevation related helpers
 func elevationHeight( _ height: CGFloat, _ maxEle : Double, _ minEle : Double) -> CGFloat {
 			// calculated  grid distance for the height of the graph
@@ -138,10 +145,17 @@ func  enableScreenSleep() -> Bool {
 	return false
 }
 
-func timeStampLog(message: String) {
+func timeStampLog(message: String, noPrint: Bool = false) -> Date {
 	let now = Date()
 	let df = DateFormatter()
-	df.dateFormat = "yyyyMMddd HH:mm:ss.S"
-	print("\(df.string(from: now)) :  \(message)")
+	df.dateFormat = "yyyyMMddd HH:mm:ss.SS"
+	if !noPrint {
+		print("\(df.string(from: now)) :  \(message)")
+	}
+	return now
+}
+
+func timeDiff(lhs : Date, rhs : Date ) -> Double {
+	return lhs - rhs
 }
 

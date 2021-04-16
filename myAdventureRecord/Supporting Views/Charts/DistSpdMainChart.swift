@@ -34,7 +34,7 @@ struct DistSpdMainChart: View {
 		GeometryReader { reader in
 		// elevation chart line
 			
-			ForEach( (1...self.track.trkptsList.count - 1), id: \.self ) { item in
+			ForEach( (1..<self.track.trkptsList.endIndex), id: \.self ) { item in
 				let trkpt = self.track.trkptsList[item]
 				Path { p in
 				//print("\(trkpt.index), \(reader.size.height), \(reader.size.width) \n")/*\t p \(p)  \n*/

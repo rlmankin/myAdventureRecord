@@ -41,7 +41,7 @@ struct AdventureList: View {
 				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
 				//	detail view (right pane)
 				ForEach(userData.adventures) { adventure in
-					NavigationLink(destination: AdventureDetail(adventure: adventure, beenInserted: true)) {
+					NavigationLink(destination: AdventureDetail(passedAdventure: adventure, beenInserted: true)) {
 						AdventureRow(adventure: adventure)
 					}.tag(adventure)
 				}
@@ -59,7 +59,7 @@ struct AdventureList: View {
 								.navigationTitle("batchParseView"),
 							  	 isActive: $batchParse) { EmptyView()}.tag("batchParse")
 			}		// end of List work
-			.frame(width: 400)
+			//.frame(width: 400)
 			.toolbar {
 				// this toolbaritem / button snippet place a List/dbTable and Parse button in the navigationview's toolbar
 				ToolbarItemGroup (placement: .automatic) {

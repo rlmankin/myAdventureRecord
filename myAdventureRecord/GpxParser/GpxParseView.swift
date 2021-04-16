@@ -26,11 +26,11 @@ struct whichAdventureView : View {
 	var body: some View {
 		if beenInserted {
 			let userDataTrackIndex = userData.adventures.firstIndex(where: {($0.id == parseGPX.parsedTracks[trackIndex].trkUniqueID)})!
-			AdventureDetail(adventure: userData.adventures[userDataTrackIndex], beenInserted: beenInserted)
+			AdventureDetail(passedAdventure: userData.adventures[userDataTrackIndex],  beenInserted: beenInserted)
 				.tag(trackIndex)
 				.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 		} else {
-			AdventureDetail(adventure: loadAdventureTrack(track: parseGPX.parsedTracks[trackIndex]), beenInserted: beenInserted)
+			AdventureDetail(passedAdventure: loadAdventureTrack(track: parseGPX.parsedTracks[trackIndex]), beenInserted: beenInserted)
 				.tag(trackIndex)
 				.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 		}
@@ -63,9 +63,9 @@ struct GPXParsingView: View {
 			if parseGPX.numberOfTracks != 0 {
 				//	make a tabview of all the tracks found in the set of parses
 				TabView (selection: $selectedTab) {						//	allow the user to select tabs - $selectedTab
-					if parseGPX.parsedTracks.count != 0 {
+					if !parseGPX.parsedTracks.isEmpty {
 						//	loop through each track and display the relevant track detail information
-						ForEach( 0 ... parseGPX.parsedTracks.count - 1, id:\.self) {trackIndex in
+						ForEach( 0 ..< parseGPX.parsedTracks.endIndex, id:\.self) {trackIndex in
 							//	if the validTrkprtsForStatistics array is empty implies that the track is still being parsed,
 							//		so show a progress wheel.  Note: to make this work, I changed the parseGPXXML to do a two-pass parse
 							//		the first pass to find all the tracks and corresponding header (if any) in the file,

@@ -23,13 +23,13 @@ struct AdventureDetail: View {
 	
 	
 
-	var adventure: Adventure
+	var passedAdventure: Adventure
 	//  Need to watch the tabInserted[] from GPXParseView to know if a track has been
 	//	inserted into the database
 	var beenInserted : Bool
 	
 	var adventureIndex: Int {
-		userData.adventures.firstIndex(where: { $0.id == adventure.id})!
+		userData.adventures.firstIndex(where: { $0.id == passedAdventure.id})!
 	}
 	
 	func loadEditVars() {
@@ -45,7 +45,7 @@ struct AdventureDetail: View {
 			print("loadUserDataProperties - userData.adventures = 0")
 			return
 		}
-		for item in (0 ... userData.adventures.count - 1) {
+		for item in (0 ..< userData.adventures.endIndex) {
 			print("userData.adventures[\(item)] - \(userData.adventures[item].id),\(userData.adventures[item].associatedTrackID),\(userData.adventures[item].name), \(userData.adventures[item].trackData.header)")
 		}
 		userData.adventures[adventureIndex].trackData.header = editName // editName is duplicated
@@ -75,11 +75,21 @@ struct AdventureDetail: View {
 	}
 	
 	var body: some View {
+		var adventure = passedAdventure
 		
 		timeStampLog(message: "AdventureDetail body")
+		// if the trckptsList has not been loaded from the sql database, then load it now.  This technique moves the ~0.5 sec to load
+		//	a larger trkptsList from application initialization to the first attempt to show the adventure's Detail. Loading all trkptsLists
+		//	at initialization causes an long delay on startup, which causes the user to worry if the app has actually loaded.
+		if adventure.trackData.trkptsList.isEmpty {
+			userData.adventures[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventure.id)
+																		//	retrieve the trackspoint list from the trackpointlist table in the database
+			adventure.trackData.trkptsList = userData.adventures[adventureIndex].trackData.trkptsList
+		}
 		
 		
 		return ScrollView  {
+			
 			ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom)) {
 				// ZStack for the map and 'open in maps' overlay
 				
@@ -89,8 +99,8 @@ struct AdventureDetail: View {
 					.overlay(
 						GeometryReader { proxy in
 							Button("Open in Maps") {
-								let destination = MKMapItem(placemark: MKPlacemark(coordinate: self.adventure.locationCoordinate))
-								destination.name = self.adventure.name
+								let destination = MKMapItem(placemark: MKPlacemark(coordinate: adventure.locationCoordinate))
+								destination.name = adventure.name
 								destination.openInMaps()
 							}
 							.frame(width: proxy.size.width, height: proxy.size.height, alignment: .bottomTrailing)
@@ -162,7 +172,7 @@ struct AdventureDetail: View {
 
 struct AdventureDetail_Previews: PreviewProvider {
     static var previews: some View {
-		AdventureDetail(adventure: adventureData[0], beenInserted: true)
+		AdventureDetail(passedAdventure: adventureData[0], beenInserted: true)
 			.environmentObject(UserData())
 			.frame(width: 850, height: 900)
     }

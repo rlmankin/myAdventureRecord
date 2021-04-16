@@ -10,7 +10,7 @@ import SwiftUI
 struct DistEleMainChart: View {
 	
 	var track: Track
-	//var proxy : GeometryProxy
+	var reader : GeometryProxy
 	
 	
 	
@@ -31,20 +31,20 @@ struct DistEleMainChart: View {
 	
 		let totalDistance = track.trackSummary.distance
 	
-		return
+		return Group {
 			
-			GeometryReader { reader in
-		// elevation chart line
+			//GeometryReader { reader in
+			// elevation chart line
 			let readerWidth = reader.size.width
 			let readerHeight = reader.size.height
 		
 			let distWidth = distanceWidth(readerWidth, totalDistance)			// pixel per meter
 			let yHeight = elevationHeight(readerHeight, upperGridPoint, lowerGridPoint)	// pixel per meter
-			ForEach( (1...self.track.trkptsList.count - 1), id: \.self ) { item in
+			ForEach( (1..<self.track.trkptsList.endIndex), id: \.self ) { item in
 				let trkpt = self.track.trkptsList[item]
 				Path { p in
 					
-					if (item == 1  || item == self.track.trkptsList.count - 1 ) {
+					if (item == 1  || item == self.track.trkptsList.endIndex - 1 ) {
 						timeStampLog(message: "\(readerHeight), \(item)")
 					}
 				//print("\(trkpt.index), \(reader.size.height), \(reader.size.width) \n")/*\t p \(p)  \n*/
@@ -74,8 +74,8 @@ struct DistEleMainChart: View {
     }
 }
 
-struct DistEleMainChart_Previews: PreviewProvider {
-    static var previews: some View {
-		DistEleMainChart( track: adventureData[0].trackData)
-    }
-}
+//struct DistEleMainChart_Previews: PreviewProvider {
+//    static var previews: some View {
+//		DistEleMainChart( track: adventureData[0].trackData)
+//    }
+//}

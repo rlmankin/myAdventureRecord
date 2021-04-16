@@ -27,7 +27,7 @@ struct BPListView: View {
 		print("bPList body:  \(bpFiles.xmlFiles.map {$0.color})")
 		return
 			Group {
-				List (0 ... bpFiles.xmlFiles.count-1, id:\.self) { fileIndex in
+				List (0 ..< bpFiles.xmlFiles.endIndex, id:\.self) { fileIndex in
 						BParseRow(index: fileIndex)
 				}
 				

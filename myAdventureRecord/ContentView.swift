@@ -36,9 +36,10 @@ struct ContentView: View {
 	
 	
 	var body: some View {
-		
-		AdventureList()
-			.frame(minWidth: 500, idealWidth: 900, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 1000, idealHeight: 1200, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+		timeStampLog(message: "->ContentView")
+		return
+			AdventureList()
+				.frame(minWidth: 1000, idealWidth: 1200, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 1000, idealHeight: 1200, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 	}
 	
 }

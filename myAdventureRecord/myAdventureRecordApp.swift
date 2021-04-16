@@ -14,11 +14,16 @@ struct myAdventureRecordApp: App {
 	@StateObject private var bpFiles = BPFiles()
 	
 	var body: some Scene {
-		WindowGroup {
+		
+		
+		timeStampLog(message: "-> myApp")
+		return WindowGroup {
 			ContentView().environmentObject(userData)
 						 .environmentObject(parseGPX)
 						 .environmentObject(bpFiles)
+			
 		}
+		
 		.commands {
 			AdventureCommands()
 		}

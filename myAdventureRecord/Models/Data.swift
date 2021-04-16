@@ -12,7 +12,8 @@ import Foundation
 import SwiftUI
 import ImageIO
 
-var adventureData: [Adventure] = loadAdventureData()				// 	create adventures from track data in the databse
+var adventureData: [Adventure]  = loadAdventureData()				// 	create adventures from track data in the databse
+
 let sqlHikingData = SqlHikingDatabase()								// 	open and load the various tables from the database
 
 
@@ -35,7 +36,7 @@ func loadAdventureTrack(track: Track) -> Adventure {
 	//	DO NOT replace this line will a call to retrieve the trackpoint list.
 		adventure.trackData.trkptsList = track.trkptsList
 		//	if there are no trackpoints the there is no need to calculate andy additional fields
-	if adventure.trackData.trkptsList.count != 0 {
+	if !adventure.trackData.trkptsList.isEmpty {
 			//	coordinates set the center of the map at the starting location and hold the maximum/minimum latitude/longitude to set the area
 			//	of the track.  This is used to set the center and area of the map
 		adventure.coordinates.latitude = adventure.trackData.trkptsList[0].latitude
@@ -83,14 +84,20 @@ func loadAdventureData() -> [Adventure] {
 	//	returns and array of adventures.  This array is later used & published by the UserData class for use throughout
 	//	the application
 	timeStampLog(message: "-> loadAdventureData")
+	
 	var localAdventure = Adventure()
 	var adventures = [Adventure]()
-	
-	for var item in sqlHikingData.tracks {
-		//timeStampLog(message: "-> \(item.header)")
-		item.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(item.trkUniqueID)
+	//var cumTrkptListLoadTime : Double = 0.0
+	for item in sqlHikingData.tracks {
+		//let lhsDate = timeStampLog(message: "-> \(item.header)", noPrint: true)
+		// do not load the trkptsList now but defer to the first attempt by the user to look at an adventure's Detail (AdventureDetail)
+		// 	I've learned that loading the trkptsList is the largest time consumer and when mulitplied over a large number of database
+		//	entries the load time for the app is unacceptable
+		//item.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(item.trkUniqueID)
 																	//	retrieve the trackspoint list from the trackpointlist table in the database
-		//timeStamp(message: "-> item.adventure")
+		//let rhsDate = timeStampLog(message: "\(item.trkptsList.count)", noPrint: true)
+		//cumTrkptListLoadTime += rhsDate - lhsDate
+		//print("\(Int((rhsDate - lhsDate)*1000))ms : \(item.trkptsList.count) - \(item.header)")
 		localAdventure = loadAdventureTrack(track: item)					// load track parameters into the adventure
 		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &localAdventure)
 																	// load adventure parameters into the adventure
@@ -101,7 +108,7 @@ func loadAdventureData() -> [Adventure] {
 		//timeStamp(message: "<- \(item.header)")
 		
 	}
-	
+	//print("Total TrkptLoadTime = \(cumTrkptListLoadTime)")
 	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
 	timeStampLog(message: "<-loadAdventureData")
 	return adventures

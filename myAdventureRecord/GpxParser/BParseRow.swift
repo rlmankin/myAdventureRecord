@@ -38,7 +38,7 @@ struct BParseRow: View {
 					Text("\(xmlFile.numTracks): [")
 					
 					if xmlFile.trackRow.count > 1 {
-						ForEach (1 ... xmlFile.trackRow.count - 1, id: \.self) { itemIndex in
+						ForEach (1 ..< xmlFile.trackRow.count, id: \.self) { itemIndex in
 							Text("\(xmlFile.trackRow[itemIndex]) ")
 							if itemIndex < xmlFile.trackRow.count-1 { Text(", ")}// add ", " except on the last iteration
 							

@@ -12,6 +12,7 @@ import SwiftUI
 struct MinMaxChart: View {
 	
 	var track : Track
+	var reader : GeometryProxy
 	var startIndex : Int
 	var endIndex : Int
 	var statData : Double
@@ -45,7 +46,8 @@ struct MinMaxChart: View {
 		let endLegDistance = calcLegDistance(endIndex)
 		let endPointElevation = track.trkptsList[endIndex].elevation!		// fix this force-unwrap
 		
-		return GeometryReader { reader in
+		return Group {
+			// GeometryReader { reader in
 			let readerWidth = reader.size.width
 			let readerHeight = reader.size.height
 			// determine the grid distance for height and width of chart
@@ -98,7 +100,7 @@ struct MinMaxChart: View {
     }
 }
 
-struct MinMaxChart_Previews: PreviewProvider {
+/*struct MinMaxChart_Previews: PreviewProvider {
     static var previews: some View {
 		MinMaxChart(track: adventureData[0].trackData,
 					startIndex: adventureData[0].trackData.trackSummary.mileStats.grade.max.startIndex,
@@ -119,4 +121,4 @@ struct MinMaxChart_Previews: PreviewProvider {
 					stringFormat: "%2.2f%%",
 					color: Color.blue)
     }
-}
+}*/

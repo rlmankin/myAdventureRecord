@@ -64,12 +64,12 @@ func calculateTrkProperties(_ currentTrack: inout Track) {						//  Main track p
 	currentTrack.validTrkptsForStatistics = currentTrack.trkptsList
 					.filter({$0.hasValidTimeStamp && $0.hasValidElevation})		//  get only those trackpoints that have a valid elevation and a valid timeStamp
 	let validElevationArray = currentTrack.trkptsList.filter({$0.hasValidElevation})
-	if currentTrack.validTrkptsForStatistics.count < 2 {										// not enough time and elevation trackpoints
+	if currentTrack.validTrkptsForStatistics.count < 2 {						// not enough time and elevation trackpoints
 		currentTrack.noValidTimeEle = true
 		//print("not enough TimeAndEle")
 		if validElevationArray.count >= 2 {										// check if there is enough elevation trackpoints
 			currentTrack.validTrkptsForStatistics = validElevationArray
-			for i in 0 ... currentTrack.validTrkptsForStatistics.count - 1  {
+			for i in 0 ..< currentTrack.validTrkptsForStatistics.endIndex  {
 				guard currentTrack.validTrkptsForStatistics[i].copyToStatisticsStruct("Ele") else { return }
 			}
 
@@ -79,7 +79,7 @@ func calculateTrkProperties(_ currentTrack: inout Track) {						//  Main track p
 			return																//	early return if there are not enough entries in the ValidTimeAndEleArray
 		}
 	} else {
-		for i in 0 ... currentTrack.validTrkptsForStatistics.count - 1 {
+		for i in 0 ..< currentTrack.validTrkptsForStatistics.endIndex {
 			guard currentTrack.validTrkptsForStatistics[i].copyToStatisticsStruct("EleTime") else { return }
 		}
 		//print("using validTimeElevationArray")
@@ -257,7 +257,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 		//print("not enough TimeAndEle")
 		if validElevationArray.count >= 2 {										// check if there is enough elevation trackpoints
 			validTrkptsForStatistics = validElevationArray
-			for i in 0 ... validTrkptsForStatistics.count - 1  {
+			for i in 0 ..< validTrkptsForStatistics.endIndex  {
 				guard validTrkptsForStatistics[i].copyToStatisticsStruct("Ele") else { return }
 			}
 
@@ -267,14 +267,14 @@ func createMileageStats(_ currentTrack: inout Track) {
 			return																//	early return if there are not enough entries in the ValidTimeAndEleArray
 		}
 	} else {
-		for i in 0 ... validTrkptsForStatistics.count - 1 {
+		for i in 0 ..< validTrkptsForStatistics.endIndex {
 			guard validTrkptsForStatistics[i].copyToStatisticsStruct("EleTime") else { return }
 		}
 		//print("using validTimeElevationArray")
 	}
 	
 print("\(currentTrack.header) - \(currentTrack.trkptsList.count)")
-	for k in 0 ... (currentTrack.validTrkptsForStatistics.endIndex - 2) {
+	for k in 0 ..< (currentTrack.validTrkptsForStatistics.endIndex - 1) {
 		
 		currentTrack.parseProgress = k
 
@@ -290,7 +290,7 @@ print("\(currentTrack.header) - \(currentTrack.trkptsList.count)")
 			}
 		} */
 		
-		for j in k ... (currentTrack.validTrkptsForStatistics.endIndex - 1) {					// sequence through all points between the current one and the last one.  This creates all possible track
+		for j in k ..< (currentTrack.validTrkptsForStatistics.endIndex) {		// sequence through all points between the current one and the last one.  This creates all possible track
 																				//	segments (leg) for the current trackpoint
 			var tempLegStats = LegStatsStruct()
 			
@@ -726,7 +726,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 			}
 					//	in the case of near empty or very small .gpx files gpxDocumentArray may not have yet been populated yet from the earlier dispatchQueue.
 					//	In that case createMileageStats will not attempt to update the window progress bar add the current track to the all tracks array
-			if self.allTracks.count != 0 {
+			if !self.allTracks.isEmpty {
 				self.allTracks[self.allTracks.endIndex - 1] = self.currentTrack
 			} else {
 				self.allTracks[0] = self.currentTrack
@@ -778,7 +778,7 @@ class parseController:  ObservableObject {
 	func parseGpxFileList (_ filesArray: [URL]) -> Bool {					// filesArray contains a list of all URLs requested to be parsed.
 		let myparsegpxxml = parseGPXXML()
 		// parseGpxFileList currently always returns true
-		for i in 0 ... filesArray.count-1 {
+		for i in 0 ..< filesArray.endIndex {
 			
 				//let myparsegpxxml = parseGPXXML()
 				let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: false)
@@ -793,14 +793,14 @@ class parseController:  ObservableObject {
 			//print("header[\(i)] = \(self.parsedTracks[i].header)")
 		}
 		
-		for i in 0 ... filesArray.count-1 {
+		for i in 0 ..< filesArray.endIndex {
 			let parseQueue = DispatchQueue(label: filesArray[i].lastPathComponent, attributes: .concurrent)
 			parseQueue.async {
 				let myparsegpxxml = parseGPXXML()
 				let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: true)
 				DispatchQueue.main.async {
 					if parseNumTracks != 0 {
-						for track in (0 ... parseNumTracks - 1) {
+						for track in (0 ..< parseNumTracks) {
 							if let parseHeaderIndex = self.parsedTracks.firstIndex(where: {$0.header == myparsegpxxml.allTracks[track].header}) {
 								self.parsedTracks[parseHeaderIndex] = myparsegpxxml.allTracks[track]
 							}
