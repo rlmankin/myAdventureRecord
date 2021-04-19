@@ -89,6 +89,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 			return Color(.red)
 		}
 	}
+	
 	// future use
 	enum HikeCategory : String, Codable,  Categorizable {
 		case hike
@@ -133,8 +134,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 }
 
 extension Adventure {
-	var image: Image {
-		ImageStore.shared.image(name: imageName)
+	var image: Image { ImageStore.shared.image(name: name)
 	}
 }
 

@@ -16,6 +16,24 @@ var adventureData: [Adventure]  = loadAdventureData()				// 	create adventures f
 
 let sqlHikingData = SqlHikingDatabase()								// 	open and load the various tables from the database
 
+/*func loadAdventureImage(name : String) -> Image? {
+	
+	let imageFileString = NSSearchPathForDirectoriesInDomains(
+		.documentDirectory, .userDomainMask, true
+	).first! +  "/hiking/" + name + " thumb.jpg"
+	if FileManager.default.fileExists(atPath: imageFileString) {
+		if let image = NSImage(contentsOfFile: imageFileString) {
+			return Image(nsImage: image)
+		} else {
+			print("Error loading image")
+			return loadAdventureImage(name: "myHikingRecordIcon")
+		}
+	} else {
+		print("Image file not found")
+		return loadAdventureImage(name: "myHikingRecordIcon")
+	}
+}*/
+
 
 func loadTrackFromAdventure(adventure: Adventure) -> Track {
 	return adventure.trackData
@@ -102,7 +120,7 @@ func loadAdventureData() -> [Adventure] {
 		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &localAdventure)
 																	// load adventure parameters into the adventure
 		//timeStamp(message: "<- item.adventure")
-		
+		//localAdventure.imageName = localAdventure.imageName
 		adventures.append(localAdventure)
 		localAdventure = Adventure()										// reinit the adventure
 		//timeStamp(message: "<- \(item.header)")
@@ -143,6 +161,49 @@ func loadAdventureData() -> [Adventure] {
 */
 
 final class ImageStore {
+	
+	typealias _ImageDictionary = [String: CGImage]
+	fileprivate var images: _ImageDictionary = [:]
+
+	private static var scale = 2
+	
+	static var shared = ImageStore()
+	
+	func image(name: String) -> Image {
+		let index = _guaranteeImage(name: name)
+		
+		return Image(images.values[index], scale: CGFloat(ImageStore.scale), label: Text(name))
+	}
+
+	static func loadImage(name: String) -> CGImage {
+	
+		var fullPathString = NSSearchPathForDirectoriesInDomains(
+									.documentDirectory, .userDomainMask, true).first!
+							 +  "/hiking/hikingDatabase/thumbnails/" + name + " thumb.jpg"
+		if !FileManager.default.fileExists(atPath: fullPathString) {
+			fullPathString = NSSearchPathForDirectoriesInDomains(
+				.documentDirectory, .userDomainMask, true).first!
+						+  "/hiking/hikingDatabase/thumbnails/myHikingRecordIcon thumb.jpg"
+		}
+		let url = NSURL(fileURLWithPath: fullPathString)
+		let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil)
+		let image = CGImageSourceCreateImageAtIndex(imageSource!, 0, nil)
+		
+		return image!
+	}
+	
+	fileprivate func _guaranteeImage(name: String) -> _ImageDictionary.Index {
+		if let index = images.index(forKey: name) { return index }
+		
+		images[name] = ImageStore.loadImage(name: name)
+		return images.index(forKey: name)!
+	}
+
+}
+
+//   Original ImageStore Class
+
+/*final class ImageStore {
 	typealias _ImageDictionary = [String: CGImage]
 	fileprivate var images: _ImageDictionary = [:]
 
@@ -174,4 +235,4 @@ final class ImageStore {
 		return images.index(forKey: name)!
 	}
 
-}
+}*/

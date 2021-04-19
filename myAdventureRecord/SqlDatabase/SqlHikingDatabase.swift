@@ -902,7 +902,7 @@ class SqlHikingDatabase: NSObject {
 				let advTable = Table(sqladvTableName)
 				let rowid = try sqlDbFileHandle!.run(advTable.insert(
 					sqladvTable.sqladvAssociatedTrackID	 <- Int(trackRowID),
-					sqladvTable.sqladvImageName <- adventure.imageName,
+					sqladvTable.sqladvImageName <- adventure.name,
 					sqladvTable.sqladvDescription <- adventure.description,
 					sqladvTable.sqladvArea <- adventure.area,
 					sqladvTable.sqladvIsFav <- adventure.isFavorite,
@@ -1244,7 +1244,8 @@ class SqlHikingDatabase: NSObject {
 				rowCount += 1
 				tempAdventure.description = key[sqladvTable.sqladvDescription]
 				tempAdventure.area = key[sqladvTable.sqladvArea]
-				tempAdventure.imageName = key[sqladvTable.sqladvImageName]
+				tempAdventure.imageName = tempAdventure.name //key[sqladvTable.sqladvImageName]
+				print(tempAdventure.imageName)
 				tempAdventure.isFavorite = key[sqladvTable.sqladvIsFav]
 				switch key[sqladvTable.sqladvHikeCat] {
 					case "Hike": tempAdventure.hikeCategory = Adventure.HikeCategory.hike

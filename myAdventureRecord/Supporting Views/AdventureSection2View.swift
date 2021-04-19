@@ -38,8 +38,9 @@ struct AdventureSection2View: View {
 		
 		return ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom)) {
 				CircleImage(image: adventure.image.resizable())
-					.offset(x:5, y: -135)
+					.offset(x:0, y: -115)
 					.frame(width: 150, height:150)
+					.padding(.horizontal)
 			//VStack (2)
 				VStack (alignment: .leading, spacing: 0) {
 					
@@ -55,6 +56,7 @@ struct AdventureSection2View: View {
 						} else {
 							Text(adventure.hikeCategory.description)
 								.frame(width: 150, height: 150, alignment: .bottom)
+								.padding(.horizontal)
 						}
 						
 						//TextField("", text: adventure.hikeCategory.rawValue)
