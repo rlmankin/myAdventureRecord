@@ -56,10 +56,10 @@ struct GPXParsingView: View {
 	
 	
 	var body: some View {
-			
+		print("-> GPXParsingView")
 			//  if there were no GPX tracks found in the requested URL, then generate a Text view to tell user something is amiss
 			//		likely a non-GPX XML file.
-		Group {
+		return Group {
 			if parseGPX.numberOfTracks != 0 {
 				//	make a tabview of all the tracks found in the set of parses
 				TabView (selection: $selectedTab) {						//	allow the user to select tabs - $selectedTab

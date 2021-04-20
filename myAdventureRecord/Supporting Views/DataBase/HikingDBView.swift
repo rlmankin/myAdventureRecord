@@ -9,7 +9,8 @@ import SwiftUI
 
 struct HikingDBView: View {
     var body: some View {
-        DBViewControllerRepresentable()
+		print("-> DBViewControllerRepresentable")
+        return DBViewControllerRepresentable()
     }
 }
 

@@ -27,6 +27,7 @@ struct DBViewControllerRepresentable : NSViewControllerRepresentable {
 	typealias NSViewType = DBViewController
 	
 	func makeNSViewController( context: NSViewControllerRepresentableContext<DBViewControllerRepresentable>) -> DBViewController {
+		timeStampLog(message: "-> makeNSViewController")
 		let mainStoryboard = NSStoryboard.init(name: "Main", bundle: nil)
 		
 		let dbViewController = mainStoryboard.instantiateController( withIdentifier: "dbViewControllerID") as! DBViewController

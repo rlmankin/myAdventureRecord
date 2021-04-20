@@ -10,7 +10,8 @@ import SwiftUI
 struct NavButtonStyle: ButtonStyle {
 	func makeBody(configuration: Configuration) -> some View {
 		configuration.label
-			.padding(5)
+			.font(.caption)
+			.padding(2)
 			.foregroundColor(Color.white)
 			.background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.orange]), startPoint: .leading, endPoint: .trailing))
 			.cornerRadius(5)
@@ -39,7 +40,7 @@ struct ContentView: View {
 		timeStampLog(message: "->ContentView")
 		return
 			AdventureList()
-				.frame(minWidth: 1000, idealWidth: 1200, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 1000, idealHeight: 1200, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+				.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 1000, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 	}
 	
 }

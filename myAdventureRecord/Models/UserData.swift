@@ -20,18 +20,23 @@ final class	UserData: ObservableObject {
 		
 	}
 	
-	func reload() {
-		for item in self.adventures {
+	func reload(tracksOnly: Bool = false) {
+		/*for item in self.adventures {
 			print("reload:  prereload[ \(item.name)")
+		}*/
+		print("-> reload, \(tracksOnly)")
+		sqlHikingData.reloadTracks(tracksOnly: tracksOnly)
+		if !tracksOnly {
+			adventureData = loadAdventureData()
+			adventures = adventureData
+			self.adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
 		}
-		sqlHikingData.reloadTracks()
-		adventureData = loadAdventureData()
-		adventures = adventureData
-		self.adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
+		print("<- reload, \(tracksOnly)")
 		
-		for item in self.adventures {
+		
+		/*for item in self.adventures {
 			print("reload:  postreload \(item.name)")
-		}
+		}*/
 	}
 	
 	

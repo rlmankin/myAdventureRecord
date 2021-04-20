@@ -998,12 +998,14 @@ class SqlHikingDatabase: NSObject {
 	}
 	
 	
-	func reloadTracks(someRows : [Int] = []) {									// Provide an array of row numbers (uniqueID)
+	func reloadTracks(someRows : [Int] = [], tracksOnly : Bool = false) {									// Provide an array of row numbers (uniqueID)
 		if someRows.isEmpty {
 			self.tracks.removeAll()
 			self.tracks = self.sqlGetAllRows()
-			self.trkpts = self.sqlGetAllTpRows()
-			self.adventures = self.sqlGetAllAdvRows()
+			if !tracksOnly {
+				self.trkpts = self.sqlGetAllTpRows()
+				self.adventures = self.sqlGetAllAdvRows()
+			}
 		} else {
 			self.tracks.removeAll()
 			self.tracks = self.sqlGetSomeRows(someRows)
@@ -1245,7 +1247,7 @@ class SqlHikingDatabase: NSObject {
 				tempAdventure.description = key[sqladvTable.sqladvDescription]
 				tempAdventure.area = key[sqladvTable.sqladvArea]
 				tempAdventure.imageName = tempAdventure.name //key[sqladvTable.sqladvImageName]
-				print(tempAdventure.imageName)
+				//print(tempAdventure.imageName)
 				tempAdventure.isFavorite = key[sqladvTable.sqladvIsFav]
 				switch key[sqladvTable.sqladvHikeCat] {
 					case "Hike": tempAdventure.hikeCategory = Adventure.HikeCategory.hike

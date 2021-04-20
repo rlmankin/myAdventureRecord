@@ -31,13 +31,44 @@ struct AdventureList: View {
     var body: some View {
 		
 		timeStampLog(message: "-> adventureList body")
-		//for item in userData.adventures {
-		//	print("adventure = \(item.name)")
-		//}
 		
 		return NavigationView {
 			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
 			List  {
+				// HStack for the buttons at the top.  Seems to be required to get
+				//	the buttons to correctdly call the detail view
+				HStack {
+					//	if the dbTable button is selected, show the database table in the detail view (right pane), but maintain the navigation view list (left pane)
+					NavigationLink(destination: HikingDBView()
+									.navigationTitle(Text("dbTableView").italic()),
+									isActive: $showDBTable)							// isActive: true displays the table, isActive:false make the view disappear
+						{ Button("\(showDBTable == true ? "List" : "dbTable")") {
+								userData.reload(tracksOnly: true)
+								showDBTable.toggle()
+								print("Button: showDBTable -\(showDBTable)")
+							}.buttonStyle(NavButtonStyle())
+						}.tag("dbTable")											// tag this link with the string "dbTable"
+					
+					//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
+					NavigationLink(destination: GPXParsingView()	// display the parsing view (showDetail if requested)
+									.navigationTitle("parsingView"),
+									isActive: $parseFile) { //EmptyView()
+						Button("Parse") {
+								parseFileRequested.toggle()
+								//batchParse = false
+							}.buttonStyle(NavButtonStyle())
+						}.tag("parse")
+					
+					NavigationLink(destination: BatchParseView()	// display the parsing view (showDetail if requested)
+									.navigationTitle("batchParseView"),
+									 isActive: $batchParse) { //EmptyView()
+						Button("batchParse") {
+							print("before: \(batchParse)")
+							batchParse.toggle()
+							print("after: \(batchParse)")
+							}.buttonStyle(NavButtonStyle())
+						}.tag("batchParse")
+				}
 				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
 				//	detail view (right pane)
 				ForEach(userData.adventures) { adventure in
@@ -45,41 +76,12 @@ struct AdventureList: View {
 						AdventureRow(adventure: adventure)
 					}.tag(adventure)
 				}
-				//	if the dbTable button is selected, show the database table in the detail view (right pane), but maintain the navigation view list (left pane)
-				NavigationLink(destination: HikingDBView()
-								.navigationTitle(Text("dbTableView").italic()),
-								isActive: $showDBTable)							// isActive: true displays the table, isActive:false make the view disappear
-					{ EmptyView()}.tag("dbTable")											// tag this link with the string "dbTable"
-				//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
-				NavigationLink(destination: GPXParsingView()	// display the parsing view (showDetail if requested)
-								.navigationTitle("parsingView"),
-							   	isActive: $parseFile) { EmptyView()}.tag("parse")
 				
-				NavigationLink(destination: BatchParseView()	// display the parsing view (showDetail if requested)
-								.navigationTitle("batchParseView"),
-							  	 isActive: $batchParse) { EmptyView()}.tag("batchParse")
-			}		// end of List work
-			//.frame(width: 400)
-			.toolbar {
-				// this toolbaritem / button snippet place a List/dbTable and Parse button in the navigationview's toolbar
-				ToolbarItemGroup (placement: .automatic) {
-					Button("\(showDBTable == true ? "List" : "dbTable")") {
-						userData.reload()
-						showDBTable.toggle()
-					}.buttonStyle(NavButtonStyle())
-					
-					Button("Parse") {
-						parseFileRequested.toggle()
-						//batchParse = false
-					}.buttonStyle(NavButtonStyle())
-					
-					Button("batchParse") {
-						print("before: \(batchParse)")
-						batchParse.toggle()
-						print("after: \(batchParse)")
-					}.buttonStyle(NavButtonStyle())
-				}
-			 }
+				
+			}.frame(minWidth:400, maxWidth: 600)				// .frame here sets the width of the left hand pane of the navigationView
+											//		it is important that .frame attaches to the List because the List
+											//		is the view in the left pane
+		
 		}
 		// when a parse has been requested, parseFileRequested will be true and the fileImporter dialog will be displayed
 		.fileImporter(isPresented: $parseFileRequested,
