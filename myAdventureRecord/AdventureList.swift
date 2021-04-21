@@ -42,32 +42,40 @@ struct AdventureList: View {
 					NavigationLink(destination: HikingDBView()
 									.navigationTitle(Text("dbTableView").italic()),
 									isActive: $showDBTable)							// isActive: true displays the table, isActive:false make the view disappear
-						{ Button("\(showDBTable == true ? "List" : "dbTable")") {
+					{ Text("").toolbar {	// tried this with EmptyView but the menu button is not shown
+						Button("\(showDBTable == true ? "List" : "dbTable")") {
 								userData.reload(tracksOnly: true)
 								showDBTable.toggle()
 								print("Button: showDBTable -\(showDBTable)")
 							}.buttonStyle(NavButtonStyle())
 						}.tag("dbTable")											// tag this link with the string "dbTable"
 					
+					}
+						
+						
 					//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
 					NavigationLink(destination: GPXParsingView()	// display the parsing view (showDetail if requested)
 									.navigationTitle("parsingView"),
-									isActive: $parseFile) { //EmptyView()
+									isActive: $parseFile)
+					{ Text("").toolbar {
 						Button("Parse") {
 								parseFileRequested.toggle()
 								//batchParse = false
 							}.buttonStyle(NavButtonStyle())
 						}.tag("parse")
+					}
 					
-					NavigationLink(destination: BatchParseView()	// display the parsing view (showDetail if requested)
+					NavigationLink(destination: BatchParseView(batchParse: $batchParse)	// display the parsing view (showDetail if requested)
 									.navigationTitle("batchParseView"),
-									 isActive: $batchParse) { //EmptyView()
+									 isActive: $batchParse)
+					{ Text("").toolbar {
 						Button("batchParse") {
 							print("before: \(batchParse)")
 							batchParse.toggle()
 							print("after: \(batchParse)")
 							}.buttonStyle(NavButtonStyle())
 						}.tag("batchParse")
+					}
 				}
 				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
 				//	detail view (right pane)

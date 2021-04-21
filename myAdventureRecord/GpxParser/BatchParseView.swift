@@ -47,6 +47,7 @@ struct BatchParseView: View {
 	@State private var xmlFilesAvailable : Bool = false
 	@State private var beenParsed : Bool = false
 	@State private var insertInDb : Bool = false
+	@Binding var batchParse : Bool
 	
 	
 	
@@ -179,8 +180,12 @@ struct BatchParseView: View {
 							Button( action: {
 									bpFiles.xmlFiles = getFile(startDate: startDate, endDate: endDate)
 									   xmlFilesAvailable = !bpFiles.xmlFiles.isEmpty
-							}) 	{Text("find files").frame( alignment: .center)
+							}) 	{Text("Find files").frame( alignment: .center)
 								}
+							Button( action: {
+								batchParse.toggle()
+								
+							}) {Text("Cancel")}
 							Spacer()
 						}
 					}
@@ -222,7 +227,7 @@ struct BatchParseView: View {
 
 struct BatchParseView_Previews: PreviewProvider {
     static var previews: some View {
-        BatchParseView()
+		BatchParseView(batchParse: .constant(true))
 			.environmentObject(BPFiles())
     }
 }
