@@ -16,25 +16,6 @@ var adventureData: [Adventure]  = loadAdventureData()				// 	create adventures f
 
 let sqlHikingData = SqlHikingDatabase()								// 	open and load the various tables from the database
 
-/*func loadAdventureImage(name : String) -> Image? {
-	
-	let imageFileString = NSSearchPathForDirectoriesInDomains(
-		.documentDirectory, .userDomainMask, true
-	).first! +  "/hiking/" + name + " thumb.jpg"
-	if FileManager.default.fileExists(atPath: imageFileString) {
-		if let image = NSImage(contentsOfFile: imageFileString) {
-			return Image(nsImage: image)
-		} else {
-			print("Error loading image")
-			return loadAdventureImage(name: "myHikingRecordIcon")
-		}
-	} else {
-		print("Image file not found")
-		return loadAdventureImage(name: "myHikingRecordIcon")
-	}
-}*/
-
-
 func loadTrackFromAdventure(adventure: Adventure) -> Track {
 	return adventure.trackData
 }

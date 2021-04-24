@@ -58,14 +58,15 @@ struct AdventureList: View {
 									.navigationTitle("parsingView"),
 									isActive: $parseFile)
 					{ Text("").toolbar {
-						Button("Parse") {
+							Button("Parse") {
 								parseFileRequested.toggle()
-								//batchParse = false
+								
 							}.buttonStyle(NavButtonStyle())
 						}.tag("parse")
 					}
 					
-					NavigationLink(destination: BatchParseView(batchParse: $batchParse)	// display the parsing view (showDetail if requested)
+					NavigationLink(destination: BatchParseView(batchParse: $batchParse
+					)	// display the parsing view (showDetail if requested)
 									.navigationTitle("batchParseView"),
 									 isActive: $batchParse)
 					{ Text("").toolbar {

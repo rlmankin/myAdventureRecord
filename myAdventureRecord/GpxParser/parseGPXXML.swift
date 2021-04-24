@@ -770,8 +770,13 @@ class parseController:  ObservableObject {
 	
 	
 	
-	@Published var parsedTracks : [Track] = []
-	@Published var numberOfTracks : Int = 0
+	@Published var parsedTracks : [Track]
+	@Published var numberOfTracks : Int
+	
+	init() {
+		self.parsedTracks = []
+		self.numberOfTracks = 0
+	}
 	
 		
 	
@@ -780,14 +785,14 @@ class parseController:  ObservableObject {
 		// parseGpxFileList currently always returns true
 		for i in 0 ..< filesArray.endIndex {
 			
-				//let myparsegpxxml = parseGPXXML()
-				let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: false)
-				self.numberOfTracks += parseNumTracks
-				if parseNumTracks != 0 {
-					self.parsedTracks += myparsegpxxml.allTracks
+			//let myparsegpxxml = parseGPXXML()
+			let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: false)
+			self.numberOfTracks += parseNumTracks
+			if parseNumTracks != 0 {
+				self.parsedTracks += myparsegpxxml.allTracks
 			}
 				
-			}
+		}
 		//print("firstParse number of tracks - \(self.numberOfTracks)")
 		for i in (0 ..< self.numberOfTracks) {
 			//print("header[\(i)] = \(self.parsedTracks[i].header)")

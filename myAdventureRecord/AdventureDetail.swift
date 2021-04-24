@@ -24,8 +24,6 @@ struct AdventureDetail: View {
 	
 
 	var passedAdventure: Adventure
-	//  Need to watch the tabInserted[] from GPXParseView to know if a track has been
-	//	inserted into the database
 	var beenInserted : Bool
 	
 	var adventureIndex: Int {
