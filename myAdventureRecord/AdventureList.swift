@@ -22,11 +22,12 @@ struct AdventureList: View {
 	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
 	
 	@State private var showDBTable = false							// flag to show the SQL database table (true), or not (false)
-	//@State private var showingParseDetail : Adventure? = nil		// will contain the adventure data from a parse
+	@State private var selectedURLs : [URL] = []
+	// the following flags should probably be transitioned to enums to make view management more readable and clear
 	@State private var parseFile = false							// flag to show if requested to parse a GPX file (true)
 	@State private var batchParse = false
 	@State private var parseFileRequested = false
-	@State private var selectedURLs : [URL] = []
+	
 	
     var body: some View {
 		
