@@ -1280,7 +1280,7 @@ class SqlHikingDatabase: NSObject {
 				tempTrack.trackURLString = key[sqlDbTable.sqlTrackURLString]
 				tempTrack.trackComment = key[sqlDbTable.sqlTrackComment]
 				tempTrack.trackSummary.numberOfDatapoints = key[sqlDbTable.sqlNumberOfDatapoints]
-				tempTrack.trkUniqueID = Int(key[sqlDbTable.sqlId])
+				tempTrack.trkUniqueID = Int(key[sqlDbTable.sqlUniqueID])
 				tempTrack.header = key[sqlDbTable.sqlHeader]
 				tempTrack.trackSummary.distance = key[sqlDbTable.sqlDistance]
 				tempTrack.trackSummary.startElevation = key[sqlDbTable.sqlStartElevation]

@@ -391,8 +391,14 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	var fcShouldExpect : String
 	var elementsBeingProcessed = ElementProcessingState(value:false)
 	@Published var currentTrack = Track()
-	var allTracks = [Track]()
+	var allTracks = [Track]() {
+		didSet {
+			print("alltracks.count = \(self.allTracks.count)")
+		}
+	}
+	
 	var currentTrkpt = Trkpt()
+
 	//*** var parentViewController: MainViewController		// this causes a Runtime warning about this not being in the Main Thread.  Not sure what
 													//	to do about it yet
 	var parseURL: URL
@@ -421,7 +427,11 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	
 	//	func parseURL( gpxURL: URL, parentViewController: MainViewController)
 	func parseURL( gpxURL: URL, withStats: Bool) -> Int {										// returns number of tracks in a URL
-		var returnValue: Int
+		var returnValue: Int = 0 {
+			didSet {
+				print("returnValue = \(returnValue)")
+			}
+		}
 		var parserSuccess: Bool = false
 			
 		self.withStats = withStats
@@ -516,7 +526,11 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 					// document at this time
 				elementsBeingProcessed.trk = true								// set track processing flag
 				currentTrackIndex += 1											// increment the local track ID
-				currentTrack.trkUniqueID = currentTrackIndex								// set the current track's id
+				currentTrack.trkUniqueID = -currentTrackIndex					// set the current track's id.  ID is set to a negative number to indicate that
+																				//	the track has not been added to the database.  In the insertRow function of
+																				//	SQLHikingDatabase the trkUniqueID is reset to the unique ID determined at
+																				//	row insertion time.  This also insures that it is easy to tell for GPXParseView
+																				//	what tracks have been added to the database and have not
 				currentTrack.trackURLString = self.parseURL.absoluteString		// set the current track's URL to the URL passed in to init
 				currentTrkptIndex = -1											// new track starts a new sequence of trackpoints
 				lastValidTrkptTimestampIndex = -1
@@ -781,9 +795,11 @@ class parseController:  ObservableObject {
 		
 	
 	func parseGpxFileList (_ filesArray: [URL]) -> Bool {					// filesArray contains a list of all URLs requested to be parsed.
-		let myparsegpxxml = parseGPXXML()
 		// parseGpxFileList currently always returns true
 		for i in 0 ..< filesArray.endIndex {
+			let myparsegpxxml = parseGPXXML()								// declaration of myparsegpxxml must be inside the loop to insure
+																			//	proper re-initialization of allTracks for each iteration.  Otherwise
+																			//	allTracks is not reinitialized and continues to expand.
 			
 			//let myparsegpxxml = parseGPXXML()
 			let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: false)

@@ -24,18 +24,22 @@ struct whichAdventureView : View {
 	var beenInserted : Bool
 	
 	var body: some View {
+		
+		print("->whichAdventureView \(trackIndex), \(beenInserted), \(parseGPX.parsedTracks[trackIndex].trkUniqueID)")
 			// if the track has already been inserted into the Database, then it's index will be found in userData.adventures and
 			//	we can call AdventureDetail with the userData information
 			// otherwise we need to call AdventureDetail with the parsed track information in parseGPX
 		
-		if let userDataTrackIndex = userData.adventures.firstIndex(where: {($0.id == parseGPX.parsedTracks[trackIndex].trkUniqueID)}) {
-			AdventureDetail(passedAdventure: userData.adventures[userDataTrackIndex],  beenInserted: true)
-				.tag(trackIndex)
-				.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
-		} else {
-			AdventureDetail(passedAdventure: loadAdventureTrack(track: parseGPX.parsedTracks[trackIndex]), beenInserted: false)
-				.tag(trackIndex)
-				.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
+		return Group {
+				if let userDataTrackIndex = userData.adventures.firstIndex(where: {($0.id == parseGPX.parsedTracks[trackIndex].trkUniqueID)}) {
+					AdventureDetail(passedAdventure: userData.adventures[userDataTrackIndex],  beenInserted: true)
+						.tag(trackIndex)
+						.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
+				} else {
+					AdventureDetail(passedAdventure: loadAdventureTrack(track: parseGPX.parsedTracks[trackIndex]), beenInserted: false)
+						.tag(trackIndex)
+						.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
+				}
 		}
 	}
 }
@@ -48,14 +52,6 @@ struct GPXParsingView: View {
 	
 	@State  var selectedURLs : [URL] = []
 	@State private var selectedTab : Int = 0
-	@State private var tabInserted: [Bool] = []
-	
-	
-	// simple function to test if the tabInserted[selectedTab] is valid.  Needed due to compiler limitations on type checking
-	func testForValidTab() -> Bool {
-		return selectedTab < tabInserted.count ? tabInserted[selectedTab] : false
-	}
-	
 	
 	var body: some View {
 		print("-> GPXParsingView")
@@ -83,7 +79,7 @@ struct GPXParsingView: View {
 									.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 							} else {
 								//	the track has finishing parsing, so make an 'adventure' out of it and display the detail view
-								whichAdventureView(trackIndex: trackIndex, beenInserted: false ) //tabInserted[selectedTab])
+								whichAdventureView(trackIndex: trackIndex, beenInserted: false )
 							}
 						}
 					}
@@ -102,10 +98,9 @@ struct GPXParsingView: View {
 							//	insertion but before navigating away from the detail view will be captured.
 							parseGPX.parsedTracks[selectedTab].trkUniqueID = Int(trackDb.sqlInsertToAllTables(track: parseGPX.parsedTracks[selectedTab]))
 							userData.reload()
-							//tabInserted[selectedTab].toggle()
-							//userData.add(parseGPX.parsedTracks[selectedTab])	// append the selected track into the datbase							tabInserted[selectedTab].toggle()		// disable the "insertDB" button to keep the user from adding the same parse many times
-						}.buttonStyle(DetailButtonStyle())
-						 .disabled( testForValidTab() )
+						}.buttonStyle(DetailButtonStyle()) // disable the "insertDB" button to keep the user from adding the same parse many times
+						 .disabled( userData.adventures.firstIndex(where: {($0.id == parseGPX.parsedTracks[selectedTab].trkUniqueID)}) != nil)
+						
 					}
 				}
 			} else {
