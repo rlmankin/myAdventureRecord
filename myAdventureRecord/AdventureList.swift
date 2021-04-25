@@ -46,6 +46,9 @@ struct AdventureList: View {
 						Button("\(showDBTable == true ? "List" : "dbTable")") {
 								userData.reload(tracksOnly: true)
 								showDBTable.toggle()
+								parseFile = false
+								parseFileRequested = false
+								batchParse = false
 								print("Button: showDBTable -\(showDBTable)")
 							}.buttonStyle(NavButtonStyle())
 						}.tag("dbTable")											// tag this link with the string "dbTable"
@@ -60,7 +63,8 @@ struct AdventureList: View {
 					{ Text("").toolbar {
 							Button("Parse") {
 								parseFileRequested.toggle()
-								
+								showDBTable = false
+								batchParse = false
 							}.buttonStyle(NavButtonStyle())
 						}.tag("parse")
 					}
@@ -73,6 +77,9 @@ struct AdventureList: View {
 						Button("batchParse") {
 							print("before: \(batchParse)")
 							batchParse.toggle()
+							showDBTable = false
+							parseFile = false
+							parseFileRequested = false
 							print("after: \(batchParse)")
 							}.buttonStyle(NavButtonStyle())
 						}.tag("batchParse")
