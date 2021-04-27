@@ -63,6 +63,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 	var name: String
 	var imageName: String = "myHikingRecordIcon"
 	var hikeDate : String
+	var distance : Double
 	var area : String						// future use: will be the geographic area of hike (e.g. RMNP)
 	var coordinates = Coordinates()			// generally will be the lat,long of first trackpt
 	var trackData = Track()					// all track summary data
@@ -121,7 +122,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 		self.associatedTrackID = 0
 		self.isFavorite = true
 		self.name = ""
-		//self.imageName = ""
+		self.distance = 0.0
 		self.area = ""
 		self.trackData = Track()
 		self.description = ""

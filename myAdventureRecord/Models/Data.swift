@@ -31,6 +31,11 @@ func loadAdventureTrack(track: Track) -> Adventure {
 																	// 	to a specific track in the database
 	adventure.name = track.header									// 	the track header will always be used to name the adventure
 	adventure.trackData = track										// 	load the trackData field with the track.
+	if let garminDistance = track.garminSummaryStats["Distance"] {
+		adventure.distance = Double(garminDistance)!
+	} else {
+		adventure.distance = track.trackSummary.distance
+	}
 	
 	//	DO NOT replace this line will a call to retrieve the trackpoint list.
 		adventure.trackData.trkptsList = track.trkptsList

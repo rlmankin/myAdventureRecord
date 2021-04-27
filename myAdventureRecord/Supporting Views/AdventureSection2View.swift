@@ -110,7 +110,10 @@ struct AdventureSection2View: View {
 									Text(String(format: "location: %5.3f , %5.3f", adventure.coordinates.latitude,adventure.coordinates.longitude))
 										.italic()
 										.foregroundColor(.secondary)
-									Text(String(format: "distance:  %3.2f miles", adventure.trackData.trackSummary.distance / metersperMile))
+									
+									
+									Text(String(format: "distance:  %3.2f miles", //adventure.trackData.trackSummary.distance
+										adventure.distance / metersperMile))
 										.italic()
 										.foregroundColor(.secondary)
 								}
