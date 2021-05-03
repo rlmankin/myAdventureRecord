@@ -166,10 +166,12 @@ struct AdventureSection2View: View {
 								.foregroundColor(.green)
 								.frame(minWidth: 400, idealWidth: 810, maxWidth: 810, minHeight: 0, idealHeight: 30, maxHeight: 50, alignment: .leading)
 						} else {
-							Text(adventure.description)
+							ScrollView {
+								Text(adventure.description)
 								.offset(x:10)
 								.foregroundColor(.green)
-								.frame(minWidth: 400, idealWidth: 810, maxWidth: 810, minHeight: 0, idealHeight: 30, maxHeight: 50, alignment: .leading)
+									.padding(.trailing, 10)
+							}.frame(minWidth: 400, idealWidth: 810, maxWidth: .infinity, minHeight: 0, idealHeight: 30, maxHeight: 50, alignment: .leading)
 						}
 					}.offset(x:10)
 					

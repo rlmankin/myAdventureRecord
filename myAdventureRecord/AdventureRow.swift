@@ -28,7 +28,7 @@ struct AdventureRow: View {
 						HStack (spacing: 2) {
 						 
 							Text(adventure.name)
-							.foregroundColor(.green)
+								.foregroundColor(  adventure.trackData.trkptsList.isEmpty ? .yellow : .green)
 							.bold()
 							.italic()
 							.truncationMode(.tail)

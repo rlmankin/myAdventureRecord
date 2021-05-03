@@ -50,35 +50,35 @@
 		EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFB25CB5E0400BA5BA0 /* AdventureRow.swift */; };
 		EE87FB2425CB5E0500BA5BA0 /* AdventureList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */; };
 		EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */; };
-		EE87FB3625CB61E800BA5BA0 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE87FB3525CB61E800BA5BA0 /* SQLite.framework */; };
-		EE87FB3725CB61E800BA5BA0 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EE87FB3525CB61E800BA5BA0 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		EE87FB3B25CB622B00BA5BA0 /* SQLite.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */; };
 		EE87FB4625CB742E00BA5BA0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE87FB4825CB742E00BA5BA0 /* Main.storyboard */; };
 		EE8B90C32603867000050D19 /* AdventureSection2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8B90C22603867000050D19 /* AdventureSection2View.swift */; };
 		EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A625D4992D00B72577 /* parseGPXXML.swift */; };
 		EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A825D56FF300B72577 /* GpxParseView.swift */; };
+		EEEB2A2E263AEC11004D3602 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEEB2A2D263AEBF8004D3602 /* SQLite.framework */; };
+		EEEB2A2F263AEC11004D3602 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EEEB2A2D263AEBF8004D3602 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EEEB2A32263AEC45004D3602 /* SQLite.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = EEEB2A31263AEC44004D3602 /* SQLite.framework.dSYM */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		EE87FB3825CB61E800BA5BA0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				EE87FB3725CB61E800BA5BA0 /* SQLite.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		EE87FB3925CB620A00BA5BA0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				EE87FB3B25CB622B00BA5BA0 /* SQLite.framework.dSYM in CopyFiles */,
+				EEEB2A32263AEC45004D3602 /* SQLite.framework.dSYM in CopyFiles */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EEEB2A30263AEC11004D3602 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EEEB2A2F263AEC11004D3602 /* SQLite.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -132,11 +132,13 @@
 		EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdventureDetail.swift; sourceTree = "<group>"; };
 		EE87FB3025CB61C400BA5BA0 /* SQLite */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = SQLite; path = Carthage/Build/Mac/SQLite.framework/SQLite; sourceTree = "<group>"; };
 		EE87FB3525CB61E800BA5BA0 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/Mac/SQLite.framework; sourceTree = "<group>"; };
-		EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SQLite.framework.dSYM; path = Carthage/Build/Mac/SQLite.framework.dSYM; sourceTree = "<group>"; };
 		EE87FB4725CB742E00BA5BA0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EE8B90C22603867000050D19 /* AdventureSection2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureSection2View.swift; sourceTree = "<group>"; };
 		EEDA19A625D4992D00B72577 /* parseGPXXML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parseGPXXML.swift; sourceTree = "<group>"; };
 		EEDA19A825D56FF300B72577 /* GpxParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxParseView.swift; sourceTree = "<group>"; };
+		EEEB2A2C263AEBF8004D3602 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = SQLite.framework.dSYM; sourceTree = "<group>"; };
+		EEEB2A2D263AEBF8004D3602 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SQLite.framework; sourceTree = "<group>"; };
+		EEEB2A31263AEC44004D3602 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SQLite.framework.dSYM; path = "Carthage/Build/SQLite.xcframework/macos-arm64_x86_64/dSYMs/SQLite.framework.dSYM"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE87FB3625CB61E800BA5BA0 /* SQLite.framework in Frameworks */,
+				EEEB2A2E263AEC11004D3602 /* SQLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,7 +156,7 @@
 		EE87FAB525CB5DA400BA5BA0 = {
 			isa = PBXGroup;
 			children = (
-				EE87FB3A25CB622B00BA5BA0 /* SQLite.framework.dSYM */,
+				EEEB2A31263AEC44004D3602 /* SQLite.framework.dSYM */,
 				EE87FAC025CB5DA400BA5BA0 /* myAdventureRecord */,
 				EE87FABF25CB5DA400BA5BA0 /* Products */,
 				EE87FB2F25CB61C400BA5BA0 /* Frameworks */,
@@ -296,6 +298,7 @@
 		EE87FB2F25CB61C400BA5BA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EEEB2A2A263AEBF8004D3602 /* macos-arm64_x86_64 */,
 				EE87FB3525CB61E800BA5BA0 /* SQLite.framework */,
 				EE87FB3025CB61C400BA5BA0 /* SQLite */,
 			);
@@ -314,6 +317,24 @@
 			path = GpxParser;
 			sourceTree = "<group>";
 		};
+		EEEB2A2A263AEBF8004D3602 /* macos-arm64_x86_64 */ = {
+			isa = PBXGroup;
+			children = (
+				EEEB2A2B263AEBF8004D3602 /* dSYMs */,
+				EEEB2A2D263AEBF8004D3602 /* SQLite.framework */,
+			);
+			name = "macos-arm64_x86_64";
+			path = "Carthage/Build/SQLite.xcframework/macos-arm64_x86_64";
+			sourceTree = "<group>";
+		};
+		EEEB2A2B263AEBF8004D3602 /* dSYMs */ = {
+			isa = PBXGroup;
+			children = (
+				EEEB2A2C263AEBF8004D3602 /* SQLite.framework.dSYM */,
+			);
+			path = dSYMs;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -324,8 +345,8 @@
 				EE87FABA25CB5DA400BA5BA0 /* Sources */,
 				EE87FABB25CB5DA400BA5BA0 /* Frameworks */,
 				EE87FABC25CB5DA400BA5BA0 /* Resources */,
-				EE87FB3825CB61E800BA5BA0 /* Embed Frameworks */,
 				EE87FB3925CB620A00BA5BA0 /* CopyFiles */,
+				EEEB2A30263AEC11004D3602 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -578,7 +599,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/SQLite.xcframework/macos-arm64_x86_64",
 				);
 				INFOPLIST_FILE = myAdventureRecord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -587,7 +608,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac/SQLite.framework",
+					"$(PROJECT_DIR)/Carthage/Build/SQLite.xcframework/macos-arm64_x86_64/SQLite.framework",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
@@ -613,7 +634,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/SQLite.xcframework/macos-arm64_x86_64",
 				);
 				INFOPLIST_FILE = myAdventureRecord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -622,7 +643,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac/SQLite.framework",
+					"$(PROJECT_DIR)/Carthage/Build/SQLite.xcframework/macos-arm64_x86_64/SQLite.framework",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;

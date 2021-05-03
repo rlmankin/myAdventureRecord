@@ -39,6 +39,7 @@ struct GetDateView: View {
 
 struct BatchParseView: View {
 	
+	@EnvironmentObject var userData: UserData
 	@EnvironmentObject var parseGPX :  parseController
 	@EnvironmentObject var bpFiles : BPFiles
 	@State private var startDate = Date()
@@ -61,7 +62,6 @@ struct BatchParseView: View {
 		
 		
 		let disableSleeping = disableScreenSleep()
-		print("disableSleeping = \(disableSleeping)")
 		
 		for fileIndex in (0 ..< bpFiles.xmlFiles.endIndex) {
 			print("pAIPL: launch parse \(bpFiles.xmlFiles[fileIndex].url)")
@@ -202,14 +202,17 @@ struct BatchParseView: View {
 							print("Body: bpFiles.xmlFiles @ button dispatch: \(bpFiles.xmlFiles)")
 							parseQueue.async {
 								parseAndInsertParseList(insert: insertInDb)
+								userData.reload(tracksOnly: true)
 								beenParsed = true
 							}
-					})
-					{	Text("parse files?").frame(alignment: .center) }.disabled(beenParsed)
-					Spacer()
-					Toggle(isOn: $insertInDb, label: {
+						}
+					   )
+					{Text("parse files?").frame(alignment: .center) }.disabled(beenParsed)
+					 Spacer()
+					 Toggle(isOn: $insertInDb, label: {
 						Text("Insert?")
-					}).disabled(beenParsed)
+					}
+					 ).disabled(beenParsed)
 					Spacer()
 				}
 				if !bpFiles.xmlFiles.isEmpty {

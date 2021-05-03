@@ -27,6 +27,7 @@ struct AdventureList: View {
 	@State private var parseFile = false							// flag to show if requested to parse a GPX file (true)
 	@State private var batchParse = false
 	@State private var parseFileRequested = false
+	@State private var refreshList = false
 	
 	
     var body: some View {
@@ -39,6 +40,27 @@ struct AdventureList: View {
 				// HStack for the buttons at the top.  Seems to be required to get
 				//	the buttons to correctdly call the detail view
 				HStack {
+					
+					//	insert refresh the table functionality here*****
+					NavigationLink(destination: EmptyView()
+									.navigationTitle(Text("refreshDB").italic()),
+									isActive: $refreshList)							// isActive: true displays the table, isActive:false make the view disappearText("").toolbar {	// tried this with EmptyView but the menu button is not shown
+					{ Text("").toolbar {	// tried this with EmptyView but the menu button is not shown
+						Button("Refresh") {
+								userData.reload(tracksOnly: true)
+								refreshList.toggle()
+								showDBTable = false
+								parseFile = false
+								parseFileRequested = false
+								batchParse = false
+								print("Button: refreshList -\(refreshList)")
+							}.buttonStyle(NavButtonStyle())
+						}.tag("refreshList")											// tag this link with the string "refreshList"
+					}
+				
+					
+					
+					//	dBTable *****
 					//	if the dbTable button is selected, show the database table in the detail view (right pane), but maintain the navigation view list (left pane)
 					NavigationLink(destination: HikingDBView()
 									.navigationTitle(Text("dbTableView").italic()),
@@ -56,7 +78,7 @@ struct AdventureList: View {
 					
 					}
 						
-						
+					//	parse *****
 					//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
 					NavigationLink(destination: GPXParsingView()	// display the parsing view (showDetail if requested)
 									.navigationTitle("parsingView"),
@@ -70,6 +92,8 @@ struct AdventureList: View {
 						}.tag("parse")
 					}
 					
+					//	batchParse *****
+					//	if the batchParse button is selected, show the filePicker dialog box to allow the user to selected .gpx files for parsing
 					NavigationLink(destination: BatchParseView(batchParse: $batchParse
 					)	// display the parsing view (showDetail if requested)
 									.navigationTitle("batchParseView"),
@@ -86,6 +110,8 @@ struct AdventureList: View {
 						}.tag("batchParse")
 					}
 				}
+				
+				//	The List of Adventure *****
 				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
 				//	detail view (right pane)
 				ForEach(userData.adventures) { adventure in
