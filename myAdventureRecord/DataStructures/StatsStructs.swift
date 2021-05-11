@@ -10,7 +10,7 @@ struct MinMaxStats: Codable, Hashable {
 	struct Stat: Codable, Hashable {
 		var statData: Double
 		
-		var boundedStatData: Double{
+		var boundedStatData: Double {
 			get {
 				switch self.statData {
 				case Double.greatestFiniteMagnitude:

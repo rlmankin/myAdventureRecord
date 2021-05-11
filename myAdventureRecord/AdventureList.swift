@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+
 struct BPReturnButton: View {
 	var body: some View {
 		HStack {
@@ -17,13 +19,22 @@ struct BPReturnButton: View {
 }
 
 struct AdventureList: View {
-	
+	enum FlagStates {
+		case showDBTable
+		case parseFile
+		case batchParse
+		case refreshList
+		case empty
+	}
 	@EnvironmentObject  var userData: UserData
 	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
 	
-	@State private var showDBTable = false							// flag to show the SQL database table (true), or not (false)
 	@State private var selectedURLs : [URL] = []
 	// the following flags should probably be transitioned to enums to make view management more readable and clear
+	
+	@State private var stateFlag : FlagStates = .empty
+	@State private var showDBTable = false							// flag to show the SQL database table (true), or not (false)
+	
 	@State private var parseFile = false							// flag to show if requested to parse a GPX file (true)
 	@State private var batchParse = false
 	@State private var parseFileRequested = false
@@ -31,6 +42,7 @@ struct AdventureList: View {
 	
 	
     var body: some View {
+		
 		
 		timeStampLog(message: "-> adventureList body")
 		
@@ -44,7 +56,7 @@ struct AdventureList: View {
 					//	insert refresh the table functionality here*****
 					NavigationLink(destination: EmptyView()
 									.navigationTitle(Text("refreshDB").italic()),
-									isActive: $refreshList)							// isActive: true displays the table, isActive:false make the view disappearText("").toolbar {	// tried this with EmptyView but the menu button is not shown
+								   isActive: $refreshList)							// isActive: true displays the table, isActive:false make the view disappearText("").toolbar {	// tried this with EmptyView but the menu button is not shown
 					{ Text("").toolbar {	// tried this with EmptyView but the menu button is not shown
 						Button("Refresh") {
 								userData.reload(tracksOnly: true)

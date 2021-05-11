@@ -19,6 +19,7 @@ struct AdventureDetail: View {
 	@State private var editDescription : String = "null"
 	@State private var editHikeCategory  = Adventure.HikeCategory.none
 	@State private var editArea : String = "Colorado"
+	@State private var trkPtsLoading : Bool = false
 	
 	
 	
@@ -72,21 +73,24 @@ struct AdventureDetail: View {
 		let udatedTrkRow = trackDb.sqlUpdateTrkRow(rowID, userData.adventures[adventureIndex])		// update the appropriate row in the track table
 	}
 	
+	func loadTrkPtList( adventure: Adventure) {
+		
+	}
+		
+
+	
 	var body: some View {
 		var adventure = passedAdventure
 		
 		timeStampLog(message: "AdventureDetail body")
-		// if the trckptsList has not been loaded from the sql database, then load it now.  This technique moves the ~0.5 sec to load
-		//	a larger trkptsList from application initialization to the first attempt to show the adventure's Detail. Loading all trkptsLists
-		//	at initialization causes an long delay on startup, which causes the user to worry if the app has actually loaded.
 		if adventure.trackData.trkptsList.isEmpty {
-			userData.adventures[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventure.id)
-																		//	retrieve the trackspoint list from the trackpointlist table in the database
+			userData.adventures[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventure.id)				//	retrieve the trackspoint list from the trackpointlist table in the database
 			adventure.trackData.trkptsList = userData.adventures[adventureIndex].trackData.trkptsList
+
 		}
 		
 		
-		return ScrollView  {
+		return ScrollView {
 			
 			ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom)) {
 				// ZStack for the map and 'open in maps' overlay
@@ -163,8 +167,11 @@ struct AdventureDetail: View {
 			
 			
 			
-			
-		}  // Scrollview
+				
+			}
+		
+		}
+		// Scrollview
 		//.frame(minWidth: 500, idealWidth: 500, maxWidth: .infinity, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: 400, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 }
 
@@ -175,4 +182,4 @@ struct AdventureDetail_Previews: PreviewProvider {
 			.frame(width: 850, height: 900)
     }
 }
-}
+

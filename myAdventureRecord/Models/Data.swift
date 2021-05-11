@@ -162,10 +162,18 @@ final class ImageStore {
 	}
 
 	static func loadImage(name: String) -> CGImage {
-	
+		
+		// I'm sure there is a more elegant way to achieve the functionality of determining
+		//	if an image with an extension of either .jpg OR .jpeg exist, but this works for now
 		var fullPathString = NSSearchPathForDirectoriesInDomains(
 									.documentDirectory, .userDomainMask, true).first!
-							 +  "/hiking/hikingDatabase/thumbnails/" + name + " thumb.jpg"
+							 +  "/hiking/hikingDatabase/thumbnails/" + name + " thumb"
+		if FileManager.default.fileExists(atPath: fullPathString + ".jpg") {
+			fullPathString = fullPathString + ".jpg"
+		}
+		if FileManager.default.fileExists(atPath: fullPathString + ".jpeg") {
+			fullPathString = fullPathString + ".jpeg"
+		}
 		if !FileManager.default.fileExists(atPath: fullPathString) {
 			fullPathString = NSSearchPathForDirectoriesInDomains(
 				.documentDirectory, .userDomainMask, true).first!
