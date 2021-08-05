@@ -10,7 +10,6 @@ import SwiftUI
 
 final class	UserData: ObservableObject {
 	@Published var adventures = adventureData
-	
 	func reload(tracksOnly: Bool = false) {
 		adventureData = loadAdventureData()
 		self.adventures = adventureData

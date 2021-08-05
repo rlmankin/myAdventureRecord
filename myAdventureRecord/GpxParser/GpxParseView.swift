@@ -97,6 +97,7 @@ struct GPXParsingView: View {
 							//	to AdventureDetail when it is updated.  This is necessary inorder to insure that edit done after
 							//	insertion but before navigating away from the detail view will be captured.
 							parseGPX.parsedTracks[selectedTab].trkUniqueID = Int(trackDb.sqlInsertToAllTables(track: parseGPX.parsedTracks[selectedTab]))
+							trackDb.reloadTracks()
 							userData.reload()
 						}.buttonStyle(DetailButtonStyle()) // disable the "insertDB" button to keep the user from adding the same parse many times
 						 .disabled( userData.adventures.firstIndex(where: {($0.id == parseGPX.parsedTracks[selectedTab].trkUniqueID)}) != nil)
