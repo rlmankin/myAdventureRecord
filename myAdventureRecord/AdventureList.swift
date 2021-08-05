@@ -93,8 +93,13 @@ struct AdventureList: View {
 						// isActive: true displays the table, isActive:false make the view disappear
 					{ Text("").toolbar {	// tried this with EmptyView but the menu button is not shown
 						Button("\(showDBTable == true ? "List" : "dbTable")") {
-								userData.reload(tracksOnly: true)
 								showDBTable.toggle()
+									// if showDBTable is false this will reload the userData adventures array with new database tracks array
+									//	which may have been modified during the users explorations of dbTable.  This will enable the navigation
+									//	view (left pane) to be reloaded since userData is a stateObject.
+								if !showDBTable {
+									userData.reload(tracksOnly: true)
+								}
 								parseFile = false
 								parseFileRequested = false
 								batchParse = false
