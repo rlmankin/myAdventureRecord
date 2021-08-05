@@ -106,7 +106,9 @@ class SqlHikingDatabase: NSObject {
 		///
 		// doHikingDb calculated Stats
 		///
-		var sqlUniqueID = Expression<Int>("uniqueID")
+		var sqlUniqueID = Expression<Int>("uniqueID")							// sqlUniqueID/uniqueID is the 'master' track ID used through all database tables
+																				//	in the trackpoints table this value is called 'tpAssociatedTrackID'
+																				//	in the adventure table this value is call 'advAssociatedTrackID'
 		var sqlId = Expression<Int>("id")
 		var sqlTrackURLString = Expression<String>("trackURLString")
 		var sqlNumberOfDatapoints = Expression<Int>("numberOfDatapoints")
@@ -324,7 +326,7 @@ class SqlHikingDatabase: NSObject {
 	
 	struct AdventureSqlTable {		// adventure table, should mirror adventure structure minus some duplications
 									//	already captured in either the trackpoints table or the track table
-		var sqladvTrkID = Expression<Int>("advuniqueID")
+		var sqlAdvUniqueID = Expression<Int>("advuniqueID")
 		var sqladvAssociatedTrackID = Expression<Int>("advAssociatedTrackID")
 		var sqladvImageName = Expression<String>("advImageName")
 		var sqladvDescription = Expression<String>("advDescription")
@@ -338,7 +340,7 @@ class SqlHikingDatabase: NSObject {
 			do {
 				let advTable = Table(sqladvTableName)
 				try sqlDbFileHandle!.run(advTable.create(ifNotExists: true) { t in
-					t.column(sqladvTable.sqladvTrkID, primaryKey: .autoincrement)
+					t.column(sqladvTable.sqlAdvUniqueID, primaryKey: .autoincrement)
 					t.column(sqladvTable.sqladvAssociatedTrackID, unique: false)
 					t.column(sqladvTable.sqladvImageName)
 					t.column(sqladvTable.sqladvDescription)
@@ -835,12 +837,37 @@ class SqlHikingDatabase: NSObject {
 		return trkptsAdded
 		
 	}
+
 	
+	func repairAssociatedTrackID( trkUniqueID : Int, associatedTrackID : Int) -> Int {
+		if let advFileHandle = sqlDbFileHandle {
+			let rowIDExpression = Expression<Int>(String(associatedTrackID))
+			let advdbTable = Table(sqladvTableName)
+			let query = advdbTable.filter(sqladvTable.sqladvAssociatedTrackID == rowIDExpression)
+			let numRowsFound = try! advFileHandle.run( query.update(
+								sqladvTable.sqladvAssociatedTrackID <- trkUniqueID
+								)
+							)
+			if numRowsFound == 0 {
+				print("associatedTrackID(\(associatedTrackID)) not found - trkUniqueID(\(trkUniqueID)")
+			}
+			return numRowsFound
+		} else {
+			Swift.print("\(sqladvTable) is empty")
+			return -2
+		}
+	}
 	func sqlUpdateAdvRow(_ trackRowID: Int, _ partial: inout Adventure) -> Int64 {
+		// trackRowID is the track's unique ID, found in the trkUniquID field in the userData.adventures structure.
+		//		This value corresponds to the  'uniqueID/sqlUniqueID' in the track database table
+		// partial is the Adventure structure that has been edited prior to calling the sqlUpdateAdvRow function
+		// It is vital that this function update the adventure row that corresponds to the track's unique ID.  This information
+		//		is found in the adventure table's advAssociatedTrkID'
 		if let advFileHandle = sqlDbFileHandle {
 			let rowIDExpression = Expression<Int>(String(trackRowID))
 			let advdbTable = Table(sqladvTableName)
-			let query = advdbTable.filter(sqladvTable.sqladvTrkID == rowIDExpression)
+			let query = advdbTable.filter(sqladvTable.sqladvAssociatedTrackID == rowIDExpression)			// was sqladvTable.sqladvTrkID
+																											//  maybe should be sqladvTable.sqladvAssociatedTrkID?????
 			do {
 				let rowid = try advFileHandle.run( query.update(
 					// add name update
@@ -889,9 +916,10 @@ class SqlHikingDatabase: NSObject {
 	func sqlInsertToAllTables( track : Track) -> Int64 {
 			//	open and connect to the hinkingdbTable of the SQL hiking database
 		let trackRow = self.sqlInsertDbRow(track)
+			// trackRow will contain the unique row number in the track database that corresponds to this track.  This will become the track.uniqueTrkID as well as the adventure and tplist associatedTrackID
 		let trkptRow = self.sqlInsertTrkptList(trackRow, track.trkptsList)
 		let tempAdv = loadAdventureTrack(track: track)
-		let advRow = self.sqlInsertAdvRow(trackRow, tempAdv)
+		let advRow = self.sqlInsertAdvRow(Int64(trackRow), tempAdv)
 		return trackRow
 	}
 	
@@ -922,28 +950,46 @@ class SqlHikingDatabase: NSObject {
 	}
 	
 	func sqlRetrieveAdventure(_ trackRowID: Int, _ partial: inout Adventure) {
-		let rowIDExpression = Expression<Int>(String(trackRowID))
-		let advdbTable = Table(sqladvTableName)
-		let query = advdbTable.filter(sqladvTable.sqladvTrkID == rowIDExpression)
-		//var adventure = Adventure()
-		if let advFileHandle = sqlDbFileHandle {
-			let results = try! advFileHandle.prepare(query)
-			for key in results {
-				partial.associatedTrackID = key[sqladvTable.sqladvAssociatedTrackID]
-				partial.imageName = key[sqladvTable.sqladvImageName]
-				partial.description = key[sqladvTable.sqladvDescription]
-				partial.area = key[sqladvTable.sqladvArea]
-				partial.isFavorite = key[sqladvTable.sqladvIsFav]
-				switch key[sqladvTable.sqladvHikeCat] {
-					case "Hike": partial.hikeCategory = Adventure.HikeCategory.hike
-					case "Walkabout" : partial.hikeCategory = Adventure.HikeCategory.walkabout
-					case "Off Road": partial.hikeCategory = Adventure.HikeCategory.orv
-					case "Scenic Drive" : partial.hikeCategory = Adventure.HikeCategory.scenicDrive
-					case "Snowshoe" : partial.hikeCategory = Adventure.HikeCategory.snowshoe
-					case "Not Categorized" : partial.hikeCategory = Adventure.HikeCategory.none
-					default : partial.hikeCategory = Adventure.HikeCategory.none
+		// sqlRetrieveAdventure reads the parts of the adventure found in the 'adventure table' of the sqlDatabase.
+		//	The primary key to find the appropriate track in the trackRowID, which is the trkUniqueID.  At this time
+		//	7/31/21 this function is only called by loadAdventureData in the adventure array initialization.
+		let rowIDExpression = Expression<Int>(String(trackRowID))	//	create a sqlite.swift expression of the trackRowID
+		let advdbTable = Table(sqladvTableName)						//	declare the advdbTable
+																	//	create the sqlite.swift query ("find rows where sqlAdvUniqueID match the
+																	//		trackRowID")
+		//let query = advdbTable.filter(sqladvTable.sqlAdvUniqueID == rowIDExpression)
+		let query = advdbTable.filter(sqladvTable.sqladvAssociatedTrackID == rowIDExpression)
+		
+		if let advFileHandle = sqlDbFileHandle {					// 	make sure the db is open ... then ...
+			do {
+				let results = try advFileHandle.prepare(query) 		// perform the db query.  I'm not sure that 'prepare' will every throw an
+																	//	error, but I put in a try/catch to let me know if it does.  I think it will
+																	//	throw an error if the row is not found, but it may only return nil.
+				for key in results {
+					//print("\tsqlRetrieveAdventure: \(trackRowID), \(key[sqladvTable.sqlAdvUniqueID]), \(key[sqladvTable.sqladvHikeCat])")
+					partial.associatedTrackID = key[sqladvTable.sqladvAssociatedTrackID]
+					partial.imageName = key[sqladvTable.sqladvImageName]
+					partial.description = key[sqladvTable.sqladvDescription]
+					partial.area = key[sqladvTable.sqladvArea]
+					partial.isFavorite = key[sqladvTable.sqladvIsFav]
+					switch key[sqladvTable.sqladvHikeCat] {
+						case "Hike": partial.hikeCategory = Adventure.HikeCategory.hike
+						case "Walkabout" : partial.hikeCategory = Adventure.HikeCategory.walkabout
+						case "Off Road": partial.hikeCategory = Adventure.HikeCategory.orv
+						case "Scenic Drive" : partial.hikeCategory = Adventure.HikeCategory.scenicDrive
+						case "Snowshoe" : partial.hikeCategory = Adventure.HikeCategory.snowshoe
+						case "Not Categorized" : partial.hikeCategory = Adventure.HikeCategory.none
+						default : partial.hikeCategory = Adventure.HikeCategory.none
+					}
 				}
+				if partial.associatedTrackID == 0 {
+					print("\(trackRowID)'s associated track is 0")
+				}
+			} catch {
+				print("retreiveAdventure fail: \(trackRowID)")
 			}
+			
+		
 		}
 	}
 

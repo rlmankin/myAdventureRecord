@@ -66,6 +66,7 @@ struct DistanceElevationChart: View {
 					XAxisView(track: track)
 						.frame(width: reader.size.width - 30, height: reader.size.height)
 						.offset(x:30)
+					
 				}
 			}
 			
@@ -76,6 +77,6 @@ struct DistanceElevationChart: View {
 
 struct DistanceElevationChart_Previews: PreviewProvider {
     static var previews: some View {
-		DistanceElevationChart(track: adventureData[0].trackData)
+		DistanceElevationChart(track: adventureData[5].trackData)
     }
 }

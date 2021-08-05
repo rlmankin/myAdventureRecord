@@ -71,6 +71,7 @@ struct AdventureSection2View: View {
 								} else {
 									Text(adventure.name).font(.title).italic()
 								}
+								//  This button manages the selecting or deselecting the adventure as a 'favorite'.  This code section has not been tested or debug as of 05/30/21
 								Button(action: {  // the favorite button can be selected outside of edit mode.  Just need to update the .isFavorite element of the adventure table
 									//updateDatabases()
 									self.userData.adventures[self.associatedTrackIndex]
@@ -194,11 +195,11 @@ struct AdventureSection2View_Previews: PreviewProvider {
 				.frame(width: 850, height: 900)
 		
 		AdventureSection2View(section2Editing: .constant(true),
-							  editName: .constant("null"),
-							  editTrackComment: .constant("null"),
-							  editDescription: .constant("null"),
+							  editName: .constant("Name field"),
+							  editTrackComment: .constant("Comment Field"),
+							  editDescription: .constant("Description field"),
 							  editHikeCategory: .constant(Adventure.HikeCategory.none),
-							  editArea : .constant("null"),
+							  editArea : .constant("Area field"),
 							  adventure: adventureData[0])
 				.environmentObject(UserData())
 				.frame(width: 850, height: 900)

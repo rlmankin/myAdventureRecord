@@ -16,9 +16,41 @@ var adventureData: [Adventure]  = loadAdventureData()				// 	create adventures f
 
 let sqlHikingData = SqlHikingDatabase()								// 	open and load the various tables from the database
 
-func loadTrackFromAdventure(adventure: Adventure) -> Track {
-	return adventure.trackData
+func loadAdventureData() -> [Adventure] {
+	//	loadAdventureData loops through all tracks in the database and creates the adventure structure for all entries.
+	//	returns an array of adventures.  This array is later used & published by the UserData class for use throughout
+	//	the application
+	timeStampLog(message: "-> loadAdventureData")
+	var adventures = [Adventure]()									//	adventures is the overall return array structure
+	var localAdventure = Adventure()								//	localAdventure is a temporary store for creating an adventure
+	for item in sqlHikingData.tracks {
+		//let lhsDate = timeStampLog(message: "-> \(item.header)", noPrint: true)
+		// do not load the trkptsList now but defer to the first attempt by the user to look at an adventure's Detail (AdventureDetail)
+		// 	I've learned that loading the trkptsList is the largest time consumer and when mulitplied over a large number of database
+		//	entries the load time for the app is unacceptable
+		//print("loadAdventureData:  \(item.trkUniqueID), \(item.header)")
+			// load track parameters into the adventure
+		localAdventure = loadAdventureTrack(track: item)
+			// load adventure parameters from 'adventure table' into the adventure.  NOTE:  localAdventure is passed as reference (&localAdventure)
+			//	to ensure I use the same instance
+		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &localAdventure)
+		if localAdventure.associatedTrackID != item.trkUniqueID {
+			print("mismatch \(item.header) - repairing", terminator: " ")
+			sqlHikingData.repairAssociatedTrackID(trkUniqueID: item.trkUniqueID, associatedTrackID: localAdventure.associatedTrackID)
+			print(" - completed")
+		}
+		localAdventure.prettyPrint()
+		adventures.append(localAdventure)
+		localAdventure = Adventure()										// reinit the adventure
+		//timeStamp(message: "<- \(item.header)")
+		
+	}
+	//print("Total TrkptLoadTime = \(cumTrkptListLoadTime)")
+	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
+	timeStampLog(message: "<-loadAdventureData")
+	return adventures
 }
+
 
 func loadAdventureTrack(track: Track) -> Adventure {
 	// loadAdventureTrack fills all applicable adventure fields from a track structure
@@ -29,17 +61,22 @@ func loadAdventureTrack(track: Track) -> Adventure {
 	
 	adventure.id = track.trkUniqueID								// 	trkUniqueID is the critical field.  It is used to link all table entries
 																	// 	to a specific track in the database
+	adventure.associatedTrackID = track.trkUniqueID
 	adventure.name = track.header									// 	the track header will always be used to name the adventure
 	adventure.trackData = track										// 	load the trackData field with the track.
+		// if a garminDistance value exists use it as the adventure distance instead of the trackSummary value.  Garmin track distance
+		//	is a more accurate reading of the overall distance than the summing of the distances between trackpoints.  Trackpoin summing
+		//	introduces sample rate error and is usually shorter than the garmin distance.
 	if let garminDistance = track.garminSummaryStats["Distance"] {
 		adventure.distance = Double(garminDistance)!
 	} else {
 		adventure.distance = track.trackSummary.distance
 	}
 	
-	//	DO NOT replace this line will a call to retrieve the trackpoint list.
-		adventure.trackData.trkptsList = track.trkptsList
-		//	if there are no trackpoints the there is no need to calculate andy additional fields
+		//	DO NOT replace this line with a call to retrieve the trackpoint list.  Retrieving the trackpoint list a a timeconsuming function
+		//		which should NOT be done in this function
+	adventure.trackData.trkptsList = track.trkptsList
+		//	if there are no trackpoints the there is no need to calculate any additional fields
 	if !adventure.trackData.trkptsList.isEmpty {
 			//	coordinates set the center of the map at the starting location and hold the maximum/minimum latitude/longitude to set the area
 			//	of the track.  This is used to set the center and area of the map
@@ -47,7 +84,7 @@ func loadAdventureTrack(track: Track) -> Adventure {
 																	//	find the latitude of the start of the track
 		adventure.coordinates.longitude = adventure.trackData.trkptsList[0].longitude
 																	//	find the longitude of the start of the track
-				// find the maximum latitude and longitude.
+			// find the maximum latitude and longitude.
 			//	probably should 'guard' these to avoid an unexpected crash for nil
 		adventure.coordinates.maxLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).max()!
 		adventure.coordinates.maxLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).max()!
@@ -60,14 +97,15 @@ func loadAdventureTrack(track: Track) -> Adventure {
 		adventure.longitudeSpan = CLLocationDegrees(max( abs( adventure.coordinates.longitude - adventure.coordinates.maxLongitude),
 									  abs( adventure.coordinates.longitude - adventure.coordinates.minLongitude)))
 	}
-	adventure.hikeDate = {											//	set the hike date, using the 'usual' Apple date functions
+		//	set the hike date, using the 'usual' Apple date functions.  NOTE:  this uses a Swift closure, unusual for me to use.
+	adventure.hikeDate = {
 		let dateFmt = DateFormatter()
 		dateFmt.timeZone = TimeZone.current
 		dateFmt.dateFormat =  "MMM dd, yyyy"
 			//	probably should 'guard' this to avoid an unexpected crash for nil
 		return String(format: "\(dateFmt.string(from: track.trackSummary.startTime!))")
 	}()
-		// return, NOTE: this is not a complete adventure, only the parts of the adventure structure used by a track
+		// return, NOTE: this is not a complete adventure, only the parts of the adventure structure found in the track structure
 	return adventure
 }
 
@@ -83,40 +121,7 @@ func loadPartialAdventure(partial: Adventure, target: inout Adventure) {
 }
 
 
-func loadAdventureData() -> [Adventure] {
-	//	loadAdventureData loops through all tracks in the database and creates the adventure structure for all entries.
-	//	returns and array of adventures.  This array is later used & published by the UserData class for use throughout
-	//	the application
-	timeStampLog(message: "-> loadAdventureData")
-	
-	var localAdventure = Adventure()
-	var adventures = [Adventure]()
-	//var cumTrkptListLoadTime : Double = 0.0
-	for item in sqlHikingData.tracks {
-		//let lhsDate = timeStampLog(message: "-> \(item.header)", noPrint: true)
-		// do not load the trkptsList now but defer to the first attempt by the user to look at an adventure's Detail (AdventureDetail)
-		// 	I've learned that loading the trkptsList is the largest time consumer and when mulitplied over a large number of database
-		//	entries the load time for the app is unacceptable
-		//item.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(item.trkUniqueID)
-																	//	retrieve the trackspoint list from the trackpointlist table in the database
-		//let rhsDate = timeStampLog(message: "\(item.trkptsList.count)", noPrint: true)
-		//cumTrkptListLoadTime += rhsDate - lhsDate
-		//print("\(Int((rhsDate - lhsDate)*1000))ms : \(item.trkptsList.count) - \(item.header)")
-		localAdventure = loadAdventureTrack(track: item)					// load track parameters into the adventure
-		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &localAdventure)
-																	// load adventure parameters into the adventure
-		//timeStamp(message: "<- item.adventure")
-		//localAdventure.imageName = localAdventure.imageName
-		adventures.append(localAdventure)
-		localAdventure = Adventure()										// reinit the adventure
-		//timeStamp(message: "<- \(item.header)")
-		
-	}
-	//print("Total TrkptLoadTime = \(cumTrkptListLoadTime)")
-	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
-	timeStampLog(message: "<-loadAdventureData")
-	return adventures
-}
+
 //****************
 // The following are copied from the MacLandmarks tutorial.  I need to understand
 //	them before deciding if I should replace my versions with these.

@@ -13,7 +13,7 @@ struct SummaryTab: View {
     var body: some View {
 		
 		timeStampLog(message: "SummaryTab")
-		return ScrollView (.horizontal) {
+		return ScrollView  {
 			Text(adventure.trackData.print())
 				.font(.caption)
 		}

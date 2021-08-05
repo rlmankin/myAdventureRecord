@@ -132,6 +132,23 @@ struct Adventure: Hashable, Codable, Identifiable {
 		self.hikeCategory = HikeCategory.none
 		
 	}
+	
+	func prettyPrint() {
+		
+		var outputString : String = nullString
+		
+		outputString.append(String(format:"%@\t ", self.trackData.id.uuidString))
+		outputString.append(String(format:"%4d\t ", self.trackData.trkUniqueID))
+		//outputString.append("Adventure:  ")
+		outputString.append(String(format:"%4d\t ", self.id))
+		outputString.append(String(format:"%4d\t ", self.associatedTrackID))
+		outputString.append(String(format:"%@\t ", self.name))
+		outputString.append(String(format:"%@\t ", self.area))
+		outputString.append(String(format:"%@\t ", self.description))
+		outputString.append(String(format:"%@", self.hikeCategory.description))
+		
+		print(outputString)
+	}
 }
 
 extension Adventure {

@@ -76,6 +76,6 @@ struct DistEleMainChart: View {
 
 //struct DistEleMainChart_Previews: PreviewProvider {
 //    static var previews: some View {
-//		DistEleMainChart( track: adventureData[0].trackData)
+//		DistEleMainChart( track: adventureData[5].trackData)
 //    }
 //}

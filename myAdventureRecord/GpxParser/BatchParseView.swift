@@ -88,7 +88,7 @@ struct BatchParseView: View {
 							let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackRow, track.trkptsList)
 								// trkptRow is the number of rows in the trackptTable where the trackpoint list was inserted
 								//	trackRow is placed into the associatedTrackID field in the trackpointdbTable
-							let advRow = trackDb.sqlInsertAdvRow(trackRow, loadAdventureTrack(track: track))
+							let advRow = trackDb.sqlInsertAdvRow(Int64(track.trkUniqueID), loadAdventureTrack(track: track))
 								// advRow is the row in the adventuredbTable where the adventure was inserted,
 								//	trackRow is place into the associatedTrackID field in the adventuredbTable
 							

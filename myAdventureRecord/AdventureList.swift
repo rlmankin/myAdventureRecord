@@ -40,19 +40,32 @@ struct AdventureList: View {
 	@State private var parseFileRequested = false
 	@State private var refreshList = false
 	
+	func printStateVars() {
+		print("showDBtable: \(showDBTable)", terminator: " ")							// flag to show the SQL database table (true), or not (false)
+		print("parseFile: \(parseFile)", terminator: " ")
+		print("batchParse: \(batchParse)", terminator: " ")
+		print("parseFileRequested: \(parseFileRequested)", terminator: " ")
+		print("refreshList: \(refreshList)")
+	}
+	
 	
     var body: some View {
 		
 		
 		timeStampLog(message: "-> adventureList body")
+		printStateVars()
 		
 		return NavigationView {
 			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
 			List  {
+				
 				// HStack for the buttons at the top.  Seems to be required to get
 				//	the buttons to correctdly call the detail view
 				HStack {
-					
+					NavigationLink(destination: EmptyView()) {
+						EmptyView()
+					}
+					/*
 					//	insert refresh the table functionality here*****
 					NavigationLink(destination: EmptyView()
 									.navigationTitle(Text("refreshDB").italic()),
@@ -68,7 +81,7 @@ struct AdventureList: View {
 								print("Button: refreshList -\(refreshList)")
 							}.buttonStyle(NavButtonStyle())
 						}.tag("refreshList")											// tag this link with the string "refreshList"
-					}
+					}*/
 				
 					
 					
@@ -76,7 +89,8 @@ struct AdventureList: View {
 					//	if the dbTable button is selected, show the database table in the detail view (right pane), but maintain the navigation view list (left pane)
 					NavigationLink(destination: HikingDBView()
 									.navigationTitle(Text("dbTableView").italic()),
-									isActive: $showDBTable)							// isActive: true displays the table, isActive:false make the view disappear
+								   isActive: $showDBTable)
+						// isActive: true displays the table, isActive:false make the view disappear
 					{ Text("").toolbar {	// tried this with EmptyView but the menu button is not shown
 						Button("\(showDBTable == true ? "List" : "dbTable")") {
 								userData.reload(tracksOnly: true)
@@ -84,17 +98,17 @@ struct AdventureList: View {
 								parseFile = false
 								parseFileRequested = false
 								batchParse = false
-								print("Button: showDBTable -\(showDBTable)")
+								//print("Button: showDBTable -\(showDBTable), ")
 							}.buttonStyle(NavButtonStyle())
 						}.tag("dbTable")											// tag this link with the string "dbTable"
 					
 					}
-						
+					
 					//	parse *****
 					//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
 					NavigationLink(destination: GPXParsingView()	// display the parsing view (showDetail if requested)
 									.navigationTitle("parsingView"),
-									isActive: $parseFile)
+								   isActive: $parseFile)
 					{ Text("").toolbar {
 							Button("Parse") {
 								parseFileRequested.toggle()
@@ -103,6 +117,7 @@ struct AdventureList: View {
 							}.buttonStyle(NavButtonStyle())
 						}.tag("parse")
 					}
+					
 					
 					//	batchParse *****
 					//	if the batchParse button is selected, show the filePicker dialog box to allow the user to selected .gpx files for parsing

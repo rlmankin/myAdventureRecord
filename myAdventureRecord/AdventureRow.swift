@@ -27,7 +27,7 @@ struct AdventureRow: View {
 					VStack (alignment: .leading) {
 						HStack (spacing: 2) {
 						 
-							Text(adventure.name)
+							Text(adventure.name + "(\(adventure.trackData.trkUniqueID))")
 								.foregroundColor(  adventure.trackData.trkptsList.isEmpty ? .yellow : .green)
 							.bold()
 							.italic()

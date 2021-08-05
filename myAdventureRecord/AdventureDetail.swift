@@ -163,7 +163,7 @@ struct AdventureDetail: View {
 						Text("Summary")
 					})
 				
-			}.frame(minWidth: 500, idealWidth: 500, maxWidth: .infinity, minHeight: 0/*@END_MENU_TOKEN@*/, idealHeight: 400, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center)
+			}.frame(minWidth: 500, idealWidth: 500, maxWidth: .infinity, minHeight: 400,idealHeight: 700, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .center)
 			
 			
 			
@@ -177,7 +177,7 @@ struct AdventureDetail: View {
 
 struct AdventureDetail_Previews: PreviewProvider {
     static var previews: some View {
-		AdventureDetail(passedAdventure: adventureData[0], beenInserted: true)
+		AdventureDetail(passedAdventure: adventureData[5], beenInserted: true)
 			.environmentObject(UserData())
 			.frame(width: 850, height: 900)
     }

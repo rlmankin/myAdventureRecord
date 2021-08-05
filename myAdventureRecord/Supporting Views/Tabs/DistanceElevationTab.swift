@@ -46,7 +46,7 @@ struct DistanceElevationTab: View {
 					.foregroundColor(Color(NSColor.systemTeal))
 				Spacer()
 				Text(String(format: "Min Speed: %2.2f mph",
-					-adventure.trackData.trackSummary.mileStats.speed.min.statData/metersperMile*secondsperHour))
+					adventure.trackData.trackSummary.mileStats.speed.min.statData/metersperMile*secondsperHour))
 					.foregroundColor(Color.orange)
 			}.padding(.horizontal)
 			VStack {
