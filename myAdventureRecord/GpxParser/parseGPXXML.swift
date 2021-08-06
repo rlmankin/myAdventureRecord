@@ -273,7 +273,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 		//print("using validTimeElevationArray")
 	}
 	
-print("\(currentTrack.header) - \(currentTrack.trkptsList.count)")
+	print("\(currentTrack.header) - \(currentTrack.trkptsList.count)")			// parsing console message
 	for k in 0 ..< (currentTrack.validTrkptsForStatistics.endIndex - 1) {
 		
 		currentTrack.parseProgress = k
@@ -350,7 +350,7 @@ print("\(currentTrack.header) - \(currentTrack.trkptsList.count)")
 		avgAscentRateMile = ((avgAscentRateMile * Double(k)) + overMile.map({$0.ascentSpeed}).reduce(0,max)) / Double(k+1)
 		avgDescentRateMile = ((avgDescentRateMile * Double(k)) + overMile.map({$0.descentSpeed}).reduce(0,min)) / Double(k+1)
 		if (k % 100) == 0 {						// print progress indicator
-			print("", separator: "", terminator: "[\(k)]\n")							// enter a newline indicator when operation from the console
+			print("", separator: "", terminator: "[\(k)]\n")					// enter a newline indicator when operation from the console
 		}
 	} // loop k
 	overEighthMile.removeAll()													// clear the array

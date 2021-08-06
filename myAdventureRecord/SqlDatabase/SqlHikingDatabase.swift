@@ -22,7 +22,7 @@ class SqlHikingDatabase: NSObject {
 	let sqltpDbTableName : String = "tpdbTable"
 	let sqladvTableName : String = "advdbTable"
 	
-	let selectAllString = "SELECT uniqueID, header from "						// SQL query to get the uniqueID and the header from the database
+	let selectAllString = "SELECT uniqueID, header from "				// SQL query to get the uniqueID and the header from the database
 	var tracks = [Track]()
 	var trkpts = [Trkpt]()
 	var adventures = [Adventure]()
@@ -30,18 +30,19 @@ class SqlHikingDatabase: NSObject {
 	
 	override init() {
 		timeStampLog(message: "-> SqlHikingDatabase.init")
-		self.sqlDbURL = URL(string:sqlDbName)!									//  initialize to the sql database name
-		self.sqlDbTable = TrkSqlTable()											//	create the database table
-		self.sqltpDbTable = TrkptsSqlTable()									//	create the trkpts table
+		self.sqlDbURL = URL(string:sqlDbName)!							//  initialize to the sql database name
+		self.sqlDbTable = TrkSqlTable()									//	create the database table
+		self.sqltpDbTable = TrkptsSqlTable()							//	create the trkpts table
 		self.sqladvTable = AdventureSqlTable()
-		self.sqlDbFileHandle = nil												//	init the file handle to nil
+		self.sqlDbFileHandle = nil										//	init the file handle to nil
 		super.init()
-		if self.sqlConnectOpenDb() {											//	connect and open the sql database
-			tracks = self.sqlGetAllRows()										// 	populate 'tracks' with all the rows in the database (not sure how this works if the DB gets large)
-			//trkpts = self.sqlGetAllTpRows()
-			//adventures = self.sqlGetAllAdvRows()
+		if self.sqlConnectOpenDb() {									//	connect and open the sql database
+			tracks = self.sqlGetAllRows()								// 	populate 'tracks' with all the rows in the database
+			//trkpts = self.sqlGetAllTpRows()							//	Don't retrieve trackpoints (wait till Detail requested by user)
+			//adventures = self.sqlGetAllAdvRows()						//	Don't get adventure data (wait till NavigationLink initializes)?
 		} else {
-			print("error opening sqlDB in init")								//	for some reason we could not open and connect to the dB
+			print("SqlHikingDatabase: init: error opening sqlDB in init \(sqlDbName)")
+																	//	for some reason we could not open and connect to the dB
 		}
 		timeStampLog(message: "<- SqlHikingDatabase.init")
 		
@@ -67,7 +68,7 @@ class SqlHikingDatabase: NSObject {
 				return false
 			}
 		} else {
-			print("Error in database string creation")
+			print("SqlHikingDatabase: sqlConnectOpenDb: hikingdb.getSqlDbFilePath returned nil")
 			return false
 		}
 		timeStampLog(message: "<-sqlConnectOpendb")
@@ -84,7 +85,7 @@ class SqlHikingDatabase: NSObject {
 				atPath: dbFileString, withIntermediateDirectories: true, attributes: nil)
 				return dbFileString
 		} catch {
-			Swift.print("path creation issue?  Error: \(error)")
+			print("SqlHikingDatabase: getSqlDbFilepath creation failed (likely basepath doesn't exist).  Error: \(error)")
 			return nil
 		}
 	}
@@ -96,7 +97,7 @@ class SqlHikingDatabase: NSObject {
 			//Swift.print("Connection to \(databaseString) succeeded")
 			return sqlFilehandle
 		} catch {																// the connection to the hiking sql database can't be made.  Hopefully 'error' will tell why.
-			Swift.print("Connection to \(databaseString) failed.  Error: \(error)")
+			print("SqlHikingDatabase: sqlDbConnect failed: \(databaseString).  Error: \(error)")
 			return nil
 		}
 	}
@@ -350,7 +351,7 @@ class SqlHikingDatabase: NSObject {
 				})
 				return true
 			} catch {
-				Swift.print("catch - create advTable failed \(error)")
+				Swift.print("SqlHikingDatabase: sqlCreateAdvTable: \(sqladvTableName) creation failed: \(error)")
 				return false
 			}
 			
@@ -413,7 +414,7 @@ class SqlHikingDatabase: NSObject {
 				})
 				return true
 			} catch {
-				Swift.print("catch - create tpTable failed \(error)")
+				Swift.print("SqlHikingDatabase: sqlCreateTpTable: \(sqltpDbTableName) creation failed: \(error)")
 				return false
 			}
 		}
@@ -586,7 +587,7 @@ class SqlHikingDatabase: NSObject {
 				//Swift.print("table \(sqlDbTableName) created in createTable")
 				return true
 			} catch {
-				Swift.print("catch - create Table Failed \(error)")
+				print("SqlHikingDatabase: sqlCreateDbTable: \(sqlDbTableName) creation failed: \(error)")
 				return false
 			}
 		}
@@ -760,11 +761,11 @@ class SqlHikingDatabase: NSObject {
 					//sqlDbFileHandle!.trace( {Swift.print( $0)})
 					return rowid
 				} catch {
-					Swift.print("insertion failed: \(error)")
+					print("SqlHikingDatabase: sqlInsertDbRow: \(sqlDbTableName) failed: \(error)")
 					return -1
 				}
 			} else {
-				Swift.print("\(sqlDbTableName) is empty")
+				print("SqlHikingDatabase: sqlInsertDbRow: \(sqlDbTableName) is empty")
 				return -1
 			}
 		}
@@ -915,9 +916,12 @@ class SqlHikingDatabase: NSObject {
 	
 	func sqlInsertToAllTables( track : Track) -> Int64 {
 			//	open and connect to the hinkingdbTable of the SQL hiking database
+		timeStampLog(message: "inserting basic track data")
 		let trackRow = self.sqlInsertDbRow(track)
 			// trackRow will contain the unique row number in the track database that corresponds to this track.  This will become the track.uniqueTrkID as well as the adventure and tplist associatedTrackID
+		timeStampLog(message: "inserting trkptsList \(track.trkptsList.count)")
 		let trkptRow = self.sqlInsertTrkptList(trackRow, track.trkptsList)
+		timeStampLog(message: "inserting adventure data")
 		let tempAdv = loadAdventureTrack(track: track)
 		let advRow = self.sqlInsertAdvRow(Int64(trackRow), tempAdv)
 		return trackRow
@@ -982,14 +986,12 @@ class SqlHikingDatabase: NSObject {
 						default : partial.hikeCategory = Adventure.HikeCategory.none
 					}
 				}
-				if partial.associatedTrackID == 0 {
+					/*if partial.associatedTrackID == 0 {
 					print("\(trackRowID)'s associated track is 0")
-				}
+					}*/
 			} catch {
-				print("retreiveAdventure fail: \(trackRowID)")
+				print("SqlHikingDatabase: retreiveAdventure fail: \(trackRowID)")
 			}
-			
-		
 		}
 	}
 

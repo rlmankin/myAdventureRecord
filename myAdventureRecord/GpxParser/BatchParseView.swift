@@ -61,17 +61,17 @@ struct BatchParseView: View {
 		}
 		
 		
-		let disableSleeping = disableScreenSleep()
-		
+		let disableSleeping = disableScreenSleep()					// When the screen sleeps the parse stops.  Since parsing can take quite awhile,
+																	//	disable sleeping until the parse is complete
 		for fileIndex in (0 ..< bpFiles.xmlFiles.endIndex) {
-			print("pAIPL: launch parse \(bpFiles.xmlFiles[fileIndex].url)")
+				//print("pAIPL: launch parse \(bpFiles.xmlFiles[fileIndex].url)")
 			if bpFiles.xmlFiles[fileIndex].parseThis {
 			
 				let parseGPX = parseController()
 				
 				DispatchQueue.main.async {
 					bpFiles.xmlFiles[fileIndex].parseInProgress = .inProgress
-					print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
+					///print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
 				}
 				let  parseSuccess = parseGPX.parseSingleFile(bpFiles.xmlFiles[fileIndex].url)
 				if parseSuccess {
@@ -102,15 +102,11 @@ struct BatchParseView: View {
 				DispatchQueue.main.async {
 					bpFiles.xmlFiles[fileIndex].numTracks = parseGPX.parsedTracks.count
 					bpFiles.xmlFiles[fileIndex].parseInProgress = .done
-					
-					
-					print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
+						//print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
 				}
 			}
 		}
-		let enableSleeping = enableScreenSleep()
-		print("enable Sleeping \(enableSleeping)")
-		
+		let enableSleeping = enableScreenSleep()					// Since the parse is complete, re-enable the screen sleep function
 		return true
 	}
 	
@@ -142,10 +138,9 @@ struct BatchParseView: View {
 						returnString.append(returnItem)
 					}
 				}
-				
 			}
 		} catch {
-			print("Fail")
+			print("BatchParseView: getFile: contentsOfDirectory | attributesOfItem has failed")
 		}
 		returnString.sort(by: {$0.creationDate < $1.creationDate})
 		return returnString
@@ -153,7 +148,7 @@ struct BatchParseView: View {
 	
     var body: some View {
 		
-		print("batchparseview body: avail: \(xmlFilesAvailable)\n \(bpFiles.xmlFiles.map {$0.color})")
+			//print("batchparseview body: avail: \(xmlFilesAvailable)\n \(bpFiles.xmlFiles.map {$0.color})")
 	
 		return  Group {
 			if !xmlFilesAvailable {
@@ -199,7 +194,7 @@ struct BatchParseView: View {
 					Spacer()
 					Button( action: {
 							let parseQueue = DispatchQueue(label: "batchParseQueue", attributes: .concurrent)
-							print("Body: bpFiles.xmlFiles @ button dispatch: \(bpFiles.xmlFiles)")
+								//print("Body: bpFiles.xmlFiles @ button dispatch: \(bpFiles.xmlFiles)")
 							parseQueue.async {
 								parseAndInsertParseList(insert: insertInDb)
 								userData.reload(tracksOnly: true)

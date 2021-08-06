@@ -78,8 +78,8 @@
             filePath = "myAdventureRecord/AdventureDetail.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "866"
-            endingLineNumber = "866"
+            startingLineNumber = "867"
+            endingLineNumber = "867"
             landmarkName = "sqlUpdateAdvRow(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "869"
-            endingLineNumber = "869"
+            startingLineNumber = "870"
+            endingLineNumber = "870"
             landmarkName = "sqlUpdateAdvRow(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,8 +126,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "872"
-            endingLineNumber = "872"
+            startingLineNumber = "873"
+            endingLineNumber = "873"
             landmarkName = "sqlUpdateAdvRow(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -142,8 +142,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "874"
-            endingLineNumber = "874"
+            startingLineNumber = "875"
+            endingLineNumber = "875"
             landmarkName = "sqlUpdateAdvRow(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "881"
-            endingLineNumber = "881"
+            startingLineNumber = "882"
+            endingLineNumber = "882"
             landmarkName = "sqlUpdateAdvRow(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "myAdventureRecord/AdventureDetail.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -222,8 +222,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "989"
-            endingLineNumber = "989"
+            startingLineNumber = "993"
+            endingLineNumber = "993"
             landmarkName = "sqlRetrieveAdventure(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -263,22 +263,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "84A9C53F-FFE1-4A61-9BF9-5E97155AD0F4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "myAdventureRecord/AdventureDetail.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "body"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "01F1AC79-E7EA-4ECB-9B44-DC9BAA8B7584"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -302,8 +286,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "884"
-            endingLineNumber = "884"
+            startingLineNumber = "885"
+            endingLineNumber = "885"
             landmarkName = "sqlUpdateAdvRow(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -318,8 +302,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "932"
-            endingLineNumber = "932"
+            startingLineNumber = "936"
+            endingLineNumber = "936"
             landmarkName = "sqlInsertAdvRow(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -366,8 +350,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "854"
-            endingLineNumber = "854"
+            startingLineNumber = "855"
+            endingLineNumber = "855"
             landmarkName = "repairAssociatedTrackID(trkUniqueID:associatedTrackID:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -382,8 +366,8 @@
             filePath = "myAdventureRecord/Supporting Views/AdventureSection2View.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -399,8 +383,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "968"
-            endingLineNumber = "968"
+            startingLineNumber = "972"
+            endingLineNumber = "972"
             landmarkName = "sqlRetrieveAdventure(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -415,8 +399,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "963"
-            endingLineNumber = "963"
+            startingLineNumber = "967"
+            endingLineNumber = "967"
             landmarkName = "sqlRetrieveAdventure(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -431,8 +415,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "965"
-            endingLineNumber = "965"
+            startingLineNumber = "969"
+            endingLineNumber = "969"
             landmarkName = "sqlRetrieveAdventure(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -447,8 +431,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "971"
-            endingLineNumber = "971"
+            startingLineNumber = "975"
+            endingLineNumber = "975"
             landmarkName = "sqlRetrieveAdventure(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -479,8 +463,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "923"
-            endingLineNumber = "923"
+            startingLineNumber = "927"
+            endingLineNumber = "927"
             landmarkName = "sqlInsertToAllTables(track:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -511,8 +495,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1049"
-            endingLineNumber = "1049"
+            startingLineNumber = "1051"
+            endingLineNumber = "1051"
             landmarkName = "reloadTracks(someRows:tracksOnly:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -527,8 +511,8 @@
             filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1051"
-            endingLineNumber = "1051"
+            startingLineNumber = "1053"
+            endingLineNumber = "1053"
             landmarkName = "reloadTracks(someRows:tracksOnly:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -537,16 +521,80 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "F2F2BAEE-B6B5-4CD9-986B-B95A1BC2802A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "myAdventureRecord/GpxParser/GpxParseView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "body"
             landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "F2F2BAEE-B6B5-4CD9-986B-B95A1BC2802A - 9468cb158b6ae4e9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.disabled(Swift.Bool) -&gt; some&gt;&gt;.0 in closure #2 () -&gt; &lt;&lt;opaque return type of static SwiftUI.ToolbarContentBuilder.buildBlock&lt;&#x3c4;_0_0 where &#x3c4;_0_0: SwiftUI.ToolbarContent&gt;(&#x3c4;_0_0) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; SwiftUI._ConditionalContent&lt;&lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0, SwiftUI.Text&gt; in myAdventureRecord.GPXParsingView.body.getter : some"
+                  moduleName = "myAdventureRecord"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/GpxParseView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "103"
+                  endingLineNumber = "103"
+                  offsetFromSymbolStart = "871">
+               </Location>
+               <Location
+                  uuid = "F2F2BAEE-B6B5-4CD9-986B-B95A1BC2802A - 3086a9a79135f0b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.disabled(Swift.Bool) -&gt; some&gt;&gt;.0 in closure #2 () -&gt; &lt;&lt;opaque return type of static SwiftUI.ToolbarContentBuilder.buildBlock&lt;&#x3c4;_0_0 where &#x3c4;_0_0: SwiftUI.ToolbarContent&gt;(&#x3c4;_0_0) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; SwiftUI._ConditionalContent&lt;&lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0, SwiftUI.Text&gt; in myAdventureRecord.GPXParsingView.body.getter : some"
+                  moduleName = "myAdventureRecord"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rlmankin/Documents/Swift%20code/myAdventureRecord/myAdventureRecord/GpxParser/GpxParseView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "103"
+                  endingLineNumber = "103"
+                  offsetFromSymbolStart = "1640">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8EB0603F-4DE7-43AC-B79E-D003F4593BF7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "myAdventureRecord/Models/UserData.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "append(item:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ABB225BC-1A63-4CDD-95A9-534649B49A50"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "myAdventureRecord/SqlDatabase/SqlHikingDatabase.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1050"
+            endingLineNumber = "1050"
+            landmarkName = "reloadTracks(someRows:tracksOnly:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -79,12 +79,10 @@ struct AdventureSection2View: View {
 									let trackDb = sqlHikingData
 									let rowID = userData.adventures[associatedTrackIndex].trackData.trkUniqueID
 									let updatedAdvRow = trackDb.sqlUpdateAdvRow(rowID, &userData.adventures[associatedTrackIndex])
-									// updates all field in adventure Table rows associated with this track
+									// updates all fields in adventure Table rows associated with this track
 									let updatedTrkRow = trackDb.sqlUpdateTrkRow(rowID, userData.adventures[associatedTrackIndex])
 									// updates the trackdata.trackComment field in the track Table
-									//let retrievedTrack = trackDb.sqlRetrieveRecord(rowID) //	open and connect to the hikingdbTable of the SQL hiking database
-									//retrievedTrack?.print()
-									print("isFavorite updated - \(self.userData.adventures[self.associatedTrackIndex].isFavorite)")
+									
 								}) {
 									if userData.adventures[self.associatedTrackIndex].isFavorite {
 										Image("star-filled")
@@ -98,8 +96,6 @@ struct AdventureSection2View: View {
 											.foregroundColor(.gray)
 											.accessibility(label: Text("Add to favorites"))
 									}
-									
-									
 								}	//button
 								.frame(width: 20, height: 20)		// Need frame to keep star small
 								.buttonStyle(PlainButtonStyle())

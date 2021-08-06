@@ -24,7 +24,6 @@ struct BPListView: View {
 		}
 	}
     var body: some View {
-		print("bPList body:  \(bpFiles.xmlFiles.map {$0.color})")
 		return
 			Group {
 				List (0 ..< bpFiles.xmlFiles.endIndex, id:\.self) { fileIndex in

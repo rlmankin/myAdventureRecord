@@ -13,7 +13,6 @@ struct BParseRow: View {
 	
 	
     var body: some View {
-		print("BPRow  body: \(bpFiles.xmlFiles[index].color)")
 		return HStack (spacing: 3){
 			Toggle(isOn: $bpFiles.xmlFiles[index].parseThis, label: {
 				EmptyView()

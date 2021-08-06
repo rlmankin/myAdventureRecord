@@ -178,7 +178,7 @@ class DBViewController: NSViewController {
 			if sqlHikingDatabase.sqlDeleteRecord(trackIdToDelete) {
 				//print("delete success")
 			} else {
-				print("delete failed - retry")
+				print("doDBContextDelete: sqlDeleteRecord has failed - \(errno)")
 			}
 		}
 		sqlHikingDatabase.reloadTracks()
@@ -276,9 +276,9 @@ extension DBViewController: NSTableViewDelegate {
 			
 		default:
 			if let tableColumnIdentifier = tableColumn?.identifier {
-				print("Oops unknown column in tableView - \(tableColumnIdentifier)")
+				print("DBViewController: unknown column requested in tableView (not nil)- \(tableColumnIdentifier)")
 			} else {
-				print("Oops unknown column in tableView - nil")
+				print("DBViewController: unknown column requested in tableView (nil)")
 			}
 			return nil
 		}

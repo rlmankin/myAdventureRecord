@@ -35,11 +35,11 @@ func loadAdventureData() -> [Adventure] {
 			//	to ensure I use the same instance
 		sqlHikingData.sqlRetrieveAdventure(item.trkUniqueID, &localAdventure)
 		if localAdventure.associatedTrackID != item.trkUniqueID {
-			print("mismatch \(item.header) - repairing", terminator: " ")
+				//print("mismatch \(item.header) - repairing", terminator: " ")
 			sqlHikingData.repairAssociatedTrackID(trkUniqueID: item.trkUniqueID, associatedTrackID: localAdventure.associatedTrackID)
-			print(" - completed")
+				//print(" - completed")
 		}
-		localAdventure.prettyPrint()
+			//localAdventure.prettyPrint()									// print the major parts of the adventure (debug)
 		adventures.append(localAdventure)
 		localAdventure = Adventure()										// reinit the adventure
 		//timeStamp(message: "<- \(item.header)")

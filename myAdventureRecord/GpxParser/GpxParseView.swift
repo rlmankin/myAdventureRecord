@@ -25,7 +25,7 @@ struct whichAdventureView : View {
 	
 	var body: some View {
 		
-		print("->whichAdventureView \(trackIndex), \(beenInserted), \(parseGPX.parsedTracks[trackIndex].trkUniqueID)")
+			//print("->whichAdventureView \(trackIndex), \(beenInserted), \(parseGPX.parsedTracks[trackIndex].trkUniqueID)")
 			// if the track has already been inserted into the Database, then it's index will be found in userData.adventures and
 			//	we can call AdventureDetail with the userData information
 			// otherwise we need to call AdventureDetail with the parsed track information in parseGPX
@@ -54,7 +54,7 @@ struct GPXParsingView: View {
 	@State private var selectedTab : Int = 0
 	
 	var body: some View {
-		print("-> GPXParsingView")
+		timeStampLog(message: "-> GPXParsingView")
 	
 			//  if there were no GPX tracks found in the requested URL, then generate a Text view to tell user something is amiss
 			//		likely a non-GPX XML file.
@@ -97,8 +97,10 @@ struct GPXParsingView: View {
 							//	to AdventureDetail when it is updated.  This is necessary inorder to insure that edit done after
 							//	insertion but before navigating away from the detail view will be captured.
 							parseGPX.parsedTracks[selectedTab].trkUniqueID = Int(trackDb.sqlInsertToAllTables(track: parseGPX.parsedTracks[selectedTab]))
-							trackDb.reloadTracks()
-							userData.reload()
+							userData.append(item: parseGPX.parsedTracks[selectedTab])
+							//trackDb.reloadTracks()
+							
+							//userData.reload()
 						}.buttonStyle(DetailButtonStyle()) // disable the "insertDB" button to keep the user from adding the same parse many times
 						 .disabled( userData.adventures.firstIndex(where: {($0.id == parseGPX.parsedTracks[selectedTab].trkUniqueID)}) != nil)
 						

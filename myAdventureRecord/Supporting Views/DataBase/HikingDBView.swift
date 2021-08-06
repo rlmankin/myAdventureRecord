@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HikingDBView: View {
     var body: some View {
-		print("-> DBViewControllerRepresentable")
+		timeStampLog(message: "-> DBViewControllerRepresentable")
         return DBViewControllerRepresentable()
     }
 }

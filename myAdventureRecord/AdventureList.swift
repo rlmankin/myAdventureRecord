@@ -53,7 +53,7 @@ struct AdventureList: View {
 		
 		
 		timeStampLog(message: "-> adventureList body")
-		printStateVars()
+			//printStateVars()
 		
 		return NavigationView {
 			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
@@ -132,12 +132,10 @@ struct AdventureList: View {
 									 isActive: $batchParse)
 					{ Text("").toolbar {
 						Button("batchParse") {
-							print("before: \(batchParse)")
 							batchParse.toggle()
 							showDBTable = false
 							parseFile = false
 							parseFileRequested = false
-							print("after: \(batchParse)")
 							}.buttonStyle(NavButtonStyle())
 						}.tag("batchParse")
 					}
@@ -160,19 +158,19 @@ struct AdventureList: View {
 		}
 		// when a parse has been requested, parseFileRequested will be true and the fileImporter dialog will be displayed
 		.fileImporter(isPresented: $parseFileRequested,
-					   allowedContentTypes: [.xml],							//	allow any .xml type.  There is exposure that a non-GPX xml file will be selected
-							 allowsMultipleSelection: true)					//	allow mulitple files to be selected, but not directoies
-				 {result in
-					do {
-							let selectedURLs = try result.get()				//	get the URLs of all the files requested
-							parseFile = !selectedURLs.isEmpty				//	if no files are selected or "cancel" pressed then close the dialog and return to the
-																			//		previous view
-							let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)	// parse all the selected URLs in background
-							parseFileRequested.toggle()						//	turn off parseFileRequested to indicate we have received a set of URLs
-					   } catch {
-						   print("Fail")
-					   }
-				}
+					   	allowedContentTypes: [.xml],					//	allow any .xml type.  There is exposure that a non-GPX xml file will be selected
+						allowsMultipleSelection: true)					//	allow mulitple files to be selected, but not directoies
+			{result in
+				do {
+						let selectedURLs = try result.get()				//	get the URLs of all the files requested
+						parseFile = !selectedURLs.isEmpty				//	if no files are selected or "cancel" pressed then close the dialog and
+																		//		return to the previous view
+						let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)	// parse all the selected URLs in background
+						parseFileRequested.toggle()						//	turn off parseFileRequested to indicate we have received a set of URLs
+				   } catch {
+					   print("AdventureList: parseFile: fileImporter catch occured from get.")
+				   }
+			}
 				
 		
 		

@@ -44,9 +44,9 @@ struct AdventureDetail: View {
 			print("loadUserDataProperties - userData.adventures = 0")
 			return
 		}
-		for item in (0 ..< userData.adventures.endIndex) {
-			print("userData.adventures[\(item)] - \(userData.adventures[item].id),\(userData.adventures[item].associatedTrackID),\(userData.adventures[item].name), \(userData.adventures[item].trackData.header)")
-		}
+			//for item in (0 ..< userData.adventures.endIndex) {
+			/*	print("userData.adventures[\(item)] - \(userData.adventures[item].id),\(userData.adventures[item].associatedTrackID),\(userData.adventures[item].name), \(userData.adventures[item].trackData.header)")
+			}*/
 		userData.adventures[adventureIndex].trackData.header = editName // editName is duplicated
 		userData.adventures[adventureIndex].name = editName				// in both the adventure
 											// name and in the track header.  Make sure to change
@@ -117,7 +117,6 @@ struct AdventureDetail: View {
 						
 						Button("\(section2Editing == true ? "Done" : "Edit")") {
 							if section2Editing {
-								print( "do the userData and database updates here - \(adventureIndex)")
 								if beenInserted {
 									loadUserDataProperties()
 									updateDatabases()
