@@ -21,7 +21,8 @@ struct DBViewControllerRepresentable : NSViewControllerRepresentable {
 	}
 	
 	func makeCoordinator() -> Coordinator {
-		Coordinator()
+		timeStampLog(message: "<-> makeCoordinator")
+		return Coordinator()
 	}
 	
 	typealias NSViewType = DBViewController
@@ -32,12 +33,14 @@ struct DBViewControllerRepresentable : NSViewControllerRepresentable {
 		
 		let dbViewController = mainStoryboard.instantiateController( withIdentifier: "dbViewControllerID") as! DBViewController
 		//dbViewController.delegate = context.coordinator
+		timeStampLog(message: "<- makeNSViewController")
+		
 		return dbViewController
 	}
 	
 	
 	func updateNSViewController(_ nsViewController: DBViewController, context: NSViewControllerRepresentableContext<DBViewControllerRepresentable>) {
-		
+		timeStampLog(message: "<-> updateNSViewController")
 	}
 	
 	

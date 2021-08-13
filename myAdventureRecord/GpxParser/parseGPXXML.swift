@@ -67,7 +67,7 @@ func calculateTrkProperties(_ currentTrack: inout Track) {						//  Main track p
 	if currentTrack.validTrkptsForStatistics.count < 2 {						// not enough time and elevation trackpoints
 		currentTrack.noValidTimeEle = true
 		//print("not enough TimeAndEle")
-		if validElevationArray.count >= 2 {										// check if there is enough elevation trackpoints
+		if validElevationArray.count >= 2 {										// check if there is enough elevation trackpoints to determine some statistics
 			currentTrack.validTrkptsForStatistics = validElevationArray
 			for i in 0 ..< currentTrack.validTrkptsForStatistics.endIndex  {
 				guard currentTrack.validTrkptsForStatistics[i].copyToStatisticsStruct("Ele") else { return }
@@ -800,8 +800,6 @@ class parseController:  ObservableObject {
 			let myparsegpxxml = parseGPXXML()								// declaration of myparsegpxxml must be inside the loop to insure
 																			//	proper re-initialization of allTracks for each iteration.  Otherwise
 																			//	allTracks is not reinitialized and continues to expand.
-			
-			//let myparsegpxxml = parseGPXXML()
 			let parseNumTracks = myparsegpxxml.parseURL(gpxURL: filesArray[i], withStats: false)
 			self.numberOfTracks += parseNumTracks
 			if parseNumTracks != 0 {

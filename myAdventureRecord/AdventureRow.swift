@@ -19,11 +19,20 @@ struct AdventureRow: View {
 				.cornerRadius(4.0)
 			
 			VStack(alignment: .leading) {
-				HStack (spacing: 2) {
-					if adventure.isFavorite {
-						Image(systemName: "star.fill")
-							.foregroundColor(.yellow)
-					}
+				HStack (spacing: 4) {
+					VStack (alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/ ) {
+						Text(adventure.hikeCategory.description)
+							.italic()
+							.font(.callout)
+							.multilineTextAlignment(.center)
+						if adventure.isFavorite {
+							Image(systemName: "star.fill")
+								.foregroundColor(.yellow)
+						}
+						
+					}.frame(width: 75, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+					
+					
 					VStack (alignment: .leading) {
 						HStack (spacing: 2) {
 						 

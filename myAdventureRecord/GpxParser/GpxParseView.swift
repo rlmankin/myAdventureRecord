@@ -68,18 +68,29 @@ struct GPXParsingView: View {
 					if !parseGPX.parsedTracks.isEmpty {
 						
 						//	loop through each track and display the relevant track detail information
+						
+						//************************************
+						//	THIS LOGIC FAILS FOR TRACKS WHICH NEVER HAVE validTrkptsForStatistics (e.g. Tracks with no timeStamp)
+						//
+						
 						ForEach( 0 ..< parseGPX.parsedTracks.endIndex, id:\.self) {trackIndex in
 							
 							//	when the validTrkprtsForStatistics array is empty, it implies that the track is still being parsed,
 							//		so show a progress wheel.  Note: to make this work, I changed the parseGPXXML to do a two-pass parse
 							//		the first pass to find all the tracks and corresponding header (if any) in the file,
 							//		the second to actually parse and gather statistics
-							if parseGPX.parsedTracks[trackIndex].validTrkptsForStatistics.isEmpty {
-								ParsingProgressView()
-									.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
+							
+							if !parseGPX.parsedTracks[trackIndex].noValidEle {
+								if parseGPX.parsedTracks[trackIndex].validTrkptsForStatistics.isEmpty {
+									ParsingProgressView()
+										.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
+								} else {
+									//	the track has finishing parsing, so make an 'adventure' out of it and display the detail view
+									whichAdventureView(trackIndex: trackIndex, beenInserted: false )
+								}
 							} else {
-								//	the track has finishing parsing, so make an 'adventure' out of it and display the detail view
-								whichAdventureView(trackIndex: trackIndex, beenInserted: false )
+								Text("no valid ele")
+									.tabItem{ Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 							}
 						}
 					}
