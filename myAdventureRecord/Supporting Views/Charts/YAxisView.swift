@@ -65,14 +65,15 @@ struct YAxisView: View {
 					}.stroke(Color(NSColor.systemGray), style: StrokeStyle(dash: [1]))		// dash value = length of dash in points
 					if ((Int(round((elevation - lowerGridPoint)/verticalGridSpacing)) % 5 == 0 ) ||
 						(elevation == verticalGridPoints.last)) {
-						 Text(String(format: "%5.0f", elevation*metric2English))
+						let y = CGFloat((elevation == verticalGridPoints.last) ? 0 : -10.0)
+						Text(String(format: "%5.0f", elevation*metric2English))
 							.font(.footnote)
 							.foregroundColor(Color.white)
 							.frame(width: 30, alignment: .leading)
 							.offset(x:0, y: scaledReaderHeight -
 											elevationOffset(elevation,
 												elevationHeight(scaledReaderHeight, upperGridPoint, lowerGridPoint),
-											  lowerGridPoint)-10)
+											  lowerGridPoint) + y)
 							
 					}
 				}
@@ -85,18 +86,18 @@ struct YAxisView: View {
 	}
 }
 
-/*struct YAxisView_Previews: PreviewProvider {
+struct YAxisView_Previews: PreviewProvider {
     static var previews: some View {
-        YAxisView(track: adventureData[0].trackData,
+        YAxisView(track: adventureData[5].trackData,
 				  verticalGridSpacing: 5.0,
-				  minValue: adventureData[0].trackData.trackSummary.elevationStats.min.elevation,
-				  maxValue: adventureData[0].trackData.trackSummary.elevationStats.max.elevation,
+				  minValue: adventureData[5].trackData.trackSummary.elevationStats.min.elevation,
+				  maxValue: adventureData[5].trackData.trackSummary.elevationStats.max.elevation,
 				  metric2English: feetperMeter)
 		
-		YAxisView(track: adventureData[0].trackData,
+		YAxisView(track: adventureData[5].trackData,
 				  verticalGridSpacing: 0.1,
 				  minValue: 0.0,
-				  maxValue: adventureData[0].trackData.trackSummary.mileStats.speed.max.statData/metersperMile*secondsperHour,
+				  maxValue: adventureData[5].trackData.trackSummary.mileStats.speed.max.statData/metersperMile*secondsperHour,
 				  metric2English: secondsperHour/metersperMile)
     }
-}*/
+}

@@ -103,7 +103,7 @@ func loadAdventureTrack(track: Track) -> Adventure {
 		dateFmt.timeZone = TimeZone.current
 		dateFmt.dateFormat =  "MMM dd, yyyy"
 			//	probably should 'guard' this to avoid an unexpected crash for nil
-		return String(format: "\(dateFmt.string(from: track.trackSummary.startTime!))")
+		return String(format: "\(dateFmt.string(from: track.trackSummary.startTime ?? Date()))")
 	}()
 		// return, NOTE: this is not a complete adventure, only the parts of the adventure structure found in the track structure
 	return adventure

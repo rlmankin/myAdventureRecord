@@ -23,8 +23,10 @@ struct DistanceElevationChart: View {
 				if reader.size.height != 0.0 {	// when GeometryReader iterates, sometime reader.size.height is - which
 												//	causes a runtime warning on the frame because of a negative height.
 												//	That warning is not fatal, but just want to get rid of it.
-					DistEleMainChart(track: track, reader: reader)
+					Group {
+						DistEleMainChart(track: track, reader: reader)
 						.frame(width: reader.size.width - 30, height: reader.size.height - 30)
+							.offset(x:30, y:0)
 					MinMaxChart(track:track,
 								reader: reader,
 								startIndex: track.trackSummary.mileStats.grade.max.startIndex,
@@ -57,7 +59,8 @@ struct DistanceElevationChart: View {
 								stringFormat: "%1.2f",
 								color: Color.orange)
 						.frame(width: reader.size.width - 30, height: reader.size.height - 30)
-					YAxisView(track: track,
+					
+						YAxisView(track: track,
 							  verticalGridSpacing: 5.0,
 							  minValue: track.trackSummary.elevationStats.min.elevation,
 							  maxValue: track.trackSummary.elevationStats.max.elevation,
@@ -66,8 +69,11 @@ struct DistanceElevationChart: View {
 					XAxisView(track: track)
 						.frame(width: reader.size.width - 30, height: reader.size.height)
 						.offset(x:30)
+
+				
 					
-				}
+				}				}
+				
 			}
 			
 			
@@ -77,6 +83,13 @@ struct DistanceElevationChart: View {
 
 struct DistanceElevationChart_Previews: PreviewProvider {
     static var previews: some View {
-		DistanceElevationChart(track: adventureData[5].trackData)
+		let adventureIndex = 5
+		if adventureData[adventureIndex].trackData.trkptsList.isEmpty {
+			adventureData[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[adventureIndex].id)				//	retrieve the trackspoint list from the trackpointlist table in the database
+		}
+		
+		return 	DistanceElevationChart(track: adventureData[adventureIndex].trackData)
+		
     }
+		
 }

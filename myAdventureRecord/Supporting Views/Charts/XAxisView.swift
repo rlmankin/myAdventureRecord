@@ -82,8 +82,11 @@ struct XAxisView: View {
 	}
 }
 
-//struct XAxisView_Previews: PreviewProvider {
-//    static var previews: some View {
-//		XAxisView(track: adventureData[1].trackData)
-//    }
-//}
+struct XAxisView_Previews: PreviewProvider {
+   static var previews: some View {
+		if adventureData[5].trackData.trkptsList.isEmpty {
+			adventureData[5].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[5].id)				//	retrieve the trackspoint list from the trackpointlist table in the database
+		}
+		return XAxisView(track: adventureData[5].trackData)
+    }
+}

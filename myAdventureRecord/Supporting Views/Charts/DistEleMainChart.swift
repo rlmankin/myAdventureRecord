@@ -53,9 +53,11 @@ struct DistEleMainChart: View {
 					let currlegDistance = calcLegDistance(item)
 							//self.trkptList[...(item)].compactMap({$0.lastTrkpt.distance}).reduce(0,+)
 					let prevXOffset = distanceOffset(prevlegDistance, pixelPerMeter: distWidth)
-					let prevYOffset = elevationOffset(self.track.trkptsList[ item - 1].elevation!, yHeight, lowerGridPoint)
+					let prevYOffset = elevationOffset((self.track.trkptsList[ item - 1].elevation!),
+											elevationHeight(readerHeight, upperGridPoint, lowerGridPoint), lowerGridPoint)
 					let xOffset = distanceOffset(currlegDistance, pixelPerMeter: distWidth)
-					let currYOffset = elevationOffset(trkpt.elevation!, yHeight, lowerGridPoint)
+					let currYOffset = elevationOffset((self.track.trkptsList[ item].elevation!),
+													  elevationHeight(readerHeight, upperGridPoint, lowerGridPoint), lowerGridPoint)
 					//print("\t \(distWidth), \(yHeight), \(xOffset), \(prevYOffset), \(currYOffset) \n")
 					
 					p.move(to: CGPoint(x: prevXOffset,
@@ -65,7 +67,6 @@ struct DistEleMainChart: View {
 				
 				
 				}.stroke(Color.yellow)
-				 .offset(x: 30, y:0)
 			}
 	
 		
@@ -74,8 +75,15 @@ struct DistEleMainChart: View {
     }
 }
 
-//struct DistEleMainChart_Previews: PreviewProvider {
-//    static var previews: some View {
-//		DistEleMainChart( track: adventureData[5].trackData)
-//    }
-//}
+struct DistEleMainChart_Previews: PreviewProvider {
+    static var previews: some View {
+	let adventureIndex = 5
+	if adventureData[adventureIndex].trackData.trkptsList.isEmpty {
+			  adventureData[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[adventureIndex].id)				//	retrieve the trackspoint list from the trackpointlist table in the database
+		  }
+		  
+		return GeometryReader { reader in
+			DistEleMainChart( track: adventureData[5].trackData, reader: reader)
+		}
+	}
+}

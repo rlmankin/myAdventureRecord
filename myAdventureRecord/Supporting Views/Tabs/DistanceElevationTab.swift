@@ -63,6 +63,6 @@ struct DistanceElevationTab: View {
 
 struct DistanceElevationTab_Previews: PreviewProvider {
     static var previews: some View {
-        DistanceElevationTab(adventure: adventureData[0])
+        DistanceElevationTab(adventure: adventureData[5])
     }
 }

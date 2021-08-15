@@ -7,7 +7,13 @@
 
 import SwiftUI
 
-
+extension String {
+   func widthOfString(usingFont font: NSFont) -> CGFloat {
+		let fontAttributes = [NSAttributedString.Key.font: font]
+		let size = self.size(withAttributes: fontAttributes)
+		return size.width
+	}
+}
 
 struct MinMaxChart: View {
 	
@@ -59,18 +65,29 @@ struct MinMaxChart: View {
 			let startXOffset = distanceOffset(startLegDistance, pixelPerMeter: distWidth)
 			let endYHeight = elevationOffset(endPointElevation, yHeight, lowerGridPoint)
 			let endXOffset = distanceOffset(endLegDistance, pixelPerMeter: distWidth)
-			// draw the requested statData value
-			Text(String(format: stringFormat, statData))
-			  	.font(.footnote)
-			   	.foregroundColor(color)
-				.offset(x: startXOffset + 35,
-						y: readerHeight - startYHeight)
+			
 			
 			// determine the distance, gain values for GainTriangleView
 			let distX = Double((endLegDistance - startLegDistance)/metersperMile)
 			let distY = Double((endPointElevation - startPointElevation)*feetperMeter)
-			GainTriangleView(readerHeight: readerHeight, startXOffset: startXOffset, endXOffset: endXOffset, startYHeight: startYHeight, endYHeight: endYHeight, distX: distX, distY: distY, color: color)
+			let deltaHeight = (endYHeight - startYHeight)/CGFloat(2.0)
+			GainTriangleView(readerHeight: readerHeight, startXOffset: startXOffset, endXOffset: endXOffset, startYHeight: startYHeight, endYHeight: endYHeight, color: color)
+			// draw the requested statData value
 			
+			Text(String(format: stringFormat, statData))
+				.font(.footnote)
+				.foregroundColor(color)
+				.position(x:endXOffset + 15, y: readerHeight - startYHeight+5)
+			Text(String( format: "\n%2.2f", distX))
+				.font(.footnote)
+				.foregroundColor(color)
+				.position(x: endXOffset + 15, y: readerHeight - startYHeight - 11)
+			Text(String( format: "\n%2.2f", distY))
+				.font(.footnote)
+					.foregroundColor(color)
+					.rotationEffect(.degrees(-90))
+					.offset(x: CGFloat(endXOffset),
+							y: CGFloat(readerHeight - endYHeight + deltaHeight))
 			// draw the line for the statistic in question
 			if startIndex + 1 <= endIndex {
 				ForEach ((startIndex + 1...endIndex) , id: \.self) { index in
@@ -100,25 +117,32 @@ struct MinMaxChart: View {
     }
 }
 
-/*struct MinMaxChart_Previews: PreviewProvider {
+struct MinMaxChart_Previews: PreviewProvider {
     static var previews: some View {
-		MinMaxChart(track: adventureData[0].trackData,
-					startIndex: adventureData[0].trackData.trackSummary.mileStats.grade.max.startIndex,
-					endIndex: adventureData[0].trackData.trackSummary.mileStats.grade.max.endIndex,
-					statData: adventureData[0].trackData.trackSummary.mileStats.grade.max.statData*100,
+		let adventureIndex = 5
+		if adventureData[adventureIndex].trackData.trkptsList.isEmpty {
+			adventureData[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[adventureIndex].id)				//	retrieve the trackspoint list from the trackpointlist table in the database
+		}
+		
+		return GeometryReader { reader in
+			MinMaxChart(track: adventureData[adventureIndex].trackData, reader: reader,
+					startIndex: adventureData[adventureIndex].trackData.trackSummary.mileStats.grade.max.startIndex,
+					endIndex: adventureData[adventureIndex].trackData.trackSummary.mileStats.grade.max.endIndex,
+					statData: adventureData[adventureIndex].trackData.trackSummary.mileStats.grade.max.statData*100,
 					stringFormat: "%2.2f%%",
 					color: Color.red)
-		MinMaxChart(track: adventureData[0].trackData,
-					startIndex: adventureData[0].trackData.trackSummary.mileStats.speed.min.startIndex,
-					endIndex: adventureData[0].trackData.trackSummary.mileStats.speed.min.endIndex,
-					statData: adventureData[0].trackData.trackSummary.mileStats.speed.min.statData/metersperMile*secondsperHour,
-					stringFormat: "%1.2f",
+			MinMaxChart(track: adventureData[adventureIndex].trackData, reader: reader,
+					startIndex: adventureData[adventureIndex].trackData.trackSummary.mileStats.speed.min.startIndex,
+					endIndex: adventureData[adventureIndex].trackData.trackSummary.mileStats.speed.min.endIndex,
+					statData: adventureData[adventureIndex].trackData.trackSummary.mileStats.speed.min.statData/metersperMile*secondsperHour,
+					stringFormat: "%1.2f%%",
 					color: Color.green)
-		MinMaxChart(track: adventureData[0].trackData,
-					startIndex: adventureData[0].trackData.trackSummary.mileStats.grade.min.startIndex,
-					endIndex: adventureData[0].trackData.trackSummary.mileStats.grade.min.endIndex,
-					statData: adventureData[0].trackData.trackSummary.mileStats.grade.min.statData*100,
+			MinMaxChart(track: adventureData[adventureIndex].trackData, reader: reader,
+					startIndex: adventureData[adventureIndex].trackData.trackSummary.mileStats.grade.min.startIndex,
+					endIndex: adventureData[adventureIndex].trackData.trackSummary.mileStats.grade.min.endIndex,
+					statData: adventureData[adventureIndex].trackData.trackSummary.mileStats.grade.min.statData*100,
 					stringFormat: "%2.2f%%",
 					color: Color.blue)
-    }
-}*/
+  		  }
+	}
+}

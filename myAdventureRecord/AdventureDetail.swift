@@ -178,7 +178,7 @@ struct AdventureDetail_Previews: PreviewProvider {
     static var previews: some View {
 		AdventureDetail(passedAdventure: adventureData[5], beenInserted: true)
 			.environmentObject(UserData())
-			.frame(width: 850, height: 900)
+			.frame(width: 500, height: 1000)
     }
 }
 
