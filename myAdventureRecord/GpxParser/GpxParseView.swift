@@ -68,11 +68,6 @@ struct GPXParsingView: View {
 					if !parseGPX.parsedTracks.isEmpty {
 						
 						//	loop through each track and display the relevant track detail information
-						
-						//************************************
-						//	THIS LOGIC FAILS FOR TRACKS WHICH NEVER HAVE validTrkptsForStatistics (e.g. Tracks with no timeStamp)
-						//
-						
 						ForEach( 0 ..< parseGPX.parsedTracks.endIndex, id:\.self) {trackIndex in
 							
 							//	when the validTrkprtsForStatistics array is empty, it implies that the track is still being parsed,
@@ -82,6 +77,7 @@ struct GPXParsingView: View {
 							
 							if !parseGPX.parsedTracks[trackIndex].noValidEle {
 								if parseGPX.parsedTracks[trackIndex].validTrkptsForStatistics.isEmpty {
+									//## bookmark parsing progressView
 									ParsingProgressView()
 										.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 								} else {

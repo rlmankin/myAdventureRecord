@@ -326,6 +326,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 				break															//	break the loop j once the first segment over a mile is found.
 			}
 			//print("k: \(k), j: \(j), k.latitude \(trkPtList[k].latitude), j.latitude \(trkPtListJ[j].latitude), legValidDistance: \(legValidDistance)")
+			//##  bookmark parse progress inner loop
 			if (j % 100) == 0 {
 				print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
 			}
@@ -349,8 +350,10 @@ func createMileageStats(_ currentTrack: inout Track) {
 																				//  caclulate partial sum averages for Rates
 		avgAscentRateMile = ((avgAscentRateMile * Double(k)) + overMile.map({$0.ascentSpeed}).reduce(0,max)) / Double(k+1)
 		avgDescentRateMile = ((avgDescentRateMile * Double(k)) + overMile.map({$0.descentSpeed}).reduce(0,min)) / Double(k+1)
+		//## bookmark parse progress outer loop
 		if (k % 100) == 0 {						// print progress indicator
 			print("", separator: "", terminator: "[\(k)]\n")					// enter a newline indicator when operation from the console
+			print("parseProgress = \(Float(k)/Float(currentTrack.trkptsList.count)*100.0)")
 		}
 	} // loop k
 	overEighthMile.removeAll()													// clear the array
@@ -390,7 +393,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	var lastValidEleAndTimeIndex : Int				// The index of the most recent trackpoint to have BOTH a valid elevation & valid timestamp
 	var fcShouldExpect : String
 	var elementsBeingProcessed = ElementProcessingState(value:false)
-	@Published var currentTrack = Track()
+	var currentTrack = Track()
 	var allTracks = [Track]() {
 		didSet {
 			print("alltracks.count = \(self.allTracks.count)")
@@ -405,8 +408,7 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	//*** var gpxDocumentArray = [Document]()											// holds the documents created when a track is found
 	var gpxTrackArray = [Track]()					// changed from Document type to Track type to reflect change to SwiftUI
 	var withStats : Bool
-	var parseStarted : Bool = false
-	var parseEnded : Bool = false
+	
 	
 	
 	
@@ -502,13 +504,11 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 	
 	func parserDidStartDocument(_ parser: XMLParser) {
 		print("xml parsing started: \(parseURL.lastPathComponent)")
-		parseStarted.toggle()
 	}
 	
 	func parserDidEndDocument(_ parser: XMLParser) {
 
 		print("xml parsing documentEnd:\(parseURL.lastPathComponent)")
-		parseEnded.toggle()
 	}
 	
 	//	Process Starting Elements.  Those with a < elementName> XML tag  ********************************************
@@ -822,6 +822,7 @@ class parseController:  ObservableObject {
 						for track in (0 ..< parseNumTracks) {
 							if let parseHeaderIndex = self.parsedTracks.firstIndex(where: {$0.header == myparsegpxxml.allTracks[track].header}) {
 								self.parsedTracks[parseHeaderIndex] = myparsegpxxml.allTracks[track]
+								//self.parseProgress[parseHeaderIndex] = myparsegpxxml.par
 							}
 						}
 						//self.parsedTracks += myparsegpxxml.allTracks
