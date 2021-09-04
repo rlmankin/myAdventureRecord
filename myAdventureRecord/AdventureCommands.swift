@@ -18,8 +18,11 @@ struct AdventureCommands : Commands {
 	@State var dbListShowing : Bool = false
 	
 	var body: some Commands {
-		CommandGroup(replacing: CommandGroupPlacement.newItem ) {
-			Button("Parse") {
+		CommandMenu("parse"){
+			Button("Parse file") {
+				
+			}
+			Button("Parse batch") {
 				
 			}
 		}
@@ -30,9 +33,14 @@ struct AdventureCommands : Commands {
 			Button("Insert All") {
 				
 			}
-			Button("List dB") {
-				dbListShowing.toggle()
-			}
+			
+			Button(action: {
+				print("List dB")
+				}, label: {
+					Text("list dB Button")
+				}
+			)
+			
 			
 			
 		}

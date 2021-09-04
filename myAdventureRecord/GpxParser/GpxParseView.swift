@@ -10,9 +10,13 @@ import SwiftUI
 
 struct ParsingProgressView: View {
 	
-	
+	var value: Int
 	var body: some View {
-		ProgressView()
+		print("value = \(value)")
+		return VStack {
+				//Text("Value = \(value)")
+				ProgressView()
+		}
 	}
 }
 
@@ -76,10 +80,13 @@ struct GPXParsingView: View {
 							//		the second to actually parse and gather statistics
 							
 							if !parseGPX.parsedTracks[trackIndex].noValidEle {
-								if parseGPX.parsedTracks[trackIndex].validTrkptsForStatistics.isEmpty {
+								if parseGPX.parsedTracks[trackIndex].parseProgress < 100 {
 									//## bookmark parsing progressView
-									ParsingProgressView()
-										.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
+									VStack {
+										Text("Number of Track points: \(parseGPX.parsedTracks[trackIndex].trkptsList.count)")
+										Text("\tProgress: \(parseGPX.parsedTracks[trackIndex].parseProgress)")
+										ParsingProgressView( value: parseGPX.parsedTracks[trackIndex].parseProgress)
+									}.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 								} else {
 									//	the track has finishing parsing, so make an 'adventure' out of it and display the detail view
 									whichAdventureView(trackIndex: trackIndex, beenInserted: false )
@@ -89,7 +96,9 @@ struct GPXParsingView: View {
 									.tabItem{ Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 							}
 						}
+
 					}
+					
 				}
 				//	associated with each track having been parsed, allow the user to insert that track into the SQL Hiking Database
 				.toolbar {

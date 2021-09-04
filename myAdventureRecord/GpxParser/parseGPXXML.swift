@@ -276,7 +276,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 	print("\(currentTrack.header) - \(currentTrack.trkptsList.count)")			// parsing console message
 	for k in 0 ..< (currentTrack.validTrkptsForStatistics.endIndex - 1) {
 		
-		currentTrack.parseProgress = k
+		currentTrack.parseProgress = k					// attempt to set parseProgress to setup a deterministic progressView ...
 
 		/*DispatchQueue.main.async {												// update the progress bar.  NOTE: the Notification.post is wrapped and dispatched back to
 																				//	the main thread.
@@ -331,6 +331,7 @@ func createMileageStats(_ currentTrack: inout Track) {
 				print(".", separator: "", terminator: "")						// print a '.' progress indicator when operating from the console
 			}
 		} // loop j
+		currentTrack.parseProgress = 100
 		
 																				// calculate Min/Max statistics for all legs in the overEighthMile collection (there is probably many of these)
 		setMinMax(&overEighthMile, &eighthStats.grade, closure: {$0.grade}, loopCount: k, closureNum: 288)
@@ -781,8 +782,6 @@ class parseGPXXML: NSObject, XMLParserDelegate, ObservableObject {
 }
 
 class parseController:  ObservableObject {
-	
-	
 	
 	@Published var parsedTracks : [Track]
 	@Published var numberOfTracks : Int

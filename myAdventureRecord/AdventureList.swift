@@ -7,7 +7,13 @@
 
 import SwiftUI
 
-
+enum FlagStates {
+	case showDBTable
+	case parseFile
+	case batchParse
+	case refreshList
+	case empty
+}
 
 struct BPReturnButton: View {
 	var body: some View {
@@ -18,22 +24,84 @@ struct BPReturnButton: View {
 	}
 }
 
-struct AdventureList: View {
-	enum FlagStates {
-		case showDBTable
-		case parseFile
-		case batchParse
-		case refreshList
-		case empty
+struct CommandButtons: View {
+	@EnvironmentObject  var userData: UserData
+	@Binding  var showDBTable : Bool
+	@Binding  var batchParse : Bool
+	@Binding  var stateFlag : FlagStates?
+	@Binding  var parseFileRequested : Bool
+	
+	
+	var body: some View {
+		
+		timeStampLog(message: "-> adventureList/CommandButtons")
+		return
+			HStack {
+				//  The Command Buttons must be enclosed in a List to eliminate the "Unable to present, File a bug" warning in Xcode 12.5.1.
+				//		I don't know why this works, but is recommended as a fix in https://stackoverflow.com/questions/67276205/swiftui-navigationlink-for-ios-14-5-not-working
+				List {
+				
+				
+				//	parse *****
+				//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
+				NavigationLink(
+					destination: GPXParsingView(),
+					tag: FlagStates.parseFile,
+					selection: self.$stateFlag,
+					label: {Text("").toolbar {
+						Button("Parse") {
+							stateFlag = .parseFile
+							showDBTable = false
+							parseFileRequested.toggle()
+						}.buttonStyle(NavButtonStyle())
+					}})
+				
+				// dBTable *****
+				NavigationLink(
+					destination: HikingDBView(),
+					tag: FlagStates.showDBTable,
+					selection: self.$stateFlag,
+					label: {Text("").toolbar {
+						Button("\(showDBTable == true ? "List" : "dbTable")") {
+							stateFlag = .showDBTable
+							showDBTable.toggle()
+							if !showDBTable {
+								userData.reload(tracksOnly: true)
+							}
+						}.buttonStyle(NavButtonStyle())
+					}})
+				
+				//batchParse *****
+				NavigationLink(
+					destination: BatchParseView(batchParse: $batchParse),
+					tag: FlagStates.batchParse,
+					selection: self.$stateFlag,
+					label: {Text("").toolbar {
+						Button("batchparse)") {
+							stateFlag = .batchParse
+							batchParse.toggle()
+							showDBTable = false
+							if !showDBTable {
+								userData.reload(tracksOnly: true)
+							}
+						}.buttonStyle(NavButtonStyle())
+					}})
+				} //List
+				
+			}	//HStack
 	}
+}
+
+struct AdventureList: View {
+	
 	@EnvironmentObject  var userData: UserData
 	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
 	
 	@State private var selectedURLs : [URL] = []
 	// the following flags should probably be transitioned to enums to make view management more readable and clear
 	
-	@State private var stateFlag : FlagStates = .empty
-	@State private var showDBTable = false							// flag to show the SQL database table (true), or not (false)
+	@State private var stateFlag : FlagStates? = .empty
+	@State private var showDBTable = false							// flag to display the SQL database table (true), or not (false)
 	
 	@State private var parseFile = false							// flag to show if requested to parse a GPX file (true)
 	@State private var batchParse = false
@@ -57,98 +125,28 @@ struct AdventureList: View {
 		
 		return NavigationView {
 			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
+			// HStack for the buttons at the top.  Seems to be required to get
+			//	the buttons to correctdly call the detail view
+			
 			List  {
 				
-				// HStack for the buttons at the top.  Seems to be required to get
-				//	the buttons to correctdly call the detail view
-				HStack {
-					NavigationLink(destination: EmptyView()) {
-						EmptyView()
-					}
-					/*
-					//	insert refresh the table functionality here*****
-					NavigationLink(destination: EmptyView()
-									.navigationTitle(Text("refreshDB").italic()),
-								   isActive: $refreshList)							// isActive: true displays the table, isActive:false make the view disappearText("").toolbar {	// tried this with EmptyView but the menu button is not shown
-					{ Text("").toolbar {	// tried this with EmptyView but the menu button is not shown
-						Button("Refresh") {
-								userData.reload(tracksOnly: true)
-								refreshList.toggle()
-								showDBTable = false
-								parseFile = false
-								parseFileRequested = false
-								batchParse = false
-								print("Button: refreshList -\(refreshList)")
-							}.buttonStyle(NavButtonStyle())
-						}.tag("refreshList")											// tag this link with the string "refreshList"
-					}*/
 				
-					
-					
-					//	dBTable *****
-					//	if the dbTable button is selected, show the database table in the detail view (right pane), but maintain the navigation view list (left pane)
-					NavigationLink(destination: HikingDBView()
-									.navigationTitle(Text("dbTableView").italic()),
-								   isActive: $showDBTable)
-						// isActive: true displays the table, isActive:false make the view disappear
-					{ Text("").toolbar {	// tried this with EmptyView but the menu button is not shown
-						Button("\(showDBTable == true ? "List" : "dbTable")") {
-								showDBTable.toggle()
-									// if showDBTable is false this will reload the userData adventures array with new database tracks array
-									//	which may have been modified during the users explorations of dbTable.  This will enable the navigation
-									//	view (left pane) to be reloaded since userData is a stateObject.
-								if !showDBTable {
-									userData.reload(tracksOnly: true)
-								}
-								parseFile = false
-								parseFileRequested = false
-								batchParse = false
-								//print("Button: showDBTable -\(showDBTable), ")
-							}.buttonStyle(NavButtonStyle())
-						}.tag("dbTable")											// tag this link with the string "dbTable"
-					
-					}
-					
-					//	parse *****
-					//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
-					NavigationLink(destination: GPXParsingView()	// display the parsing view (showDetail if requested)
-									.navigationTitle("parsingView"),
-								   isActive: $parseFile)
-					{ Text("").toolbar {
-							Button("Parse") {
-								parseFileRequested.toggle()
-								showDBTable = false
-								batchParse = false
-							}.buttonStyle(NavButtonStyle())
-						}.tag("parse")
-					}
-					
-					
-					//	batchParse *****
-					//	if the batchParse button is selected, show the filePicker dialog box to allow the user to selected .gpx files for parsing
-					NavigationLink(destination: BatchParseView(batchParse: $batchParse
-					)	// display the parsing view (showDetail if requested)
-									.navigationTitle("batchParseView"),
-									 isActive: $batchParse)
-					{ Text("").toolbar {
-						Button("batchParse") {
-							batchParse.toggle()
-							showDBTable = false
-							parseFile = false
-							parseFileRequested = false
-							}.buttonStyle(NavButtonStyle())
-						}.tag("batchParse")
-					}
-				}
+				CommandButtons(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested)
+				// The list of Adventures
+				
+				
 				
 				//	The List of Adventure *****
 				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
 				//	detail view (right pane)
 				ForEach(userData.adventures) { adventure in
-					NavigationLink(destination: AdventureDetail(passedAdventure: adventure, beenInserted: true)) {
-						AdventureRow(adventure: adventure)
-					}.tag(adventure)
+					NavigationLink(
+						destination: AdventureDetail(passedAdventure: adventure, beenInserted: true)) {
+							AdventureRow(adventure: adventure)
+							}
+					.tag(adventure)
 				}
+			
 				
 				
 			}.frame(minWidth:400, maxWidth: 600)				// .frame here sets the width of the left hand pane of the navigationView
