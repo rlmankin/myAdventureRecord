@@ -63,6 +63,7 @@ struct GPXParsingView: View {
 			//  if there were no GPX tracks found in the requested URL, then generate a Text view to tell user something is amiss
 			//		likely a non-GPX XML file.
 		return Group {
+			
 			if parseGPX.numberOfTracks != 0 {
 				
 				

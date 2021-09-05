@@ -36,13 +36,13 @@ struct BParseRow: View {
 				HStack (spacing: 0) {
 					Text("\(xmlFile.numTracks): [")
 					
-					if xmlFile.trackRow.count > 1 {
-						ForEach (1 ..< xmlFile.trackRow.count, id: \.self) { itemIndex in
-							Text("\(xmlFile.trackRow[itemIndex]) ")
-							if itemIndex < xmlFile.trackRow.count-1 { Text(", ")}// add ", " except on the last iteration
+					
+					if xmlFile.trackdbRow.count >= 1 {
+						ForEach (1 ... xmlFile.numTracks, id: \.self) { itemIndex in
+							Text("\(xmlFile.numTrkpts[itemIndex]), \(xmlFile.trackdbRow[itemIndex]), \(xmlFile.advdbRow[itemIndex])]")
 							
 						}
-					Text("]")
+					//Text("]")
 					}
 					
 					

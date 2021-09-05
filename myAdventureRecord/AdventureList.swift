@@ -24,8 +24,10 @@ struct BPReturnButton: View {
 	}
 }
 
-struct CommandButtons: View {
+struct CommandButtonsView: View {
 	@EnvironmentObject  var userData: UserData
+	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
+	
 	@Binding  var showDBTable : Bool
 	@Binding  var batchParse : Bool
 	@Binding  var stateFlag : FlagStates?
@@ -41,7 +43,18 @@ struct CommandButtons: View {
 				//		I don't know why this works, but is recommended as a fix in https://stackoverflow.com/questions/67276205/swiftui-navigationlink-for-ios-14-5-not-working
 				List {
 				
+				//	empty *****
+				//	this will display nothing in the detailview.  Trying to use when navigating back to the 'default' view from varous button pushes
+				//		(e.g. cancel for parses, list for dbTable)
+				NavigationLink(
+					destination: EmptyView(),
+					tag: FlagStates.empty,
+					selection: self.$stateFlag)
+					{
+						EmptyView()
+					}
 				
+					
 				//	parse *****
 				//	if the parse button is selected, show the file importer dialog box to allow the user to selected .gpx files for parsing
 				NavigationLink(
@@ -50,11 +63,33 @@ struct CommandButtons: View {
 					selection: self.$stateFlag,
 					label: {Text("").toolbar {
 						Button("Parse") {
-							stateFlag = .parseFile
 							showDBTable = false
 							parseFileRequested.toggle()
 						}.buttonStyle(NavButtonStyle())
 					}})
+					// when a parse has been requested, parseFileRequested will be true and the fileImporter dialog will be displayed
+					.fileImporter(isPresented: $parseFileRequested,
+									allowedContentTypes: [.xml],					//	allow any .xml type.  There is exposure that a non-GPX xml file will be selected
+									allowsMultipleSelection: true)					//	allow mulitple files to be selected, but not directoies
+						{result in
+							do {
+									//	get the URLs of all the files requested
+								let selectedURLs = try result.get()
+									//	if no files are selected or "cancel" pressed then close the dialog and reeturn to the previous view.  This is accomlished
+									//		by setting stateflag to either empty or parsefile
+								stateFlag = (selectedURLs.isEmpty ? .empty : .parseFile)
+								if stateFlag == FlagStates.parseFile {
+								//parseFile = !selectedURLs.isEmpty
+								//if !parseFile {
+								//	stateFlag = .empty
+								//} else {
+									let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)	// parse all the selected URLs in background
+										parseFileRequested.toggle()						//	turn off parseFileRequested to indicate we have received a set of URLs
+								}
+						   } catch {
+							   print("AdventureList: parseFile: fileImporter catch occured from get.")
+						   }
+						}
 				
 				// dBTable *****
 				NavigationLink(
@@ -66,6 +101,7 @@ struct CommandButtons: View {
 							stateFlag = .showDBTable
 							showDBTable.toggle()
 							if !showDBTable {
+								stateFlag = .empty
 								userData.reload(tracksOnly: true)
 							}
 						}.buttonStyle(NavButtonStyle())
@@ -73,7 +109,7 @@ struct CommandButtons: View {
 				
 				//batchParse *****
 				NavigationLink(
-					destination: BatchParseView(batchParse: $batchParse),
+					destination: BatchParseView(stateFlag: $stateFlag),
 					tag: FlagStates.batchParse,
 					selection: self.$stateFlag,
 					label: {Text("").toolbar {
@@ -94,7 +130,7 @@ struct CommandButtons: View {
 
 struct AdventureList: View {
 	
-	@EnvironmentObject  var userData: UserData
+	@EnvironmentObject var userData: UserData
 	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
 	
 	@State private var selectedURLs : [URL] = []
@@ -109,7 +145,8 @@ struct AdventureList: View {
 	@State private var refreshList = false
 	
 	func printStateVars() {
-		print("showDBtable: \(showDBTable)", terminator: " ")							// flag to show the SQL database table (true), or not (false)
+		print("stateFlag: \(stateFlag)", terminator: " ")
+		print("showDBtable: \(showDBTable)", terminator: " ")
 		print("parseFile: \(parseFile)", terminator: " ")
 		print("batchParse: \(batchParse)", terminator: " ")
 		print("parseFileRequested: \(parseFileRequested)", terminator: " ")
@@ -131,7 +168,7 @@ struct AdventureList: View {
 			List  {
 				
 				
-				CommandButtons(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested)
+				CommandButtonsView(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested)
 				// The list of Adventures
 				
 				
@@ -154,21 +191,29 @@ struct AdventureList: View {
 											//		is the view in the left pane
 		
 		}
+		
+	/*
 		// when a parse has been requested, parseFileRequested will be true and the fileImporter dialog will be displayed
 		.fileImporter(isPresented: $parseFileRequested,
 					   	allowedContentTypes: [.xml],					//	allow any .xml type.  There is exposure that a non-GPX xml file will be selected
 						allowsMultipleSelection: true)					//	allow mulitple files to be selected, but not directoies
 			{result in
 				do {
-						let selectedURLs = try result.get()				//	get the URLs of all the files requested
-						parseFile = !selectedURLs.isEmpty				//	if no files are selected or "cancel" pressed then close the dialog and
-																		//		return to the previous view
+						//	get the URLs of all the files requested
+					let selectedURLs = try result.get()
+						//	if no files are selected or "cancel" pressed then close the dialog and eeturn to the previous view
+					parseFile = !selectedURLs.isEmpty
+					if !parseFile {
+						stateFlag = .empty
+					} else {
 						let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)	// parse all the selected URLs in background
-						parseFileRequested.toggle()						//	turn off parseFileRequested to indicate we have received a set of URLs
-				   } catch {
-					   print("AdventureList: parseFile: fileImporter catch occured from get.")
-				   }
+							parseFileRequested.toggle()						//	turn off parseFileRequested to indicate we have received a set of URLs
+					}
+			   } catch {
+				   print("AdventureList: parseFile: fileImporter catch occured from get.")
+			   }
 			}
+	*/
 				
 		
 		

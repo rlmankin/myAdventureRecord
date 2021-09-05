@@ -11,4 +11,9 @@ import SwiftUI
 
 final class	BPFiles: ObservableObject {
 	@Published var xmlFiles : [ReturnStruct] = []
+	var xmlFilesAvailable : Bool {
+		get {
+			return !self.xmlFiles.isEmpty
+		}
+	}
 }

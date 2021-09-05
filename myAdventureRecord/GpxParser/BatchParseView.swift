@@ -45,10 +45,10 @@ struct BatchParseView: View {
 	@State private var startDate = Date()
 	@State private var endDate = Date()
 	//@State private var xmlFiles = [ReturnStruct]()
-	@State private var xmlFilesAvailable : Bool = false
+	//@State private var xmlFilesAvailable : Bool = false
 	@State private var beenParsed : Bool = false
 	@State private var insertInDb : Bool = false
-	@Binding var batchParse : Bool
+	@Binding var stateFlag : FlagStates?
 	
 	
 	
@@ -56,7 +56,7 @@ struct BatchParseView: View {
 	
 	func parseAndInsertParseList(  insert: Bool) -> Bool {
 		
-		guard !bpFiles.xmlFiles.isEmpty else {
+		guard bpFiles.xmlFilesAvailable else {
 			return false
 		}
 		
@@ -84,18 +84,25 @@ struct BatchParseView: View {
 							//track.print()
 							let trackDb = sqlHikingData						//	open and connect to the hinkingdbTable of the SQL hiking database
 							//let trkptDb = SqlTrkptsDatabase()						//	connect to the trkptsTable of the SQL hiking database
-							let trackRow = trackDb.sqlInsertDbRow(track)			// trackRow is the row in the hikingdbTable where the track was inserted
-							let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackRow, track.trkptsList)
+							let trackdBRow = trackDb.sqlInsertDbRow(track)			// trackRow is the row in the hikingdbTable where the track was inserted
+							bpFiles.xmlFiles[fileIndex].trackdbRow.append(Int(trackdBRow))
+							let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackdBRow, track.trkptsList)
 								// trkptRow is the number of rows in the trackptTable where the trackpoint list was inserted
 								//	trackRow is placed into the associatedTrackID field in the trackpointdbTable
-							let advRow = trackDb.sqlInsertAdvRow(Int64(track.trkUniqueID), loadAdventureTrack(track: track))
+							let advdBRow = trackDb.sqlInsertAdvRow(Int64(track.trkUniqueID), loadAdventureTrack(track: track))
 								// advRow is the row in the adventuredbTable where the adventure was inserted,
 								//	trackRow is place into the associatedTrackID field in the adventuredbTable
+							bpFiles.xmlFiles[fileIndex].trackdbRow.append(Int(advdBRow))
 							
-							bpFiles.xmlFiles[fileIndex].trackRow.append(numberOfTrkptRows)
+							
+							
+							bpFiles.xmlFiles[fileIndex].trackdbRow.append(numberOfTrkptRows)
 							
 							//print("GPX file: \(track.header) - inserted @ row: \(trackRow), trkPts @ row: \(trkptRow)")
-							}
+						} else {
+							bpFiles.xmlFiles[fileIndex].trackdbRow.append(-1)
+							bpFiles.xmlFiles[fileIndex].advdbRow.append(-1)
+						}
 
 					}
 				}
@@ -114,7 +121,7 @@ struct BatchParseView: View {
 	{
 		
 		var returnItem = ReturnStruct(url:URL(string:"blah")!, parseThis: true, creationDate: Date(), parseInProgress: .notStarted,
-									  numTrkpts: [0], trackRow: [0], trkptRow: [0])
+									  numTrkpts: [0], trackdbRow: [0], advdbRow: [0])
 		var returnString = [ReturnStruct]()
 		let fm = FileManager.default
 		let path = "/users/rlmankin/documents/hiking/hiking tracks/"
@@ -151,7 +158,7 @@ struct BatchParseView: View {
 			//print("batchparseview body: avail: \(xmlFilesAvailable)\n \(bpFiles.xmlFiles.map {$0.color})")
 	
 		return  Group {
-			if !xmlFilesAvailable {
+			if !bpFiles.xmlFilesAvailable {	// there are no files
 				Form  {
 					VStack (alignment: .leading) {
 						HStack  {
@@ -174,11 +181,11 @@ struct BatchParseView: View {
 							Spacer()
 							Button( action: {
 									bpFiles.xmlFiles = getFile(startDate: startDate, endDate: endDate)
-									   xmlFilesAvailable = !bpFiles.xmlFiles.isEmpty
+									   //xmlFilesAvailable = !bpFiles.xmlFiles.isEmpty
 							}) 	{Text("Find files").frame( alignment: .center)
 								}
 							Button( action: {
-								batchParse.toggle()
+								stateFlag = FlagStates.empty
 								
 							}) {Text("Cancel")}
 							Spacer()
@@ -225,7 +232,7 @@ struct BatchParseView: View {
 
 struct BatchParseView_Previews: PreviewProvider {
     static var previews: some View {
-		BatchParseView(batchParse: .constant(true))
+		BatchParseView(stateFlag: .constant(.batchParse))
 			.environmentObject(BPFiles())
     }
 }

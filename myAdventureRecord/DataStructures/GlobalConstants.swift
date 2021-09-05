@@ -109,14 +109,14 @@ struct ReturnStruct {
 	}
 	var numTracks : Int = 0
 	var numTrkpts : [Int] = []
-	var trackRow : [Int] = []
-	var trkptRow : [Int] = []
+	var trackdbRow : [Int] = []
+	var advdbRow : [Int] = []
 	
 	mutating func clean() {
 		numTracks = 0
 		numTrkpts = []
-		trackRow  = []
-		trkptRow  = []
+		trackdbRow  = []
+		advdbRow  = []
 	}
 	
 	
