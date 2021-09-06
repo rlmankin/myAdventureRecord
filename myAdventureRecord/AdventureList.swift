@@ -102,7 +102,7 @@ struct CommandButtonsView: View {
 							showDBTable.toggle()
 							if !showDBTable {
 								stateFlag = .empty
-								//userData.reload(tracksOnly: true)
+								userData.reload(tracksOnly: true)		// reload userData to reflect changes as a result of deleting adventures from the database table
 							}
 						}.buttonStyle(NavButtonStyle())
 					}})
