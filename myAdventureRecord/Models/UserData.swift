@@ -20,6 +20,7 @@ final class	UserData: ObservableObject {
 		var localAdventure = loadAdventureTrack(track: item)
 		self.adventures.append(localAdventure)
 		adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
+		//self.reload()
 	}
 	
 	

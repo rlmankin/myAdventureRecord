@@ -84,7 +84,7 @@ struct AdventureSection2View: View {
 									// updates the trackdata.trackComment field in the track Table
 									
 								}) {
-									if userData.adventures[self.associatedTrackIndex].isFavorite {
+									if (userData.adventures.count != 0) && (userData.adventures[self.associatedTrackIndex].isFavorite)  {
 										Image("star-filled")
 											.resizable()
 											.renderingMode(.template)

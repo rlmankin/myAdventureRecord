@@ -38,9 +38,10 @@ struct BParseRow: View {
 					
 					
 					if xmlFile.trackdbRow.count >= 1 {
-						ForEach (1 ... xmlFile.numTracks, id: \.self) { itemIndex in
-							Text("\(xmlFile.numTrkpts[itemIndex]), \(xmlFile.trackdbRow[itemIndex]), \(xmlFile.advdbRow[itemIndex])]")
-							
+						if xmlFile.numTracks >= 1 {
+							ForEach (1 ... xmlFile.numTracks, id: \.self) { itemIndex in
+								Text("\(xmlFile.numTrkpts[itemIndex]); \(xmlFile.trackdbRow[itemIndex]); \(xmlFile.advdbRow[itemIndex])]")
+							}
 						}
 					//Text("]")
 					}

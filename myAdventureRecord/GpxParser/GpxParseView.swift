@@ -113,7 +113,7 @@ struct GPXParsingView: View {
 							// setting the trkUniqueID places the database rowID where the track was inserted to be available
 							//	to AdventureDetail when it is updated.  This is necessary inorder to insure that edit done after
 							//	insertion but before navigating away from the detail view will be captured.
-							parseGPX.parsedTracks[selectedTab].trkUniqueID = Int(trackDb.sqlInsertToAllTables(track: parseGPX.parsedTracks[selectedTab]))
+							parseGPX.parsedTracks[selectedTab].trkUniqueID = trackDb.sqlInsertToAllTables(track: parseGPX.parsedTracks[selectedTab]).trackdbRow
 							userData.append(item: parseGPX.parsedTracks[selectedTab])
 							//trackDb.reloadTracks()
 							

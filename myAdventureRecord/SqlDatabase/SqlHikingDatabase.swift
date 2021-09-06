@@ -914,7 +914,7 @@ class SqlHikingDatabase: NSObject {
 		}
 	}
 	
-	func sqlInsertToAllTables( track : Track) -> Int64 {
+	func sqlInsertToAllTables( track : Track) -> (trackdbRow: Int, trkptdbRow: Int, advdbRow: Int) {
 			//	open and connect to the hinkingdbTable of the SQL hiking database
 		timeStampLog(message: "inserting basic track data")
 		let trackRow = self.sqlInsertDbRow(track)
@@ -924,7 +924,7 @@ class SqlHikingDatabase: NSObject {
 		timeStampLog(message: "inserting adventure data")
 		let tempAdv = loadAdventureTrack(track: track)
 		let advRow = self.sqlInsertAdvRow(Int64(trackRow), tempAdv)
-		return trackRow
+		return (Int(trackRow), Int(trkptRow), Int(advRow))
 	}
 	
 	

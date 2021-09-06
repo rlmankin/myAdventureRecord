@@ -102,7 +102,7 @@ struct CommandButtonsView: View {
 							showDBTable.toggle()
 							if !showDBTable {
 								stateFlag = .empty
-								userData.reload(tracksOnly: true)
+								//userData.reload(tracksOnly: true)
 							}
 						}.buttonStyle(NavButtonStyle())
 					}})
@@ -118,7 +118,7 @@ struct CommandButtonsView: View {
 							batchParse.toggle()
 							showDBTable = false
 							if !showDBTable {
-								userData.reload(tracksOnly: true)
+								//userData.reload(tracksOnly: true)
 							}
 						}.buttonStyle(NavButtonStyle())
 					}})

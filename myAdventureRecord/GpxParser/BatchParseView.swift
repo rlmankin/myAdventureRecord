@@ -80,23 +80,35 @@ struct BatchParseView: View {
 						bpFiles.xmlFiles[fileIndex].numTrkpts.append(track.trackSummary.numberOfDatapoints)
 						if insert {
 							
-							// this is the actual insert of a parsed track.  Using updateDatabases() is not appropriate here.  May need to add a new function
-							//track.print()
-							let trackDb = sqlHikingData						//	open and connect to the hinkingdbTable of the SQL hiking database
+							print("inserting adventure into Db")
+							let trackDb =   sqlHikingData
+							
+							if let trackIndex = parseGPX.parsedTracks.firstIndex(of: track) {
+								let inserteddbRowNumbers = trackDb.sqlInsertToAllTables(track: track)
+								parseGPX.parsedTracks[trackIndex].trkUniqueID = inserteddbRowNumbers.trackdbRow
+								bpFiles.xmlFiles[fileIndex].trackdbRow.append(inserteddbRowNumbers.trackdbRow)
+								bpFiles.xmlFiles[fileIndex].advdbRow.append(inserteddbRowNumbers.advdbRow)
+								userData.append(item: parseGPX.parsedTracks[trackIndex])
+								
+							} else {
+								fatalError("dbInsert in batchParse: \(track.header) not found in parseGPX.parsedTracks")
+							}
+						
+/*							let trackDb = sqlHikingData						//	open and connect to the hinkingdbTable of the SQL hiking database
 							//let trkptDb = SqlTrkptsDatabase()						//	connect to the trkptsTable of the SQL hiking database
-							let trackdBRow = trackDb.sqlInsertDbRow(track)			// trackRow is the row in the hikingdbTable where the track was inserted
-							bpFiles.xmlFiles[fileIndex].trackdbRow.append(Int(trackdBRow))
-							let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackdBRow, track.trkptsList)
+							let trackdbRow = trackDb.sqlInsertDbRow(track)			// trackRow is the row in the hikingdbTable where the track was inserted
+							bpFiles.xmlFiles[fileIndex].trackdbRow.append(Int(trackdbRow))
+							let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackdbRow, track.trkptsList)
 								// trkptRow is the number of rows in the trackptTable where the trackpoint list was inserted
 								//	trackRow is placed into the associatedTrackID field in the trackpointdbTable
 							let advdBRow = trackDb.sqlInsertAdvRow(Int64(track.trkUniqueID), loadAdventureTrack(track: track))
 								// advRow is the row in the adventuredbTable where the adventure was inserted,
 								//	trackRow is place into the associatedTrackID field in the adventuredbTable
-							bpFiles.xmlFiles[fileIndex].trackdbRow.append(Int(advdBRow))
+							bpFiles.xmlFiles[fileIndex].advdbRow.append(Int(advdBRow))
+*/
 							
 							
-							
-							bpFiles.xmlFiles[fileIndex].trackdbRow.append(numberOfTrkptRows)
+							//bpFiles.xmlFiles[fileIndex].trackdbRow.append(numberOfTrkptRows)
 							
 							//print("GPX file: \(track.header) - inserted @ row: \(trackRow), trkPts @ row: \(trkptRow)")
 						} else {
@@ -197,14 +209,14 @@ struct BatchParseView: View {
 			} else {
 				
 				HStack {
-					Text("doNotParse")
+					Text("Check to Parse")
 					Spacer()
 					Button( action: {
 							let parseQueue = DispatchQueue(label: "batchParseQueue", attributes: .concurrent)
 								//print("Body: bpFiles.xmlFiles @ button dispatch: \(bpFiles.xmlFiles)")
 							parseQueue.async {
 								parseAndInsertParseList(insert: insertInDb)
-								userData.reload(tracksOnly: true)
+								//userData.reload(tracksOnly: true)
 								beenParsed = true
 							}
 						}
