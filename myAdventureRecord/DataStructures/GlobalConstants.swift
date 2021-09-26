@@ -85,7 +85,6 @@ func roundDowntoNearest( nearest: Double, _ x : Double) -> Double {
 }
 
 
-
 struct ReturnStruct {
 	enum parseProgress {
 		case notStarted
@@ -158,4 +157,6 @@ func timeStampLog(message: String, noPrint: Bool = false) -> Date {
 func timeDiff(lhs : Date, rhs : Date ) -> Double {
 	return lhs - rhs
 }
+
+
 

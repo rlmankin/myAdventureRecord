@@ -15,14 +15,7 @@ enum FlagStates {
 	case empty
 }
 
-struct BPReturnButton: View {
-	var body: some View {
-		HStack {
-			Image( systemName: "chevron-left")
-			Text( "bpreturn ")	//\(String(batchParse))")
-			}
-	}
-}
+
 
 struct CommandButtonsView: View {
 	@EnvironmentObject  var userData: UserData
@@ -32,6 +25,7 @@ struct CommandButtonsView: View {
 	@Binding  var batchParse : Bool
 	@Binding  var stateFlag : FlagStates?
 	@Binding  var parseFileRequested : Bool
+	@Binding  var filterBy : Adventure.HikeCategory
 	
 	
 	var body: some View {
@@ -49,10 +43,10 @@ struct CommandButtonsView: View {
 				NavigationLink(
 					destination: EmptyView(),
 					tag: FlagStates.empty,
-					selection: self.$stateFlag)
-					{
-						EmptyView()
-					}
+					selection: self.$stateFlag,
+					label:  {Text("").toolbar {}
+							}
+				)
 				
 					
 				//	parse *****
@@ -62,15 +56,16 @@ struct CommandButtonsView: View {
 					tag: FlagStates.parseFile,
 					selection: self.$stateFlag,
 					label: {Text("").toolbar {
-						Button("Parse") {
+						/*Button("Parse") {
 							showDBTable = false
 							parseFileRequested.toggle()
-						}.buttonStyle(NavButtonStyle())
+						}.buttonStyle(NavButtonStyle())*/
 					}})
+					.navigationTitle("Parse")
 					// when a parse has been requested, parseFileRequested will be true and the fileImporter dialog will be displayed
 					.fileImporter(isPresented: $parseFileRequested,
 									allowedContentTypes: [.xml],					//	allow any .xml type.  There is exposure that a non-GPX xml file will be selected
-									allowsMultipleSelection: true)					//	allow mulitple files to be selected, but not directoies
+									allowsMultipleSelection: true)					//	allow multitple files to be selected, but not directoies
 						{result in
 							do {
 									//	get the URLs of all the files requested
@@ -97,15 +92,8 @@ struct CommandButtonsView: View {
 					tag: FlagStates.showDBTable,
 					selection: self.$stateFlag,
 					label: {Text("").toolbar {
-						Button("\(showDBTable == true ? "List" : "dbTable")") {
-							stateFlag = .showDBTable
-							showDBTable.toggle()
-							if !showDBTable {
-								stateFlag = .empty
-								userData.reload(tracksOnly: true)		// reload userData to reflect changes as a result of deleting adventures from the database table
-							}
-						}.buttonStyle(NavButtonStyle())
 					}})
+					.navigationTitle("dBView")
 				
 				//batchParse *****
 				NavigationLink(
@@ -113,16 +101,62 @@ struct CommandButtonsView: View {
 					tag: FlagStates.batchParse,
 					selection: self.$stateFlag,
 					label: {Text("").toolbar {
-						Button("batchparse)") {
+						/*Button("batchparse)") {
 							stateFlag = .batchParse
-							batchParse.toggle()
+							//batchParse.toggle()
 							showDBTable = false
 							if !showDBTable {
 								//userData.reload(tracksOnly: true)
 							}
-						}.buttonStyle(NavButtonStyle())
+						}.buttonStyle(NavButtonStyle())*/
 					}})
-				} //List
+					.navigationTitle("batchParse")
+				
+			} //List
+				
+			Text("")
+				.toolbar {
+					ToolbarItem() {
+						Menu("Commands") {
+							Button("Parse") {
+								showDBTable = false
+								stateFlag = .parseFile
+								parseFileRequested.toggle()
+							}
+							Button("\(showDBTable == true ? "List" : "dbTable")") {
+								stateFlag = .showDBTable
+								showDBTable.toggle()
+								if !showDBTable {
+									stateFlag = .empty
+									userData.reload(tracksOnly: true)		// reload userData to reflect changes as a result of deleting adventures from the database table
+								}
+							}
+							Button("batchparse") {
+								stateFlag = .batchParse
+								//batchParse.toggle()
+								showDBTable = false
+								if !showDBTable {
+									//userData.reload(tracksOnly: true)
+								}
+							}
+						}
+					}
+					ToolbarItem() {
+						Menu("Filter") {
+							Menu("Category") {
+								Button("all", action: { filterBy = .all})
+								Button("Hike", action: {filterBy = .hike})
+								Button("Off Road", action: {filterBy = .orv})
+								Button("Scenic Drive", action: {filterBy = .scenicDrive})
+								Button("Snowshoe", action: {filterBy = .snowshoe})
+								Button("Not Categorized", action: {filterBy = .none})
+							}
+							Button("Area", action: {})
+							Button("Title", action: {})
+						}
+					}
+					
+				}
 				
 			}	//HStack
 	}
@@ -144,6 +178,14 @@ struct AdventureList: View {
 	@State private var parseFileRequested = false
 	@State private var refreshList = false
 	
+	@State private var filterBy :  Adventure.HikeCategory = .all
+	var filteredAdventures : [Adventure] {
+		if filterBy == .all {
+			return userData.adventures
+		} else {
+			return userData.adventures.filter {$0.hikeCategory == filterBy}
+		}
+	}
 	func printStateVars() {
 		print("stateFlag: \(stateFlag)", terminator: " ")
 		print("showDBtable: \(showDBTable)", terminator: " ")
@@ -154,69 +196,52 @@ struct AdventureList: View {
 	}
 	
 	
+	
+	
     var body: some View {
 		
 		
 		timeStampLog(message: "-> adventureList body")
 			//printStateVars()
 		
-		return NavigationView {
-			// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
-			// HStack for the buttons at the top.  Seems to be required to get
-			//	the buttons to correctdly call the detail view
+		return
+			Group {
 			
-			List  {
 				
 				
-				CommandButtonsView(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested)
 				// The list of Adventures
 				
+				NavigationView {
+				// the List provide the rows in the navigation view (left pane) by walking through all entries in the userData structure
+				// HStack for the buttons at the top.  Seems to be required to get
+				//	the buttons to correctdly call the detail view
 				
+					List  {
+						
+						
+						CommandButtonsView(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested, filterBy: $filterBy)
+						
+						
+						
+						//	The List of Adventure *****
+						//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
+						//	detail view (right pane)
+						ForEach(filteredAdventures/*userData.adventures*/) { adventure in
+							NavigationLink(
+								destination: AdventureDetail(passedAdventure: adventure, beenInserted: true)) {
+									AdventureRow(adventure: adventure)
+									}
+							.tag(adventure)
+						}
+					
+						
+						
+					}.frame(minWidth:400, maxWidth: 600)				// .frame here sets the width of the left hand pane of the navigationView
+													//		it is important that .frame attaches to the List because the List
+													//		is the view in the left pane
 				
-				//	The List of Adventure *****
-				//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
-				//	detail view (right pane)
-				ForEach(userData.adventures) { adventure in
-					NavigationLink(
-						destination: AdventureDetail(passedAdventure: adventure, beenInserted: true)) {
-							AdventureRow(adventure: adventure)
-							}
-					.tag(adventure)
-				}
-			
-				
-				
-			}.frame(minWidth:400, maxWidth: 600)				// .frame here sets the width of the left hand pane of the navigationView
-											//		it is important that .frame attaches to the List because the List
-											//		is the view in the left pane
-		
-		}
-		
-	/*
-		// when a parse has been requested, parseFileRequested will be true and the fileImporter dialog will be displayed
-		.fileImporter(isPresented: $parseFileRequested,
-					   	allowedContentTypes: [.xml],					//	allow any .xml type.  There is exposure that a non-GPX xml file will be selected
-						allowsMultipleSelection: true)					//	allow mulitple files to be selected, but not directoies
-			{result in
-				do {
-						//	get the URLs of all the files requested
-					let selectedURLs = try result.get()
-						//	if no files are selected or "cancel" pressed then close the dialog and eeturn to the previous view
-					parseFile = !selectedURLs.isEmpty
-					if !parseFile {
-						stateFlag = .empty
-					} else {
-						let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)	// parse all the selected URLs in background
-							parseFileRequested.toggle()						//	turn off parseFileRequested to indicate we have received a set of URLs
-					}
-			   } catch {
-				   print("AdventureList: parseFile: fileImporter catch occured from get.")
-			   }
 			}
-	*/
-				
-		
-		
+		}
 	}
 }
 

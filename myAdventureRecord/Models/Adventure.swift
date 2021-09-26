@@ -93,6 +93,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 	
 	// future use
 	enum HikeCategory : String, Codable,  Categorizable {
+		case all
 		case hike
 		case walkabout
 		case orv
@@ -104,6 +105,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 		
 		var description: String {
 			switch self {
+			case .all : return "all"
 			case .hike: return "Hike"
 			case .walkabout: return "Walkabout"
 			case .orv : return "Off Road"
