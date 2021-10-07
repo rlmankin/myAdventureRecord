@@ -8,12 +8,49 @@
 import SwiftUI
 
 enum FlagStates {
+	case showFilterView
 	case showDBTable
 	case parseFile
 	case batchParse
 	case refreshList
 	case empty
 }
+
+struct FilterVars {
+	var filterBy : Adventure.HikeCategory
+	var searchArea : String
+	var searchTitle : String
+	var showFilterView : Bool
+	var searchLength : Double
+	var searchPace : Double
+	var searchAscent : Double
+	var searchDescent : Double
+	var searchMaxElevation : Double
+	
+	mutating func setVarsToDefault() {
+		self.filterBy =  Adventure.HikeCategory.all
+		self.searchArea = nullString
+		self.searchTitle  = nullString
+		self.searchLength = 0.0
+		self.searchPace = 0.0
+		self.searchAscent = 0.0
+		self.searchDescent = 0.0
+		self.searchMaxElevation = 15000.0
+	}
+	
+	init() {
+		filterBy = .all
+		searchArea = nullString
+		searchTitle = nullString
+		searchLength = 0.0
+		searchPace = 0.0
+		searchAscent = 0.0
+		searchDescent = 0.0
+		searchMaxElevation = 0.0
+		showFilterView = false
+	}
+}
+
 
 
 
@@ -25,7 +62,15 @@ struct CommandButtonsView: View {
 	@Binding  var batchParse : Bool
 	@Binding  var stateFlag : FlagStates?
 	@Binding  var parseFileRequested : Bool
+	
+	@Binding var filtervars : FilterVars
+	/*
 	@Binding  var filterBy : Adventure.HikeCategory
+	@Binding  var searchArea : String
+	@Binding  var searchTitle : String
+	@Binding  var showFilterView : Bool
+	@Binding  var searchLength : Double
+	 */
 	
 	
 	var body: some View {
@@ -40,13 +85,13 @@ struct CommandButtonsView: View {
 				//	empty *****
 				//	this will display nothing in the detailview.  Trying to use when navigating back to the 'default' view from varous button pushes
 				//		(e.g. cancel for parses, list for dbTable)
-				NavigationLink(
+				/*NavigationLink(
 					destination: EmptyView(),
 					tag: FlagStates.empty,
 					selection: self.$stateFlag,
 					label:  {Text("").toolbar {}
 							}
-				)
+				)*/
 				
 					
 				//	parse *****
@@ -55,13 +100,9 @@ struct CommandButtonsView: View {
 					destination: GPXParsingView(),
 					tag: FlagStates.parseFile,
 					selection: self.$stateFlag,
-					label: {Text("").toolbar {
-						/*Button("Parse") {
-							showDBTable = false
-							parseFileRequested.toggle()
-						}.buttonStyle(NavButtonStyle())*/
-					}})
-					.navigationTitle("Parse")
+					label: 	{Text("").toolbar {}
+							}
+				).navigationTitle("Parse")
 					// when a parse has been requested, parseFileRequested will be true and the fileImporter dialog will be displayed
 					.fileImporter(isPresented: $parseFileRequested,
 									allowedContentTypes: [.xml],					//	allow any .xml type.  There is exposure that a non-GPX xml file will be selected
@@ -91,31 +132,32 @@ struct CommandButtonsView: View {
 					destination: HikingDBView(),
 					tag: FlagStates.showDBTable,
 					selection: self.$stateFlag,
-					label: {Text("").toolbar {
-					}})
-					.navigationTitle("dBView")
+					label: 	{Text("").toolbar {}
+							}
+				).navigationTitle("dBView")
 				
 				//batchParse *****
 				NavigationLink(
 					destination: BatchParseView(stateFlag: $stateFlag),
 					tag: FlagStates.batchParse,
 					selection: self.$stateFlag,
-					label: {Text("").toolbar {
-						/*Button("batchparse)") {
-							stateFlag = .batchParse
-							//batchParse.toggle()
-							showDBTable = false
-							if !showDBTable {
-								//userData.reload(tracksOnly: true)
+					label: 	{Text("").toolbar {}
 							}
-						}.buttonStyle(NavButtonStyle())*/
-					}})
-					.navigationTitle("batchParse")
-				
-			} //List
-				
+				).navigationTitle("batchParse")
+					
+				//filterview *****
+					NavigationLink(
+						destination: FilterView(filtervars: $filtervars, stateFlag: $stateFlag),
+						tag: FlagStates.showFilterView,
+						selection: self.$stateFlag,
+						label: 	{Text("").toolbar {}
+								}
+					).navigationTitle("filterview")
+					
+			
 			Text("")
 				.toolbar {
+					// Command pulldown menu.  Used for specific operations (e.g. parse a file, list the database, batchparse many files)
 					ToolbarItem() {
 						Menu("Commands") {
 							Button("Parse") {
@@ -133,7 +175,6 @@ struct CommandButtonsView: View {
 							}
 							Button("batchparse") {
 								stateFlag = .batchParse
-								//batchParse.toggle()
 								showDBTable = false
 								if !showDBTable {
 									//userData.reload(tracksOnly: true)
@@ -141,22 +182,18 @@ struct CommandButtonsView: View {
 							}
 						}
 					}
+					// Filter pulldown menu.  Used to filter adventures in the navigation (left) pane.
 					ToolbarItem() {
-						Menu("Filter") {
-							Menu("Category") {
-								Button("all", action: { filterBy = .all})
-								Button("Hike", action: {filterBy = .hike})
-								Button("Off Road", action: {filterBy = .orv})
-								Button("Scenic Drive", action: {filterBy = .scenicDrive})
-								Button("Snowshoe", action: {filterBy = .snowshoe})
-								Button("Not Categorized", action: {filterBy = .none})
-							}
-							Button("Area", action: {})
-							Button("Title", action: {})
+						Button("Filter") {
+							stateFlag = .showFilterView
 						}
 					}
 					
+					
+					
 				}
+				
+			}
 				
 			}	//HStack
 	}
@@ -178,13 +215,45 @@ struct AdventureList: View {
 	@State private var parseFileRequested = false
 	@State private var refreshList = false
 	
-	@State private var filterBy :  Adventure.HikeCategory = .all
+	@State private var filtervars = FilterVars()
+	// Filtering State variables
+	/*@State private var filterBy :  Adventure.HikeCategory = .all
+	@State private var searchArea : String = nullString
+	@State private var searchTitle : String = nullString
+	@State private var searchLength : Double = 0.0
+	*/
+	@State private var showfilterView : Bool = false
+	
 	var filteredAdventures : [Adventure] {
-		if filterBy == .all {
-			return userData.adventures
-		} else {
-			return userData.adventures.filter {$0.hikeCategory == filterBy}
+			var filteredAdventures : [Adventure] = userData.adventures
+		if filtervars.filterBy != .all {
+			filteredAdventures =  userData.adventures.filter {$0.hikeCategory == filtervars.filterBy}
+			}
+		if filtervars.searchArea != nullString {
+			filteredAdventures = filteredAdventures.filter {$0.area.contains(filtervars.searchArea) }
 		}
+		
+		if filtervars.searchTitle != nullString {
+			filteredAdventures = filteredAdventures.filter {$0.name.contains(filtervars.searchTitle) }
+		}
+		
+		if filtervars.searchLength > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.distance/metersperMile <= filtervars.searchLength }
+		}
+		
+		if filtervars.searchPace > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.avgSpeed/metersperMile*secondsperHour <= filtervars.searchPace }
+		}
+		if filtervars.searchAscent > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.totalAscent*feetperMeter <= filtervars.searchAscent }
+		}
+		if filtervars.searchDescent > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.totalDescent*feetperMeter <= filtervars.searchDescent }
+		}
+		if filtervars.searchMaxElevation > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.elevationStats.max.elevation * feetperMeter <= filtervars.searchMaxElevation }
+		}
+		return filteredAdventures
 	}
 	func printStateVars() {
 		print("stateFlag: \(stateFlag)", terminator: " ")
@@ -205,7 +274,6 @@ struct AdventureList: View {
 			//printStateVars()
 		
 		return
-			Group {
 			
 				
 				
@@ -219,7 +287,7 @@ struct AdventureList: View {
 					List  {
 						
 						
-						CommandButtonsView(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested, filterBy: $filterBy)
+						CommandButtonsView(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested, filtervars: $filtervars )
 						
 						
 						
@@ -241,7 +309,7 @@ struct AdventureList: View {
 													//		is the view in the left pane
 				
 			}
-		}
+	
 	}
 }
 

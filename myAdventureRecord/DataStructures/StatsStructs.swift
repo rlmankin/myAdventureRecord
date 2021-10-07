@@ -34,8 +34,10 @@ struct MinMaxStats: Codable, Hashable {
 		
 	}
 	
-	var max = Stat(startVal: -Double.greatestFiniteMagnitude)					//	init max to the largest negative number available
-	var min = Stat(startVal: Double.greatestFiniteMagnitude)					//	init min to the largest postivie number available
+	var max = Stat(startVal: -Double.greatestFiniteMagnitude)
+		//	init max to the largest negative number available
+	var min = Stat(startVal: Double.greatestFiniteMagnitude)
+		//	init min to the largest postivie number available
 	var avg = Stat(startVal: 0)
 	
 }
