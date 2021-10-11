@@ -16,37 +16,57 @@ enum FlagStates {
 	case empty
 }
 
+struct FilterRange {
+	var lower : Double
+	var upper : Double
+	
+	init() {
+		lower = 0.0
+		upper = 0.0
+	}
+}
 struct FilterVars {
 	var filterBy : Adventure.HikeCategory
+	
 	var searchArea : String
 	var searchTitle : String
 	var showFilterView : Bool
-	var searchLength : Double
-	var searchPace : Double
-	var searchAscent : Double
-	var searchDescent : Double
-	var searchMaxElevation : Double
+	var searchLength = FilterRange()
+	var searchPace = FilterRange()
+	var searchAscent = FilterRange()
+	var searchDescent = FilterRange()
+	var searchMaxElevation = FilterRange()
 	
 	mutating func setVarsToDefault() {
 		self.filterBy =  Adventure.HikeCategory.all
 		self.searchArea = nullString
 		self.searchTitle  = nullString
-		self.searchLength = 0.0
-		self.searchPace = 0.0
-		self.searchAscent = 0.0
-		self.searchDescent = 0.0
-		self.searchMaxElevation = 15000.0
+		self.searchLength.lower = 0.0
+		self.searchLength.upper = 300.0
+		self.searchPace.lower = 0.0
+		self.searchPace.upper = 4.0
+		self.searchAscent.lower = 0.0
+		self.searchAscent.upper = 6000.0
+		self.searchDescent.lower = -3000.0
+		self.searchDescent.upper = 0.0
+		self.searchMaxElevation.lower = 0.0
+		self.searchMaxElevation.upper = 15000.0
 	}
 	
 	init() {
-		filterBy = .all
-		searchArea = nullString
-		searchTitle = nullString
-		searchLength = 0.0
-		searchPace = 0.0
-		searchAscent = 0.0
-		searchDescent = 0.0
-		searchMaxElevation = 0.0
+		self.filterBy =  Adventure.HikeCategory.all
+		self.searchArea = nullString
+		self.searchTitle  = nullString
+		searchLength.lower = 0.0
+		searchLength.upper = 300.0
+		self.searchPace.lower = 0.0
+		self.searchPace.upper = 4.0
+		self.searchAscent.lower = 0.0
+		self.searchAscent.upper = 6000.0
+		self.searchDescent.lower = -3000.0
+		self.searchDescent.upper = 0.0
+		self.searchMaxElevation.lower = 0.0
+		self.searchMaxElevation.upper = 15000.0
 		showFilterView = false
 	}
 }
@@ -237,21 +257,31 @@ struct AdventureList: View {
 			filteredAdventures = filteredAdventures.filter {$0.name.contains(filtervars.searchTitle) }
 		}
 		
-		if filtervars.searchLength > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.distance/metersperMile <= filtervars.searchLength }
+		if filtervars.searchLength.upper > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.distance/metersperMile <= filtervars.searchLength.upper &&
+				$0.distance/metersperMile >= filtervars.searchLength.lower
+			}
 		}
 		
-		if filtervars.searchPace > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.avgSpeed/metersperMile*secondsperHour <= filtervars.searchPace }
+		if filtervars.searchPace.upper > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.avgSpeed/metersperMile*secondsperHour <= filtervars.searchPace.upper &&
+				$0.trackData.trackSummary.avgSpeed/metersperMile*secondsperHour >= filtervars.searchPace.lower
+			}
 		}
-		if filtervars.searchAscent > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.totalAscent*feetperMeter <= filtervars.searchAscent }
+		if filtervars.searchAscent.upper > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.totalAscent*feetperMeter <= filtervars.searchAscent.upper &&
+				$0.trackData.trackSummary.totalAscent*feetperMeter >= filtervars.searchAscent.lower
+			}
 		}
-		if filtervars.searchDescent > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.totalDescent*feetperMeter <= filtervars.searchDescent }
+		if filtervars.searchDescent.lower < 0 {
+			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.totalDescent*feetperMeter <= filtervars.searchDescent.upper &&
+				$0.trackData.trackSummary.totalDescent*feetperMeter >= filtervars.searchDescent.lower
+			}
 		}
-		if filtervars.searchMaxElevation > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.elevationStats.max.elevation * feetperMeter <= filtervars.searchMaxElevation }
+		if filtervars.searchMaxElevation.upper > 0 {
+			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.elevationStats.max.elevation * feetperMeter <= filtervars.searchMaxElevation.upper &&
+				$0.trackData.trackSummary.elevationStats.max.elevation * feetperMeter >= filtervars.searchMaxElevation.lower
+			}
 		}
 		return filteredAdventures
 	}

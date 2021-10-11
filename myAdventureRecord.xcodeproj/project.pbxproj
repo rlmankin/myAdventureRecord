@@ -56,6 +56,7 @@
 		EE8B90C32603867000050D19 /* AdventureSection2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8B90C22603867000050D19 /* AdventureSection2View.swift */; };
 		EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A625D4992D00B72577 /* parseGPXXML.swift */; };
 		EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A825D56FF300B72577 /* GpxParseView.swift */; };
+		EEE4C27D2710AD2C00B4BBAE /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE4C27C2710AD2C00B4BBAE /* RangeSlider.swift */; };
 		EEEB2A2E263AEC11004D3602 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEEB2A2D263AEBF8004D3602 /* SQLite.framework */; };
 		EEEB2A2F263AEC11004D3602 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EEEB2A2D263AEBF8004D3602 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EEEB2A32263AEC45004D3602 /* SQLite.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = EEEB2A31263AEC44004D3602 /* SQLite.framework.dSYM */; };
@@ -140,6 +141,7 @@
 		EE8B90C22603867000050D19 /* AdventureSection2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureSection2View.swift; sourceTree = "<group>"; };
 		EEDA19A625D4992D00B72577 /* parseGPXXML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parseGPXXML.swift; sourceTree = "<group>"; };
 		EEDA19A825D56FF300B72577 /* GpxParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxParseView.swift; sourceTree = "<group>"; };
+		EEE4C27C2710AD2C00B4BBAE /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
 		EEEB2A2C263AEBF8004D3602 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = SQLite.framework.dSYM; sourceTree = "<group>"; };
 		EEEB2A2D263AEBF8004D3602 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SQLite.framework; sourceTree = "<group>"; };
 		EEEB2A31263AEC44004D3602 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SQLite.framework.dSYM; path = "Carthage/Build/SQLite.xcframework/macos-arm64_x86_64/dSYMs/SQLite.framework.dSYM"; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				EE5BF7A8270DE5210045B3E0 /* SliderView.swift */,
+				EEE4C27C2710AD2C00B4BBAE /* RangeSlider.swift */,
 				EE8218812703CAD300430188 /* FilterView.swift */,
 				EE8B90C22603867000050D19 /* AdventureSection2View.swift */,
 				EE87FAEB25CB5E0400BA5BA0 /* DataBase */,
@@ -443,6 +446,7 @@
 				EE87FB0825CB5E0500BA5BA0 /* DistanceSpeedChart.swift in Sources */,
 				EE87FB1025CB5E0500BA5BA0 /* UserData.swift in Sources */,
 				EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */,
+				EEE4C27D2710AD2C00B4BBAE /* RangeSlider.swift in Sources */,
 				EE87FB1C25CB5E0500BA5BA0 /* DistGrdMainChart.swift in Sources */,
 				EE87FB1E25CB5E0500BA5BA0 /* DistEleMainChart.swift in Sources */,
 				EE87FB0725CB5E0500BA5BA0 /* GlobalConstants.swift in Sources */,
