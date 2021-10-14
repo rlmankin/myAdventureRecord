@@ -77,18 +77,21 @@ struct Adventure: Hashable, Codable, Identifiable {
 	var longitudeSpan : CLLocationDegrees
 	var latitudeSpan: CLLocationDegrees
 	
-	var difficulty : Color {
-		let difficultyScore =  ((trackData.trackSummary.totalAscent * 3.281) * 2 * (trackData.trackSummary.distance/1000)).squareRoot()
+	var difficulty : (score: Double, color: Color) {
+		let score =  ((trackData.trackSummary.totalAscent * 3.281) * 2 * (trackData.trackSummary.distance/1000)).squareRoot()
 					// from Shenandoah National Park Difficulty Rating
-		switch difficultyScore {
-		case ..<50: return Color(.green)
-		case 50 ..< 100: return Color(.blue)
-		case 100 ..< 150: return Color(.yellow)
-		case 150 ..< 200: return Color(.orange)
+		var color : Color
+		switch score {
+		case ..<50: color = Color.green
+		case 50 ..< 100: color = Color.blue //Color(.blue)
+		case 100 ..< 150: color = Color.yellow //Color(.yellow)
+		case 150 ..< 200: color = Color.orange //Color(.orange)
+		case 200 ..< Double.greatestFiniteMagnitude:  color = Color.red //Color(.red)
 		
 		default:
-			return Color(.red)
+			color = Color.gray //Color(.gray)
 		}
+		return(score, color)
 	}
 	
 	// future use

@@ -46,7 +46,7 @@ struct AdventureRow: View {
 							Image(systemName: "circle.fill")
 								.resizable()
 								.frame(width: 10, height: 10)
-								.foregroundColor(adventure.difficulty)
+								.foregroundColor(adventure.difficulty.color)
 						}
 						HStack {
 							Text(adventure.area)

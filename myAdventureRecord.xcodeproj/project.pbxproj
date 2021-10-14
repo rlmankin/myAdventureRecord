@@ -249,12 +249,12 @@
 				EEE4C27C2710AD2C00B4BBAE /* RangeSlider.swift */,
 				EE8218812703CAD300430188 /* FilterView.swift */,
 				EE8B90C22603867000050D19 /* AdventureSection2View.swift */,
+				EE87E98625F04F98005C5669 /* DifficultyView.swift */,
 				EE87FAEB25CB5E0400BA5BA0 /* DataBase */,
 				EE87FAED25CB5E0400BA5BA0 /* MapView.swift */,
 				EE87FAEE25CB5E0400BA5BA0 /* CircleImage.swift */,
 				EE87FAE625CB5E0400BA5BA0 /* Tabs */,
 				EE87FAEF25CB5E0400BA5BA0 /* Charts */,
-				EE87E98625F04F98005C5669 /* DifficultyView.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";

@@ -177,13 +177,13 @@ struct BatchParseView: View {
 							DatePicker(	"Start Date",
 										selection: $startDate,
 										displayedComponents: [.date])
-								.datePickerStyle(GraphicalDatePickerStyle())
+								.datePickerStyle(DefaultDatePickerStyle())
 						
 							
 							DatePicker("End Date",
 									selection: $endDate,
 									displayedComponents: [.date])
-								.datePickerStyle(GraphicalDatePickerStyle())
+								.datePickerStyle(DefaultDatePickerStyle())
 						}
 						
 						HStack {
