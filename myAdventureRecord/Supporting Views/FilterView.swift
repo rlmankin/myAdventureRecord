@@ -91,7 +91,8 @@ struct FilterView: View {
 					}
 				
 				Button("Cancel") {
-						self.setStateToDefault()
+						//self.setStateToDefault()
+					self.stateFlag = FlagStates.empty
 				}
 		}
 	}

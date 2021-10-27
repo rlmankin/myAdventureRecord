@@ -64,7 +64,10 @@ struct DistSpdMainChart: View {
 }
 
 struct DistSpdMainChart_Previews: PreviewProvider {
-    static var previews: some View {
-        DistSpdMainChart(track: adventureData[0].trackData)
+	static var previews: some View {
+		if adventureData[0].trackData.trkptsList.isEmpty {
+			adventureData[0].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[0].id)
+		} //	retrieve the trackspoint list from the trackpointlist table in the database
+        return  DistSpdMainChart(track: adventureData[0].trackData)
     }
 }

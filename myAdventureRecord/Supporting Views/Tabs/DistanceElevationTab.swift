@@ -13,6 +13,7 @@ import SwiftUI
 struct DistanceElevationTab: View {
 	
 	var adventure : Adventure
+	@State private var showGraph : Bool = false
     var body: some View {
 		
 		timeStampLog(message: "DistanceElevationTab")
@@ -50,8 +51,13 @@ struct DistanceElevationTab: View {
 					.foregroundColor(Color.orange)
 			}.padding(.horizontal)
 			VStack {
-					
-				DistanceElevationChart(track: adventure.trackData)
+				
+				if !showGraph {
+					Button("click to see graph", action: { showGraph.toggle()})
+				} else {
+					DistanceElevationChart(track: adventure.trackData)
+				}
+				
 				
 					//.foregroundColor(Color.black)
 					//.background(Color.yellow)
@@ -63,6 +69,11 @@ struct DistanceElevationTab: View {
 
 struct DistanceElevationTab_Previews: PreviewProvider {
     static var previews: some View {
-        DistanceElevationTab(adventure: adventureData[5])
+		let adventureIndex = 5
+		if adventureData[adventureIndex].trackData.trkptsList.isEmpty {
+			adventureData[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[adventureIndex].id)				//	retrieve the trackspoint list from the trackpointlist table in the database
+		}
+		
+        return DistanceElevationTab(adventure: adventureData[adventureIndex])
     }
 }

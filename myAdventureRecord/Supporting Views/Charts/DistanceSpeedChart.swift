@@ -33,6 +33,9 @@ struct DistanceSpeedChart: View {
 
 struct DistanceSpeedChart_Previews: PreviewProvider {
     static var previews: some View {
-		DistanceSpeedChart(track:adventureData[0].trackData)
+		if adventureData[0].trackData.trkptsList.isEmpty {
+			adventureData[0].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[0].id)
+		} //	retrieve the trackspoint list from the trackpointlist table in the database
+		return  DistanceSpeedChart(track:adventureData[0].trackData)
     }
 }

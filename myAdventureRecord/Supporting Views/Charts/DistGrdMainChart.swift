@@ -51,7 +51,7 @@ struct DistGrdMainChart: View {
 	
 		GeometryReader { reader in
 		// elevation chart line
-			ForEach( (1..<self.track.trkptsList.endIndex), id: \.self ) { item in
+			ForEach( (1 ..< self.track.trkptsList.endIndex), id: \.self ) { item in
 				let trkpt = self.track.trkptsList[item]
 				Path { p in
 				let readerWidth = reader.size.width
@@ -85,6 +85,9 @@ struct DistGrdMainChart: View {
 
 struct DistGrdMainChart_Previews: PreviewProvider {
     static var previews: some View {
-		DistGrdMainChart(track: adventureData[0].trackData)
+		if adventureData[0].trackData.trkptsList.isEmpty {
+			adventureData[0].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[0].id)
+		} //	retrieve the trackspoint list from the trackpointlist table in the database
+		return  DistGrdMainChart(track: adventureData[0].trackData)
     }
 }

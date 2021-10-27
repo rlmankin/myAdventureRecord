@@ -99,7 +99,6 @@ struct MapView : View {
 		let trkPtAsAnnotations = convertLocationsToAnnotations(trkPtAsLocations)
 		//  trkPtAsAnnotations is currently not used to provide base functions for displaying waypoints later
 		
-		
 		//view.addAnnotations(y)
 		let polyline = MKPolyline(coordinates: trkPtAsLocations, count: trkPtAsLocations.count)
 		view.addOverlay(polyline)

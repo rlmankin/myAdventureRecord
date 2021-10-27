@@ -11,6 +11,7 @@
 import Foundation
 import SwiftUI
 import ImageIO
+import CoreLocation
 
 var adventureData: [Adventure]  = loadAdventureData()				// 	create adventures from track data in the databse
 

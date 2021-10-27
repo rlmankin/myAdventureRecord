@@ -92,6 +92,8 @@ struct FilterVars {
 
 
 
+
+
 struct CommandButtonsView: View {
 	@EnvironmentObject  var userData: UserData
 	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
@@ -102,6 +104,8 @@ struct CommandButtonsView: View {
 	@Binding  var parseFileRequested : Bool
 	
 	@Binding var filtervars : FilterVars
+	
+	var filteredAdventures : [Adventure]
 	
 	var body: some View {
 		
@@ -115,13 +119,13 @@ struct CommandButtonsView: View {
 				//	empty *****
 				//	this will display nothing in the detailview.  Trying to use when navigating back to the 'default' view from varous button pushes
 				//		(e.g. cancel for parses, list for dbTable)
-				/*NavigationLink(
-					destination: EmptyView(),
+				NavigationLink(
+					destination: SplashView(filteredAdventures: filteredAdventures),
 					tag: FlagStates.empty,
 					selection: self.$stateFlag,
 					label:  {Text("").toolbar {}
 							}
-				)*/
+				)
 				
 					
 				//	parse *****
@@ -249,6 +253,16 @@ struct AdventureList: View {
 	
 	@State private var showfilterView : Bool = false
 	
+	
+	func printStateVars() {
+		print("stateFlag: \(stateFlag)", terminator: " ")
+		print("showDBtable: \(showDBTable)", terminator: " ")
+		print("parseFile: \(parseFile)", terminator: " ")
+		print("batchParse: \(batchParse)", terminator: " ")
+		print("parseFileRequested: \(parseFileRequested)", terminator: " ")
+		print("refreshList: \(refreshList)")
+	}
+	
 	var filteredAdventures : [Adventure] {
 			var filteredAdventures : [Adventure] = userData.adventures
 		if filtervars.filterByCategory != .all {
@@ -299,16 +313,6 @@ struct AdventureList: View {
 		}
 		return filteredAdventures
 	}
-	func printStateVars() {
-		print("stateFlag: \(stateFlag)", terminator: " ")
-		print("showDBtable: \(showDBTable)", terminator: " ")
-		print("parseFile: \(parseFile)", terminator: " ")
-		print("batchParse: \(batchParse)", terminator: " ")
-		print("parseFileRequested: \(parseFileRequested)", terminator: " ")
-		print("refreshList: \(refreshList)")
-	}
-	
-	
 	
 	
     var body: some View {
@@ -331,7 +335,7 @@ struct AdventureList: View {
 					List  {
 						
 						
-						CommandButtonsView(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested, filtervars: $filtervars )
+						CommandButtonsView(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested, filtervars: $filtervars , filteredAdventures: filteredAdventures)
 						
 						
 						

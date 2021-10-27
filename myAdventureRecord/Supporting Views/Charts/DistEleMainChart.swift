@@ -83,7 +83,7 @@ struct DistEleMainChart_Previews: PreviewProvider {
 		  }
 		  
 		return GeometryReader { reader in
-			DistEleMainChart( track: adventureData[5].trackData, reader: reader)
+			DistEleMainChart( track: adventureData[adventureIndex].trackData, reader: reader)
 		}
 	}
 }

@@ -98,6 +98,7 @@ struct AdventureDetail: View {
 				MapView(coordinate: adventure.locationCoordinate,
 						track: adventure.trackData)
 					.frame(height:350)
+				
 					.overlay(
 						GeometryReader { proxy in
 							Button("Open in Maps") {
@@ -109,6 +110,7 @@ struct AdventureDetail: View {
 							.offset(x: -10, y: -10)
 						}
 					)
+				
 			}
 			
 			AdventureSection2View(section2Editing: $section2Editing, editName: $editName, editTrackComment: $editTrackComment, editDescription: $editDescription, editHikeCategory: $editHikeCategory, editArea:  $editArea, adventure: adventure)

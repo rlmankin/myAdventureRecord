@@ -3,11 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		EE0BFF7F25CCA303007ACA9D /* AdventureCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */; };
+		EE100A082728B828006BB086 /* SigmaSwiftStatistics in Frameworks */ = {isa = PBXBuildFile; productRef = EE100A072728B828006BB086 /* SigmaSwiftStatistics */; };
+		EE100A0A27298841006BB086 /* SplashTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100A0927298841006BB086 /* SplashTabView.swift */; };
 		EE1492A125F5433F00DE184A /* BatchParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A025F5433F00DE184A /* BatchParseView.swift */; };
 		EE1492A325F7B76800DE184A /* BParseRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A225F7B76800DE184A /* BParseRow.swift */; };
 		EE1492A525F7B99600DE184A /* BPListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A425F7B99600DE184A /* BPListView.swift */; };
@@ -54,6 +56,7 @@
 		EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */; };
 		EE87FB4625CB742E00BA5BA0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE87FB4825CB742E00BA5BA0 /* Main.storyboard */; };
 		EE8B90C32603867000050D19 /* AdventureSection2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8B90C22603867000050D19 /* AdventureSection2View.swift */; };
+		EE99D7C72726EA2C00338ADE /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE99D7C62726EA2C00338ADE /* SplashView.swift */; };
 		EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A625D4992D00B72577 /* parseGPXXML.swift */; };
 		EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A825D56FF300B72577 /* GpxParseView.swift */; };
 		EEE4C27D2710AD2C00B4BBAE /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE4C27C2710AD2C00B4BBAE /* RangeSlider.swift */; };
@@ -88,6 +91,7 @@
 
 /* Begin PBXFileReference section */
 		EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureCommands.swift; sourceTree = "<group>"; };
+		EE100A0927298841006BB086 /* SplashTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashTabView.swift; sourceTree = "<group>"; };
 		EE1492A025F5433F00DE184A /* BatchParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchParseView.swift; sourceTree = "<group>"; };
 		EE1492A225F7B76800DE184A /* BParseRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BParseRow.swift; sourceTree = "<group>"; };
 		EE1492A425F7B99600DE184A /* BPListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BPListView.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 		EE87FB3525CB61E800BA5BA0 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/Mac/SQLite.framework; sourceTree = "<group>"; };
 		EE87FB4725CB742E00BA5BA0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EE8B90C22603867000050D19 /* AdventureSection2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureSection2View.swift; sourceTree = "<group>"; };
+		EE99D7C62726EA2C00338ADE /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		EEDA19A625D4992D00B72577 /* parseGPXXML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parseGPXXML.swift; sourceTree = "<group>"; };
 		EEDA19A825D56FF300B72577 /* GpxParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxParseView.swift; sourceTree = "<group>"; };
 		EEE4C27C2710AD2C00B4BBAE /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
@@ -153,6 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEEB2A2E263AEC11004D3602 /* SQLite.framework in Frameworks */,
+				EE100A082728B828006BB086 /* SigmaSwiftStatistics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,9 +256,10 @@
 				EE8218812703CAD300430188 /* FilterView.swift */,
 				EE8B90C22603867000050D19 /* AdventureSection2View.swift */,
 				EE87E98625F04F98005C5669 /* DifficultyView.swift */,
-				EE87FAEB25CB5E0400BA5BA0 /* DataBase */,
 				EE87FAED25CB5E0400BA5BA0 /* MapView.swift */,
 				EE87FAEE25CB5E0400BA5BA0 /* CircleImage.swift */,
+				EE99D7C62726EA2C00338ADE /* SplashView.swift */,
+				EE87FAEB25CB5E0400BA5BA0 /* DataBase */,
 				EE87FAE625CB5E0400BA5BA0 /* Tabs */,
 				EE87FAEF25CB5E0400BA5BA0 /* Charts */,
 			);
@@ -267,6 +274,7 @@
 				EE87FAE825CB5E0400BA5BA0 /* DistanceElevationTab.swift */,
 				EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */,
 				EE87FAEA25CB5E0400BA5BA0 /* GainTriangleView.swift */,
+				EE100A0927298841006BB086 /* SplashTabView.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -362,6 +370,9 @@
 			dependencies = (
 			);
 			name = myAdventureRecord;
+			packageProductDependencies = (
+				EE100A072728B828006BB086 /* SigmaSwiftStatistics */,
+			);
 			productName = myAdventureRecord;
 			productReference = EE87FABE25CB5DA400BA5BA0 /* myAdventureRecord.app */;
 			productType = "com.apple.product-type.application";
@@ -389,6 +400,9 @@
 				Base,
 			);
 			mainGroup = EE87FAB525CB5DA400BA5BA0;
+			packageReferences = (
+				EE100A062728B828006BB086 /* XCRemoteSwiftPackageReference "SigmaSwiftStatistics" */,
+			);
 			productRefGroup = EE87FABF25CB5DA400BA5BA0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -435,6 +449,7 @@
 				EE87FB1425CB5E0500BA5BA0 /* DistanceSpeedTab.swift in Sources */,
 				EE87FB1225CB5E0500BA5BA0 /* DistanceGradeTab.swift in Sources */,
 				EE87FB1925CB5E0500BA5BA0 /* YAxisView.swift in Sources */,
+				EE99D7C72726EA2C00338ADE /* SplashView.swift in Sources */,
 				EE87FB0925CB5E0500BA5BA0 /* DistanceElevationChart.swift in Sources */,
 				EE3EB17F25D1F212004C149B /* SummaryTab.swift in Sources */,
 				EE87FB1125CB5E0500BA5BA0 /* Adventure.swift in Sources */,
@@ -444,6 +459,7 @@
 				EE87FB1625CB5E0500BA5BA0 /* HikingDBView.swift in Sources */,
 				EE87FB1B25CB5E0500BA5BA0 /* MinMaxChart.swift in Sources */,
 				EE87FB0825CB5E0500BA5BA0 /* DistanceSpeedChart.swift in Sources */,
+				EE100A0A27298841006BB086 /* SplashTabView.swift in Sources */,
 				EE87FB1025CB5E0500BA5BA0 /* UserData.swift in Sources */,
 				EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */,
 				EEE4C27D2710AD2C00B4BBAE /* RangeSlider.swift in Sources */,
@@ -687,6 +703,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EE100A062728B828006BB086 /* XCRemoteSwiftPackageReference "SigmaSwiftStatistics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/SigmaSwiftStatistics.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EE100A072728B828006BB086 /* SigmaSwiftStatistics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE100A062728B828006BB086 /* XCRemoteSwiftPackageReference "SigmaSwiftStatistics" */;
+			productName = SigmaSwiftStatistics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EE87FAB625CB5DA400BA5BA0 /* Project object */;
 }

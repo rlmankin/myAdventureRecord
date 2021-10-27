@@ -88,16 +88,23 @@ struct YAxisView: View {
 
 struct YAxisView_Previews: PreviewProvider {
     static var previews: some View {
-        YAxisView(track: adventureData[5].trackData,
+		let adventureIndex = 5
+		if adventureData[adventureIndex].trackData.trkptsList.isEmpty {
+			adventureData[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventureData[adventureIndex].id)				//	retrieve the trackspoint list from the trackpointlist table in the database
+		}
+		
+		return  Group {
+        YAxisView(track: adventureData[adventureIndex].trackData,
 				  verticalGridSpacing: 5.0,
 				  minValue: adventureData[5].trackData.trackSummary.elevationStats.min.elevation,
 				  maxValue: adventureData[5].trackData.trackSummary.elevationStats.max.elevation,
 				  metric2English: feetperMeter)
 		
-		YAxisView(track: adventureData[5].trackData,
+		YAxisView(track: adventureData[adventureIndex].trackData,
 				  verticalGridSpacing: 0.1,
 				  minValue: 0.0,
 				  maxValue: adventureData[5].trackData.trackSummary.mileStats.speed.max.statData/metersperMile*secondsperHour,
 				  metric2English: secondsperHour/metersperMile)
     }
+	}
 }
