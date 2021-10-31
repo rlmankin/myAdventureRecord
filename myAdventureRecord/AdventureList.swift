@@ -264,7 +264,7 @@ struct AdventureList: View {
 	}
 	
 	var filteredAdventures : [Adventure] {
-			var filteredAdventures : [Adventure] = userData.adventures
+		var filteredAdventures : [Adventure] = userData.adventures
 		if filtervars.filterByCategory != .all {
 			filteredAdventures =  userData.adventures.filter {$0.hikeCategory == filtervars.filterByCategory}
 			}

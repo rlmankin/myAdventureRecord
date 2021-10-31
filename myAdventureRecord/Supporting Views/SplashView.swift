@@ -17,6 +17,30 @@ func calcDaysHoursMinutes(seconds: Double) -> (days: Int, hours: Int, minutes: I
 	
 }
 
+func leaderBoardBestMonth(dateArray: [String]) -> (month: String, count: Int) {
+		// dateArray format must be "MMM dd, yyyy"
+	func getMonthString(dateString: String) -> String {
+		return String(dateString.prefix(3))
+	}
+	func getMonthInt(dateString: String) -> Int {
+		let df = DateFormatter()
+		df.dateFormat = "MMM dd, yyyy"
+		let hikeDate =  df.date(from: dateString)
+		let components = Calendar.current.dateComponents([.year, .month, .day, .hour], from: hikeDate!)
+		return components.month!
+	}
+	var hikeMonthDict : [String : Int] =   ["Jan" : 0, "Feb":0, "Mar":0,
+											"Apr" : 0, "May":0, "Jun":0,
+											"Jul" : 0, "Aug":0, "Sep":0,
+											"Oct" : 0, "Nov":0, "Dec":0]
+	
+	for hike in dateArray {
+		hikeMonthDict[getMonthString(dateString: hike)]! += 1
+	}
+	
+	return (hikeMonthDict.first(where: { $1 == hikeMonthDict.values.max()!})!.key, hikeMonthDict.values.max()!)
+}
+
 struct SplashView: View {
 	
 	
@@ -25,7 +49,8 @@ struct SplashView: View {
     var body: some View {
 		VStack {
 			VStack {
-				Text("Total Stats")
+				Text("Total Statistics")
+				Text("# Adventures: \(filteredAdventures.count)")
 				Text(String( format: "Distance: %5.2f miles", filteredAdventures.compactMap({$0.distance}).reduce(0,+) / metersperMile))
 				Text(String( format: " Gain: %5.2f feet", filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent}).reduce(0,+) * feetperMeter))
 				let duration = calcDaysHoursMinutes(seconds: filteredAdventures.compactMap({$0.trackData.trackSummary.duration}).reduce(0,+))
@@ -35,6 +60,7 @@ struct SplashView: View {
 		
 			VStack {
 				Text(" Leaderboard")
+				//  best distance
 				HStack (alignment: .center) {
 					Spacer()
 					let max = filteredAdventures.compactMap({$0.distance}).max()!
@@ -44,6 +70,7 @@ struct SplashView: View {
 					Text("\t\t\(filteredAdventures[index].name)")
 					Spacer()
 				}
+				//	best gain
 				HStack {
 					Spacer()
 					let max = filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent}).max()!
@@ -53,14 +80,17 @@ struct SplashView: View {
 					Text("\t\t\(filteredAdventures[index].name)")
 					Spacer()
 				}
-				
-				
+				//	best duration
 				HStack {
 					let max = calcDaysHoursMinutes(seconds: filteredAdventures.compactMap({$0.trackData.trackSummary.duration}).max()!)
 					Text(String( format: "Largest Duration : %5dh %2dm",  max.hours, max.minutes))
 					let index = filteredAdventures.firstIndex(where: {$0.trackData.trackSummary.duration == filteredAdventures.compactMap({$0.trackData.trackSummary.duration}).max()!})!
 					Text("\(filteredAdventures[index].name)")
 				}
+				//	best month
+				let bestMonth = leaderBoardBestMonth(dateArray: filteredAdventures.compactMap({$0.hikeDate}))
+				Text("Month with most adventures (all years): \(bestMonth.month) with \(bestMonth.count) adventures")
+				
 				
 			}.padding(10)
 			
@@ -86,6 +116,7 @@ struct SplashView: View {
 				)
 				.tabItem({		Image(systemName: "thermometer")
 							Text("Duration (hours)")})//.background(Color.red)
+				
 			}
 		}
 		
