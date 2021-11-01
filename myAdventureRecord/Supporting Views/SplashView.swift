@@ -17,7 +17,7 @@ func calcDaysHoursMinutes(seconds: Double) -> (days: Int, hours: Int, minutes: I
 	
 }
 
-func leaderBoardBestMonth(dateArray: [String]) -> (month: String, count: Int) {
+func hikeMonthCount(dateArray: [String] ) -> [String: Int] {
 		// dateArray format must be "MMM dd, yyyy"
 	func getMonthString(dateString: String) -> String {
 		return String(dateString.prefix(3))
@@ -38,6 +38,13 @@ func leaderBoardBestMonth(dateArray: [String]) -> (month: String, count: Int) {
 		hikeMonthDict[getMonthString(dateString: hike)]! += 1
 	}
 	
+	return hikeMonthDict
+}
+
+func leaderBoardBestMonth(dateArray: [String]) -> (month: String, count: Int) {
+		// dateArray format must be "MMM dd, yyyy"
+	
+	let hikeMonthDict = hikeMonthCount(dateArray: dateArray)
 	return (hikeMonthDict.first(where: { $1 == hikeMonthDict.values.max()!})!.key, hikeMonthDict.values.max()!)
 }
 
@@ -48,83 +55,28 @@ struct SplashView: View {
 	
     var body: some View {
 		VStack {
-			VStack {
-				Text("Total Statistics")
-				Text("# Adventures: \(filteredAdventures.count)")
-				Text(String( format: "Distance: %5.2f miles", filteredAdventures.compactMap({$0.distance}).reduce(0,+) / metersperMile))
-				Text(String( format: " Gain: %5.2f feet", filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent}).reduce(0,+) * feetperMeter))
-				let duration = calcDaysHoursMinutes(seconds: filteredAdventures.compactMap({$0.trackData.trackSummary.duration}).reduce(0,+))
-				Text(String(format: "Duration - %2dd %3dh %2dm", duration.days, duration.hours, duration.minutes))
-				Text(String( format: "Max Elevation: %5.2f feet", filteredAdventures.compactMap({$0.trackData.trackSummary.elevationStats.max.elevation}).max()! * feetperMeter))
-			}.padding(10)
-		
-			VStack {
-				Text(" Leaderboard")
-				//  best distance
-				HStack (alignment: .center) {
-					Spacer()
-					let max = filteredAdventures.compactMap({$0.distance}).max()!
-					Text(String( format: "Longest Distance : %5.2f miles",  max / metersperMile))
-					Spacer()
-					let index = filteredAdventures.firstIndex(where: {$0.distance == max})!
-					Text("\t\t\(filteredAdventures[index].name)")
-					Spacer()
+			GeometryReader { proxy in
+			HStack {
+				VStack {
+				UpperStatsView(filteredAdventures: filteredAdventures)
 				}
-				//	best gain
-				HStack {
-					Spacer()
-					let max = filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent}).max()!
-					Text(String( format: "Largest Gain : %5.2f feet",  max * feetperMeter))
-					let index = filteredAdventures.firstIndex(where: {$0.trackData.trackSummary.totalAscent == max})!
-					Spacer()
-					Text("\t\t\(filteredAdventures[index].name)")
-					Spacer()
+					.frame(width: proxy.size.width/2)
+				VStack {
+					MonthHistogramView(monthDict: hikeMonthCount(dateArray: filteredAdventures.compactMap({$0.hikeDate})))
+					Text("Number of Hikes")
 				}
-				//	best duration
-				HStack {
-					let max = calcDaysHoursMinutes(seconds: filteredAdventures.compactMap({$0.trackData.trackSummary.duration}).max()!)
-					Text(String( format: "Largest Duration : %5dh %2dm",  max.hours, max.minutes))
-					let index = filteredAdventures.firstIndex(where: {$0.trackData.trackSummary.duration == filteredAdventures.compactMap({$0.trackData.trackSummary.duration}).max()!})!
-					Text("\(filteredAdventures[index].name)")
-				}
-				//	best month
-				let bestMonth = leaderBoardBestMonth(dateArray: filteredAdventures.compactMap({$0.hikeDate}))
-				Text("Month with most adventures (all years): \(bestMonth.month) with \(bestMonth.count) adventures")
-				
-				
-			}.padding(10)
-			
-			
-			TabView {
-				SplashTabView(
-					filteredAdventures:
-						filteredAdventures.compactMap({$0.distance / metersperMile}),
-					filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
-				).tabItem({		Image(systemName: "thermometer")
-								Text("Distance (miles)")})//.background(Color.red)
-				SplashTabView(
-					filteredAdventures:
-						filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent}),
-					filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
-				).tabItem({		Image(systemName: "thermometer")
-								Text("Gain (feet)")})//.background(Color.red)
-				
-				SplashTabView(
-				filteredAdventures:
-					filteredAdventures.compactMap({$0.trackData.trackSummary.duration/secondsperHour}),
-				filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
-				)
-				.tabItem({		Image(systemName: "thermometer")
-							Text("Duration (hours)")})//.background(Color.red)
 				
 			}
-		}
+			}
+					
+			SplashTabsView(filteredAdventures: filteredAdventures)
+		}.frame( height: 500)
 		
     }
 }
 
 struct SplashView_Previews: PreviewProvider {
     static var previews: some View {
-		SplashView(filteredAdventures: adventureData )
+		SplashView()
     }
 }
