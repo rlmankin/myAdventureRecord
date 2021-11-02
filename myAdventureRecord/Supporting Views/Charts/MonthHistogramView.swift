@@ -44,9 +44,12 @@ struct MonthHistogramView: View {
 					
 						
 					Text("\(monthDict[month]!)")
-						.foregroundColor(monthHeight < 40 ? .gray : .white)
+						/*.foregroundColor(monthHeight < 40 ? .gray : .white)
 						.offset(x:index*binWidth,
-								y: chartHeight-monthHeight - (monthHeight < 40 ? 45 : 15))
+								y: chartHeight-monthHeight - (monthHeight < 40 ? 45 : 15))*/
+						.foregroundColor(.gray)
+						.offset(x: index*binWidth,
+								y: 45)
 					
 				}
 				.frame(width: binWidth)
