@@ -15,6 +15,7 @@ struct MonthHistogramView: View {
     var body: some View {
 		let xaxisOffset = 40.0
 		let gapWidth = 2.0
+		var countOffset : CGFloat = 15.0		// offset to make count be at the inside top of the barz
 		GeometryReader { reader in
 			let chartHeight = CGFloat(reader.size.height - xaxisOffset)
 			
@@ -39,9 +40,14 @@ struct MonthHistogramView: View {
 						.foregroundColor(.white)
 						.rotationEffect(.degrees(-90))
 						.offset(x:index*binWidth, y: reader.size.height - 30)
+					
+					
+						
 					Text("\(monthDict[month]!)")
-						.foregroundColor(.black)
-						.offset(x:index*binWidth, y: chartHeight-monthHeight)
+						.foregroundColor(monthHeight < 40 ? .gray : .white)
+						.offset(x:index*binWidth,
+								y: chartHeight-monthHeight - (monthHeight < 40 ? 45 : 15))
+					
 				}
 				.frame(width: binWidth)
 			}
