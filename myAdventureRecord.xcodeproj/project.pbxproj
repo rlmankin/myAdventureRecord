@@ -66,6 +66,8 @@
 		EEEB2A2E263AEC11004D3602 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEEB2A2D263AEBF8004D3602 /* SQLite.framework */; };
 		EEEB2A2F263AEC11004D3602 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EEEB2A2D263AEBF8004D3602 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EEEB2A32263AEC45004D3602 /* SQLite.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = EEEB2A31263AEC44004D3602 /* SQLite.framework.dSYM */; };
+		EEFFBE4D2731C0D200B89325 /* DescriptiveStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFFBE4C2731C0D200B89325 /* DescriptiveStatsView.swift */; };
+		EEFFBE4F2731C3A500B89325 /* DistributionChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFFBE4E2731C3A500B89325 /* DistributionChart.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -96,7 +98,7 @@
 		EE0BFF7E25CCA303007ACA9D /* AdventureCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureCommands.swift; sourceTree = "<group>"; };
 		EE100A0927298841006BB086 /* SplashTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashTabView.swift; sourceTree = "<group>"; };
 		EE100A0B272EF0CD006BB086 /* RangeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
-		EE100A0D272EF161006BB086 /* MonthHistogramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MonthHistogramView.swift; path = Charts/MonthHistogramView.swift; sourceTree = "<group>"; };
+		EE100A0D272EF161006BB086 /* MonthHistogramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthHistogramView.swift; sourceTree = "<group>"; };
 		EE100A0F272EF234006BB086 /* SplashTabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashTabsView.swift; sourceTree = "<group>"; };
 		EE100A11272F26EA006BB086 /* UpperStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpperStatsView.swift; sourceTree = "<group>"; };
 		EE1492A025F5433F00DE184A /* BatchParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchParseView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,8 @@
 		EEEB2A2C263AEBF8004D3602 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = SQLite.framework.dSYM; sourceTree = "<group>"; };
 		EEEB2A2D263AEBF8004D3602 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SQLite.framework; sourceTree = "<group>"; };
 		EEEB2A31263AEC44004D3602 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SQLite.framework.dSYM; path = "Carthage/Build/SQLite.xcframework/macos-arm64_x86_64/dSYMs/SQLite.framework.dSYM"; sourceTree = "<group>"; };
+		EEFFBE4C2731C0D200B89325 /* DescriptiveStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptiveStatsView.swift; sourceTree = "<group>"; };
+		EEFFBE4E2731C3A500B89325 /* DistributionChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistributionChart.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +263,7 @@
 			children = (
 				EE99D7C62726EA2C00338ADE /* SplashView.swift */,
 				EE100A11272F26EA006BB086 /* UpperStatsView.swift */,
+				EEFFBE4C2731C0D200B89325 /* DescriptiveStatsView.swift */,
 				EE5BF7A8270DE5210045B3E0 /* SliderView.swift */,
 				EE8218812703CAD300430188 /* FilterView.swift */,
 				EE8B90C22603867000050D19 /* AdventureSection2View.swift */,
@@ -266,7 +271,6 @@
 				EE87FAED25CB5E0400BA5BA0 /* MapView.swift */,
 				EE87FAEE25CB5E0400BA5BA0 /* CircleImage.swift */,
 				EE100A0B272EF0CD006BB086 /* RangeSlider.swift */,
-				EE100A0D272EF161006BB086 /* MonthHistogramView.swift */,
 				EE87FAEB25CB5E0400BA5BA0 /* DataBase */,
 				EE87FAE625CB5E0400BA5BA0 /* Tabs */,
 				EE87FAEF25CB5E0400BA5BA0 /* Charts */,
@@ -278,12 +282,12 @@
 			isa = PBXGroup;
 			children = (
 				EE100A0F272EF234006BB086 /* SplashTabsView.swift */,
+				EE100A0927298841006BB086 /* SplashTabView.swift */,
 				EE3EB17E25D1F212004C149B /* SummaryTab.swift */,
 				EE87FAE725CB5E0400BA5BA0 /* DistanceGradeTab.swift */,
 				EE87FAE825CB5E0400BA5BA0 /* DistanceElevationTab.swift */,
 				EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */,
 				EE87FAEA25CB5E0400BA5BA0 /* GainTriangleView.swift */,
-				EE100A0927298841006BB086 /* SplashTabView.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -299,6 +303,8 @@
 		EE87FAEF25CB5E0400BA5BA0 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				EEFFBE4E2731C3A500B89325 /* DistributionChart.swift */,
+				EE100A0D272EF161006BB086 /* MonthHistogramView.swift */,
 				EE87FAF125CB5E0400BA5BA0 /* DistSpdMainChart.swift */,
 				EE87FAD925CB5E0300BA5BA0 /* DistanceSpeedChart.swift */,
 				EE87FAF325CB5E0400BA5BA0 /* DistGrdMainChart.swift */,
@@ -449,6 +455,7 @@
 				EE87FB1A25CB5E0500BA5BA0 /* DistSpdMainChart.swift in Sources */,
 				EE87FB1325CB5E0500BA5BA0 /* DistanceElevationTab.swift in Sources */,
 				EE87FB0625CB5E0500BA5BA0 /* Trkpt.swift in Sources */,
+				EEFFBE4F2731C3A500B89325 /* DistributionChart.swift in Sources */,
 				EE87FB0B25CB5E0500BA5BA0 /* DBViewControllerRepresentable.swift in Sources */,
 				EE87FB1525CB5E0500BA5BA0 /* GainTriangleView.swift in Sources */,
 				EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */,
@@ -480,6 +487,7 @@
 				EE0BFF7F25CCA303007ACA9D /* AdventureCommands.swift in Sources */,
 				EE87FB0525CB5E0400BA5BA0 /* ParsingStructs.swift in Sources */,
 				EE1492A125F5433F00DE184A /* BatchParseView.swift in Sources */,
+				EEFFBE4D2731C0D200B89325 /* DescriptiveStatsView.swift in Sources */,
 				EE100A12272F26EA006BB086 /* UpperStatsView.swift in Sources */,
 				EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */,
 				EE87FB0F25CB5E0500BA5BA0 /* Data.swift in Sources */,

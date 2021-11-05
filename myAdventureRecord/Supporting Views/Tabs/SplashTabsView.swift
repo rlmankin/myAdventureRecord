@@ -19,7 +19,7 @@ struct SplashTabsView: View {
 							Text("Distance (miles)")})//.background(Color.red)
 			SplashTabView(
 				filteredAdventures:
-					filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent}),
+					filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent / feetperMeter}),
 				filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
 			).tabItem({		Image(systemName: "thermometer")
 							Text("Gain (feet)")})//.background(Color.red)
