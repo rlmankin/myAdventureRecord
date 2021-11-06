@@ -11,7 +11,8 @@ struct DistributionChart: View {
 	var histogramData : [Double: Int]
 	
     var body: some View {
-		let xaxisOffset = 40.0
+		let xaxisOffset = 40.0										// pixels reserved for xaxis
+		let topReservedSpace = 20.0									// pixels reserved for gap between chart and top of frame
 		let yaxisOffset = 0.0
 		let gapWidth = 2.0
 		var countOffset : CGFloat = 15.0		// offset to make count be at the inside top of the bars
@@ -67,7 +68,7 @@ struct DistributionChart: View {
 				//Text("\(key), \(valueHeight)").offset(y:10*key)
 				
 			}
-		}
+		}.padding(top: 20)
     }
 }
 

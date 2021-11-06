@@ -12,7 +12,7 @@
 		EE100A0A27298841006BB086 /* SplashTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100A0927298841006BB086 /* SplashTabView.swift */; };
 		EE100A0C272EF0CD006BB086 /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100A0B272EF0CD006BB086 /* RangeSlider.swift */; };
 		EE100A0E272EF161006BB086 /* MonthHistogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100A0D272EF161006BB086 /* MonthHistogramView.swift */; };
-		EE100A10272EF234006BB086 /* SplashTabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100A0F272EF234006BB086 /* SplashTabsView.swift */; };
+		EE100A10272EF234006BB086 /* LowerStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100A0F272EF234006BB086 /* LowerStatsView.swift */; };
 		EE100A12272F26EA006BB086 /* UpperStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100A11272F26EA006BB086 /* UpperStatsView.swift */; };
 		EE1492A125F5433F00DE184A /* BatchParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A025F5433F00DE184A /* BatchParseView.swift */; };
 		EE1492A325F7B76800DE184A /* BParseRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A225F7B76800DE184A /* BParseRow.swift */; };
@@ -99,7 +99,7 @@
 		EE100A0927298841006BB086 /* SplashTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashTabView.swift; sourceTree = "<group>"; };
 		EE100A0B272EF0CD006BB086 /* RangeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
 		EE100A0D272EF161006BB086 /* MonthHistogramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthHistogramView.swift; sourceTree = "<group>"; };
-		EE100A0F272EF234006BB086 /* SplashTabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashTabsView.swift; sourceTree = "<group>"; };
+		EE100A0F272EF234006BB086 /* LowerStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LowerStatsView.swift; sourceTree = "<group>"; };
 		EE100A11272F26EA006BB086 /* UpperStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpperStatsView.swift; sourceTree = "<group>"; };
 		EE1492A025F5433F00DE184A /* BatchParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchParseView.swift; sourceTree = "<group>"; };
 		EE1492A225F7B76800DE184A /* BParseRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BParseRow.swift; sourceTree = "<group>"; };
@@ -175,6 +175,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EE6023C92736B462003B2AF9 /* SplashViews */ = {
+			isa = PBXGroup;
+			children = (
+				EE99D7C62726EA2C00338ADE /* SplashView.swift */,
+				EE100A11272F26EA006BB086 /* UpperStatsView.swift */,
+				EE100A0F272EF234006BB086 /* LowerStatsView.swift */,
+				EEFFBE4C2731C0D200B89325 /* DescriptiveStatsView.swift */,
+				EE100A0927298841006BB086 /* SplashTabView.swift */,
+			);
+			path = SplashViews;
+			sourceTree = "<group>";
+		};
 		EE87FAB525CB5DA400BA5BA0 = {
 			isa = PBXGroup;
 			children = (
@@ -261,9 +273,7 @@
 		EE87FAE525CB5E0400BA5BA0 /* Supporting Views */ = {
 			isa = PBXGroup;
 			children = (
-				EE99D7C62726EA2C00338ADE /* SplashView.swift */,
-				EE100A11272F26EA006BB086 /* UpperStatsView.swift */,
-				EEFFBE4C2731C0D200B89325 /* DescriptiveStatsView.swift */,
+				EE6023C92736B462003B2AF9 /* SplashViews */,
 				EE5BF7A8270DE5210045B3E0 /* SliderView.swift */,
 				EE8218812703CAD300430188 /* FilterView.swift */,
 				EE8B90C22603867000050D19 /* AdventureSection2View.swift */,
@@ -281,8 +291,6 @@
 		EE87FAE625CB5E0400BA5BA0 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				EE100A0F272EF234006BB086 /* SplashTabsView.swift */,
-				EE100A0927298841006BB086 /* SplashTabView.swift */,
 				EE3EB17E25D1F212004C149B /* SummaryTab.swift */,
 				EE87FAE725CB5E0400BA5BA0 /* DistanceGradeTab.swift */,
 				EE87FAE825CB5E0400BA5BA0 /* DistanceElevationTab.swift */,
@@ -498,7 +506,7 @@
 				EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */,
 				EE8B90C32603867000050D19 /* AdventureSection2View.swift in Sources */,
 				EE87FB1825CB5E0500BA5BA0 /* CircleImage.swift in Sources */,
-				EE100A10272EF234006BB086 /* SplashTabsView.swift in Sources */,
+				EE100A10272EF234006BB086 /* LowerStatsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

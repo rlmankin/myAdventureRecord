@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SplashTabsView: View {
+struct LowerStatsView: View {
 	var filteredAdventures: [Adventure]
     var body: some View {
 		TabView {
@@ -38,6 +38,6 @@ struct SplashTabsView: View {
 
 struct SplashTabsView_Previews: PreviewProvider {
     static var previews: some View {
-		SplashTabsView(filteredAdventures: adventureData)
+		LowerStatsView(filteredAdventures: adventureData)
     }
 }

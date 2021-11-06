@@ -1,16 +1,16 @@
 //
-//  SplashTabView.swift
+//  DescriptiveStatsView.swift
 //  myAdventureRecord
 //
-//  Created by Robb Mankin on 10/27/21.
+//  Created by Robb Mankin on 11/2/21.
 //
 
 import SwiftUI
 import SigmaSwiftStatistics
 
-struct SplashTabView: View {
-	var filteredAdventures : [Double] = []
-	var filteredAdventuresName : [String] = []
+struct DescriptiveStatsView: View {
+	var filteredAdventures : [Double] = [0]
+	var filteredAdventuresName : [String] = ["empty"]
 	
     var body: some View {
 		VStack (alignment: .leading) {
@@ -52,8 +52,8 @@ struct SplashTabView: View {
 				}
 			}
 			
-			let min = arry.min()!
-			let max = arry.max()!
+			let min = arry.min() ?? 0
+			let max = arry.max() ?? 0
 			let indexMin = arry.firstIndex(where: {$0 == min})!
 			let indexMax = arry.firstIndex(where: {$0 == max})!
 			HStack {
@@ -102,11 +102,18 @@ struct SplashTabView: View {
     }
 }
 
-struct SplashTabView_Previews: PreviewProvider {
+struct DescriptiveStatsView_Previews: PreviewProvider {
     static var previews: some View {
-		let arry = adventureData.compactMap({$0.distance / metersperMile})
-		let arryName = adventureData.compactMap({$0.name})
-        SplashTabView(filteredAdventures: arry,
-						filteredAdventuresName: arryName)
+		var arry = adventureData.compactMap({$0.distance / metersperMile})
+		var arryName = adventureData.compactMap({$0.name})
+        DescriptiveStatsView(filteredAdventures: arry, filteredAdventuresName: arryName)
+		/*
+		let arry1 = adventureData.compactMap({$0.trackData.trackSummary.totalAscent / feetperMeter})
+		let arry1Name = adventureData.compactMap({$0.name})
+		DescriptiveStatsView(filteredAdventures: arry1, filteredAdventuresName: arry1Name)
+		
+		let arry2 = adventureData.compactMap({$0.trackData.trackSummary.duration / secondsperHour})
+		let arry2Name = adventureData.compactMap({$0.name})
+		DescriptiveStatsView(filteredAdventures: arry2, filteredAdventuresName: arry2Name)*/
     }
 }
