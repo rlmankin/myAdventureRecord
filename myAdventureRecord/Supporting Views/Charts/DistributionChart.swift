@@ -11,8 +11,11 @@ struct DistributionChart: View {
 	var histogramData : [Double: Int]
 	
     var body: some View {
-		let xaxisOffset = 40.0										// pixels reserved for xaxis
-		let topReservedSpace = 20.0									// pixels reserved for gap between chart and top of frame
+		let xaxisOffset = 40.0
+			// pixels reserved for xaxis
+		let topPadding = 20.0
+		let topReservedSpace = xaxisOffset + topPadding
+			// pixels reserved for gap between chart and top of frame
 		let yaxisOffset = 0.0
 		let gapWidth = 2.0
 		var countOffset : CGFloat = 15.0		// offset to make count be at the inside top of the bars
@@ -46,8 +49,9 @@ struct DistributionChart: View {
 					p.addRoundedRect(in: rect, cornerSize: CGSize(width: binWidth/10, height: binWidth/10))
 				}
 				VStack {
-					let x = String(format:"%3.0f", key)
+					let x = String(format:"%5.0f", key)
 					Text("\(x)")
+						.font(.subheadline)
 						.foregroundColor(.white)
 						.rotationEffect(.degrees(-90))
 						.offset(x:keyXOffset, y: reader.size.height - 30)
@@ -55,9 +59,10 @@ struct DistributionChart: View {
 					
 					
 					Text("\(histogramData[key]!)")
+						.font(.subheadline)
 						//.foregroundColor(monthHeight < 40 ? .gray : .white)
 						.offset(x:keyXOffset,
-					 			y: chartHeight - valueHeight - 45)
+					 			y: chartHeight - valueHeight - 65)
 								//y: chartHeight-valueHeight - (valueHeight < 40 ? 45 : 10))
 						.foregroundColor(.gray)
 						/*.offset(x: index*binWidth,
@@ -68,7 +73,7 @@ struct DistributionChart: View {
 				//Text("\(key), \(valueHeight)").offset(y:10*key)
 				
 			}
-		}.padding(top: 20)
+		}.padding(.top, topPadding)
     }
 }
 
