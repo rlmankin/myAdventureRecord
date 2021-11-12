@@ -112,9 +112,12 @@ struct CommandButtonsView: View {
 		timeStampLog(message: "-> adventureList/CommandButtons")
 		return
 			HStack {
-				//  The Command Buttons must be enclosed in a List to eliminate the "Unable to present, File a bug" warning in Xcode 12.5.1.
+				//	Big Sur and prior macOS required that the Command Buttons must be enclosed in a List to eliminate the "Unable to present, File a bug" warning in Xcode 12.5.1.
 				//		I don't know why this works, but is recommended as a fix in https://stackoverflow.com/questions/67276205/swiftui-navigationlink-for-ios-14-5-not-working
-				List {
+			//	List {
+				
+				//	Monterey made some change that, when the Command Buttons were enclosed in a List, they would not render; therefore no Command Buttons were available.
+				//		I eventually will want to perform a OS check to determine whether to make this a List or not
 				
 				//	empty *****
 				//	this will display nothing in the detailview.  Trying to use when navigating back to the 'default' view from varous button pushes
@@ -123,8 +126,7 @@ struct CommandButtonsView: View {
 					destination: SplashView(filteredAdventures: filteredAdventures),
 					tag: FlagStates.empty,
 					selection: self.$stateFlag,
-					label:  {Text("").toolbar {}
-							}
+					label:  {EmptyView()}	// label: { Text("").toolbar {}}
 				)
 				
 					
@@ -227,7 +229,7 @@ struct CommandButtonsView: View {
 					
 				}
 				
-			}
+		//	}			// end of List
 				
 			}	//HStack
 	}

@@ -54,25 +54,27 @@ struct SplashView: View {
 	var filteredAdventures : [Adventure] = adventureData
 	
     var body: some View {
-		VStack {
-			GeometryReader { proxy in
-				HStack {
-					VStack {
-					UpperStatsView(filteredAdventures: filteredAdventures)
-					}
-					.frame(width: proxy.size.width/2, height: proxy.size.height/2)
-					VStack {
-						MonthHistogramView(monthDict: hikeMonthCount(dateArray: filteredAdventures.compactMap({$0.hikeDate})))
-						Text("Number of Hikes")
+		timeStampLog(message: "-> SplashView")
+		return
+			VStack {
+				GeometryReader { proxy in
+					HStack {
+						VStack {
+						UpperStatsView(filteredAdventures: filteredAdventures)
+						}
+						.frame(width: proxy.size.width/2, height: proxy.size.height/2)
+						VStack {
+							MonthHistogramView(monthDict: hikeMonthCount(dateArray: filteredAdventures.compactMap({$0.hikeDate})))
+							Text("Number of Hikes")
+						}
+						
 					}
 					
 				}
+					LowerStatsView(filteredAdventures: filteredAdventures)
+						
 				
-			}
-				LowerStatsView(filteredAdventures: filteredAdventures)
-					
-			
-		}//.frame( height: 500)
+			}//.frame( height: 500)
 		
     }
 }

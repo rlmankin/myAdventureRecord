@@ -13,6 +13,7 @@ struct DescriptiveStatsView: View {
 	var filteredAdventuresName : [String] = ["empty"]
 	
     var body: some View {
+		
 		VStack (alignment: .leading) {
 			let arry = filteredAdventures  //[82.0, 93.0, 91.0, 69.0, 61.0,88.0, 58.0, 59.0, 100.0, 93.0, 71.0, 78.0, 98.0]	//
 			Text(String( format: "Descriptive Statistics (%4d datapoints)", arry.count))

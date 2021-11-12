@@ -46,11 +46,9 @@ struct SplashTabView: View {
 				HStack {
 					DescriptiveStatsView(filteredAdventures: filteredAdventures,
 										 filteredAdventuresName: filteredAdventuresName)
-						.frame(width: proxy.size.width/2)
 					
-						let histogramBins = populateHistorgramArray(arry: filteredAdventures)
-						DistributionChart(histogramData: histogramBins)
-							.frame(width: proxy.size.width/2)
+					let histogramBins = populateHistorgramArray(arry: filteredAdventures)
+					DistributionChart(histogramData: histogramBins)
 				}
 			}
 		}

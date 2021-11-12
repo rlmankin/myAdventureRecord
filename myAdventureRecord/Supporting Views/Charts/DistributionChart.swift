@@ -11,69 +11,79 @@ struct DistributionChart: View {
 	var histogramData : [Double: Int]
 	
     var body: some View {
-		let xaxisOffset = 40.0
+		let xaxisOffset : CGFloat = 40.0
 			// pixels reserved for xaxis
-		let topPadding = 20.0
-		let topReservedSpace = xaxisOffset + topPadding
+		let keyLabelOffset : CGFloat = 30.0
+		let gapWidth : CGFloat = 2.0
+		let countOffset : CGFloat = 10.0		// offset to make count be at the inside top of the bars
+		
+		let topPadding : CGFloat = 20.0
+		//let topReservedSpace = xaxisOffset + topPadding
 			// pixels reserved for gap between chart and top of frame
-		let yaxisOffset = 0.0
-		let gapWidth = 2.0
-		var countOffset : CGFloat = 15.0		// offset to make count be at the inside top of the bars
-		let keyArray = Array<Double>(histogramData.keys)
-		let maxKey = histogramData.keys.max()!
+		let yaxisOffset : CGFloat = 0.0
+		let keyArray : Array<Double> = Array<Double>(histogramData.keys)
+		let maxKey : CGFloat = histogramData.keys.max()!
 			// maximum key (longest distance)
-		let minKey = histogramData.keys.min()!
-		let maxValue = histogramData.values.max()!
+		let minKey : CGFloat = histogramData.keys.min()!
+		let maxValue: CGFloat = CGFloat(histogramData.values.max()!)
+		
+		
 			// maximum value in a single bin
+		VStack {
+			GeometryReader { reader in
+				let chartHeight : CGFloat = reader.size.height - xaxisOffset
+					// chartheight in pixels
+				let chartWidth : CGFloat  = reader.size.width - yaxisOffset
+					// chartheight in pixels
+				let binWidth : CGFloat = reader.size.width/CGFloat(histogramData.count)
+					// binWidth in pixels
+				let rectw : CGFloat = binWidth - gapWidth
+				let singleWidth : CGFloat = chartWidth/maxKey
+					// width of a single pxiel (in miles)
+				let singleHeight : CGFloat = chartHeight/maxValue
+					// height of a value of 1
+			 
+				ForEach (keyArray, id: \.self) { key in
+					let valueHeight : CGFloat = CGFloat(histogramData[key]!) * singleHeight
+					let rectx : CGFloat = (CGFloat(key) * singleWidth) - minKey
+					
+					
+					let recty : CGFloat = chartHeight - valueHeight
+					let rect : CGRect = CGRect(x: rectx, y: recty, width:rectw, height: valueHeight)
+					let cornerSize : CGSize = CGSize(width: binWidth/10, height: binWidth/10)
+					let valueOffset : CGFloat = recty - (valueHeight < xaxisOffset ? xaxisOffset - countOffset : countOffset)
+					
+					
+					Path { p in
+						p.addRoundedRect(in: rect, cornerSize: cornerSize)
+					}
 		
+					VStack {
+						let keyString : String = String(format:"%3.0f", key)
+						Text("\(keyString)")
+							.font(.subheadline)
+							.foregroundColor(.white)
+							.rotationEffect(.degrees(-90))
+							.offset(x:rectx, y: reader.size.height - keyLabelOffset)
+						
+							// This section is written this way, versus something more elegant, to
+							//	assist the Swift compile to type check complex statements.  This is
+							//	to (hopefully) reduce the instances of runaway SourceKitService and
+							//	swift - frontend memory pressure
+						let valueString : String = histogramData[key]! == 0 ? nullString :
+								String(format: "%3d", histogramData[key]!)
+						Text(valueString)
+							.font(.subheadline)
+							.foregroundColor(valueHeight < 40 ? .yellow : .green)
+							.offset(x: rectx,
+									y: valueOffset)
+					}
+					.frame(width: binWidth)
+				}
+			}.padding(.top, topPadding)
+			Text("Distribution")
+		}
 		
-		GeometryReader { reader in
-			let chartHeight = CGFloat(reader.size.height - xaxisOffset)
-				// chartheight in pixels
-			let chartWidth = CGFloat(reader.size.width - yaxisOffset)
-			
-			let binWidth = CGFloat((1.0*reader.size.width)/CGFloat(histogramData.count))
-				// binWidth in pixels
-			
-			let singleWidth = chartWidth/CGFloat(maxKey)
-				// width of a single pxiel (in miles)
-			let singleHeight = chartHeight/CGFloat(maxValue)
-				// height of a value of 1
-			ForEach (keyArray, id: \.self) { key in
-				let valueHeight = CGFloat(histogramData[key]!) * singleHeight
-				let keyXOffset = (key * singleWidth) - minKey
-				Path { p in
-					//p.move(to: CGPoint(x: key*binWidth, y:0))
-					p.move(to: CGPoint(x: keyXOffset, y:0))
-					let rect = CGRect(x: keyXOffset, y: chartHeight-valueHeight, width:binWidth - gapWidth,height: valueHeight)
-					p.addRoundedRect(in: rect, cornerSize: CGSize(width: binWidth/10, height: binWidth/10))
-				}
-				VStack {
-					let x = String(format:"%5.0f", key)
-					Text("\(x)")
-						.font(.subheadline)
-						.foregroundColor(.white)
-						.rotationEffect(.degrees(-90))
-						.offset(x:keyXOffset, y: reader.size.height - 30)
-					
-					
-					
-					Text("\(histogramData[key]!)")
-						.font(.subheadline)
-						//.foregroundColor(monthHeight < 40 ? .gray : .white)
-						.offset(x:keyXOffset,
-					 			y: chartHeight - valueHeight - 65)
-								//y: chartHeight-valueHeight - (valueHeight < 40 ? 45 : 10))
-						.foregroundColor(.gray)
-						/*.offset(x: index*binWidth,
-								y: chartHeight - monthHeight - 45)*/
-					
-				}
-				.frame(width: binWidth)
-				//Text("\(key), \(valueHeight)").offset(y:10*key)
-				
-			}
-		}.padding(.top, topPadding)
     }
 }
 

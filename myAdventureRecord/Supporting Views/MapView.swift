@@ -84,6 +84,8 @@ struct MapView : View {
 									longitudeDelta: CLLocationDegrees(abs(maxLon-minLon) + 0.2))
 			// set up a "standard" span of 0.2 degrees.  I may change this later
 			// to set the span to be the size of the track 'bounding box'
+		// if more than one detail tab is available, this statement will crash with a parallel access error
+		//		Need to find a way to either put some kind of semaphore in or grant shared access.
 		let region = MKCoordinateRegion(center: coordinate, span: span)
 		view.setRegion(region, animated: false)	// show the map immediately
 		view.mapType = .hybrid

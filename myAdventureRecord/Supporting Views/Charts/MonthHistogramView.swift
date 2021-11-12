@@ -13,41 +13,41 @@ struct MonthHistogramView: View {
 	var monthDict : [String: Int]
 	
     var body: some View {
-		let xaxisOffset = 40.0
-		let gapWidth = 2.0
-		var countOffset : CGFloat = 15.0		// offset to make count be at the inside top of the bars
+		let xaxisOffset : CGFloat = 40.0
+		let gapWidth : CGFloat = 2.0
+		var countOffset : CGFloat = 25		// offset to make count be at the inside top of the bars
 		GeometryReader { reader in
 			let chartHeight = CGFloat(reader.size.height - xaxisOffset)
 			
 			let binWidth = CGFloat((1.0*reader.size.width)/12)
-			let maxCount = monthDict.values.max()!					// maximum count in a month
-			let singleHeight = chartHeight/CGFloat(maxCount)		// height of a count of one
+			let maxCount = CGFloat(monthDict.values.max()!)				// maximum count in a month
+			let singleHeight = chartHeight/maxCount		// height of a count of one
 			
 			ForEach (monthArray, id:\.self) {month in
+				// putting all calculations in individual variables to 1) improve type-checking,
+				//		2) improve performace (slightly), 3) reduce memory pressure (maybe)
 				let index = CGFloat(monthArray.firstIndex(where: {$0 == month})!)
 				let monthHeight  = CGFloat(monthDict[month]!) * singleHeight
-				
+				let rectx = index * binWidth
+				let recty = chartHeight - monthHeight
+				let rectw = binWidth - gapWidth
+				let rect = CGRect(x: rectx, y: recty, width:rectw, height: monthHeight)
+				let cornerSize = CGSize(width: binWidth/10, height: binWidth/10)
+				let valueOffset = recty - (monthHeight < xaxisOffset ? xaxisOffset : xaxisOffset - countOffset)
 				Path { p in
-					p.move(to:CGPoint(x:index*binWidth, y: 0))
-					let rect = CGRect(x: index*binWidth, y: chartHeight-monthHeight, width:binWidth - gapWidth,height: monthHeight
-					)
-					p.addRoundedRect(in: rect, cornerSize: CGSize(width: binWidth/10, height: binWidth/10))
-					
+					p.addRoundedRect(in: rect, cornerSize: cornerSize)
 				}
 				
 				VStack {
 					Text("\(month)")
 						.foregroundColor(.white)
 						.rotationEffect(.degrees(-90))
-						.offset(x:index*binWidth, y: reader.size.height - 30)
-					
-					
-						
+						.offset(x:rectx, y: reader.size.height - xaxisOffset + 10)
+							// 10 point from bottom of bars
 					Text("\(monthDict[month]!)")
 						//.foregroundColor(monthHeight < 40 ? .gray : .white)
-						.offset(x:index*binWidth,
-								//y: chartHeight-monthHeight - (monthHeight < 40 ? 45 : 10))
-								y: chartHeight - monthHeight - 45)
+						.offset(x:rectx,
+								y: valueOffset)
 						.foregroundColor(.gray)
 					
 				}
