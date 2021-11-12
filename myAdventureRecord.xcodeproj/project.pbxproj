@@ -59,6 +59,8 @@
 		EE87FB2425CB5E0500BA5BA0 /* AdventureList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFC25CB5E0400BA5BA0 /* AdventureList.swift */; };
 		EE87FB2525CB5E0500BA5BA0 /* AdventureDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAFD25CB5E0400BA5BA0 /* AdventureDetail.swift */; };
 		EE87FB4625CB742E00BA5BA0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE87FB4825CB742E00BA5BA0 /* Main.storyboard */; };
+		EE893548273ED62700F8FC4A /* BellCurveChart.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE893547273ED62700F8FC4A /* BellCurveChart.swift.swift */; };
+		EE89354A273ED95600F8FC4A /* DistributionHistogramChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE893549273ED95600F8FC4A /* DistributionHistogramChartView.swift */; };
 		EE8B90C32603867000050D19 /* AdventureSection2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8B90C22603867000050D19 /* AdventureSection2View.swift */; };
 		EE99D7C72726EA2C00338ADE /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE99D7C62726EA2C00338ADE /* SplashView.swift */; };
 		EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A625D4992D00B72577 /* parseGPXXML.swift */; };
@@ -151,6 +153,8 @@
 		EE87FB3025CB61C400BA5BA0 /* SQLite */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = SQLite; path = Carthage/Build/Mac/SQLite.framework/SQLite; sourceTree = "<group>"; };
 		EE87FB3525CB61E800BA5BA0 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/Mac/SQLite.framework; sourceTree = "<group>"; };
 		EE87FB4725CB742E00BA5BA0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		EE893547273ED62700F8FC4A /* BellCurveChart.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellCurveChart.swift.swift; sourceTree = "<group>"; };
+		EE893549273ED95600F8FC4A /* DistributionHistogramChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistributionHistogramChartView.swift; sourceTree = "<group>"; };
 		EE8B90C22603867000050D19 /* AdventureSection2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureSection2View.swift; sourceTree = "<group>"; };
 		EE99D7C62726EA2C00338ADE /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		EEDA19A625D4992D00B72577 /* parseGPXXML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parseGPXXML.swift; sourceTree = "<group>"; };
@@ -311,7 +315,9 @@
 		EE87FAEF25CB5E0400BA5BA0 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				EE893549273ED95600F8FC4A /* DistributionHistogramChartView.swift */,
 				EEFFBE4E2731C3A500B89325 /* DistributionChart.swift */,
+				EE893547273ED62700F8FC4A /* BellCurveChart.swift.swift */,
 				EE100A0D272EF161006BB086 /* MonthHistogramView.swift */,
 				EE87FAF125CB5E0400BA5BA0 /* DistSpdMainChart.swift */,
 				EE87FAD925CB5E0300BA5BA0 /* DistanceSpeedChart.swift */,
@@ -469,6 +475,7 @@
 				EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */,
 				EE87FB2425CB5E0500BA5BA0 /* AdventureList.swift in Sources */,
 				EE87FAC425CB5DA400BA5BA0 /* ContentView.swift in Sources */,
+				EE89354A273ED95600F8FC4A /* DistributionHistogramChartView.swift in Sources */,
 				EE87FAC225CB5DA400BA5BA0 /* myAdventureRecordApp.swift in Sources */,
 				EE87FB0C25CB5E0500BA5BA0 /* DBViewController.swift in Sources */,
 				EE87FB1425CB5E0500BA5BA0 /* DistanceSpeedTab.swift in Sources */,
@@ -493,6 +500,7 @@
 				EE87FB0725CB5E0500BA5BA0 /* GlobalConstants.swift in Sources */,
 				EE1492A325F7B76800DE184A /* BParseRow.swift in Sources */,
 				EE0BFF7F25CCA303007ACA9D /* AdventureCommands.swift in Sources */,
+				EE893548273ED62700F8FC4A /* BellCurveChart.swift.swift in Sources */,
 				EE87FB0525CB5E0400BA5BA0 /* ParsingStructs.swift in Sources */,
 				EE1492A125F5433F00DE184A /* BatchParseView.swift in Sources */,
 				EEFFBE4D2731C0D200B89325 /* DescriptiveStatsView.swift in Sources */,
