@@ -18,7 +18,7 @@ struct DistributionHistogramChartView: View {
 		let yaxisOffset : CGFloat = 0.0
 		let keyLabelOffset : CGFloat = 35.0
 		let gapWidth : CGFloat = 2.0
-		let countOffset : CGFloat = 20.0		// offset to make count be at the inside top of the bars
+		let countOffset : CGFloat = 30.0		// offset to make count be at the inside top of the bars
 		
 		let topPadding : CGFloat = 20.0
 		//let topReservedSpace = xaxisOffset + topPadding
@@ -28,38 +28,46 @@ struct DistributionHistogramChartView: View {
 		let maxKey : CGFloat = histogramBins.keys.max()!
 			// maximum key (longest distance)
 		let minKey : CGFloat = histogramBins.keys.min()!
-		let xRange : Double = Double(maxKey - minKey)
+		let keyDistance : CGFloat = keyArray[1] - keyArray[0]
+		let xRange : Double = Double(maxKey - minKey + keyDistance)
 		let maxValue: CGFloat = CGFloat(histogramBins.values.max()!)
 			// maximum value in a single bin
 
-		VStack {
+		//VStack {
 			GeometryReader { reader in
 				let chartHeight : CGFloat = reader.size.height - xaxisOffset
 					// chartheight in pixels
 				let chartWidth : CGFloat  = reader.size.width - yaxisOffset
 					// chartheight in pixels
-				let binWidth : CGFloat = chartWidth/CGFloat(histogramBins.count)
+				//let binWidth : CGFloat = chartWidth/CGFloat(histogramBins.count)
+				let binWidth : CGFloat = reader.size.width / CGFloat(histogramBins.count)
 					// binWidth in pixels
 				let rectw : CGFloat = binWidth - gapWidth
 				let singleWidth : CGFloat = chartWidth/(maxKey - minKey)
 					// width of a single pxiel (in miles)
 				let singleHeight : CGFloat = chartHeight/maxValue
 					// height of a value of 1
-				
+				/*Text("\(binWidth), \(chartWidth), \(histogramBins.count)")		// xaxis labels
+					.font(.subheadline)
+					   .foregroundColor(.yellow)
+					   .rotationEffect(.degrees(-90))
+					   .offset(x:0, y: 140)
+					   .border(.yellow, width: 2)*/
 				ForEach (keyArray, id: \.self) { key in
 					let valueHeight : CGFloat = CGFloat(histogramBins[key]!) * singleHeight
-					//let rectx : CGFloat = ((CGFloat(key) * singleWidth) - minKey < 0 ? 0 : (CGFloat(key) * singleWidth) - minKey)
-					//let rectx : CGFloat = (CGFloat(key) - minKey ) * singleWidth
 					let rectx : CGFloat = xlocationInPixels(x: key, chartWidthInPixels: chartWidth, xRange: xRange, min: minKey)
-					//let recty : CGFloat = chartHeight - valueHeight
 					let recty : CGFloat = ylocationInPixels(y: Double(histogramBins[key]!), chartHeightinPixels: chartHeight, yRange: maxValue)
 					let rect : CGRect = CGRect(x: rectx, y: recty, width:rectw, height: valueHeight)
 					let cornerSize : CGSize = CGSize(width: binWidth/10, height: binWidth/10)
-					let valueOffset : CGFloat = recty - xaxisOffset - (valueHeight < xaxisOffset ? valueHeight + countOffset : 0)
+					let valueOffset : CGFloat = recty - xaxisOffset - (valueHeight <= singleHeight ?  -10 : -countOffset)
+					
 					
 					Path { p in
 						p.addRoundedRect(in: rect, cornerSize: cornerSize)
 					}
+					 
+					
+					
 					Path {p in
 						p.move(to: CGPoint(x: rectx, y: reader.size.height))
 						p.addLine(to: CGPoint(x: rectx, y: 0))
@@ -73,17 +81,8 @@ struct DistributionHistogramChartView: View {
 							.font(.subheadline)
 							.foregroundColor(.white)
 							.rotationEffect(.degrees(-90))
-							.offset(x:rectx, y: reader.size.height - xaxisOffset - 0)
-							.frame(width: binWidth, height: xaxisOffset, alignment: .trailing)
+							.offset(x:rectx, y: chartHeight + xaxisOffset/3)
 						
-						Text("\(rectx)")		// xaxis labels
-							.alignmentGuide(.trailing, computeValue: { _ in 0 })
-							.font(.subheadline)
-							.foregroundColor(.yellow)
-							.rotationEffect(.degrees(-90))
-							.offset(x:rectx, y: reader.size.height/2)
-							.border(.green, width: 2)
-							.frame(width: binWidth, height: xaxisOffset, alignment: .trailing)
 						
 							// This section is written this way, versus something more elegant, to
 							//	assist the Swift compile to type check complex statements.  This is
@@ -93,15 +92,18 @@ struct DistributionHistogramChartView: View {
 								String(format: "%3d", histogramBins[key]!)
 						Text(valueString)
 							.font(.subheadline)
-							.foregroundColor(valueHeight < 40 ? .yellow : .green)
+							.foregroundColor(valueHeight < singleHeight ? .yellow : .green)
 							.offset(x: rectx,
 									y: valueOffset)
 					}
 					.frame(width: binWidth)
-				}
-			}.padding(.top, topPadding)
+					
+				}  // foreach
+					
+				
+			}.padding(.top, topPadding)  // reader
 			//Text("Distribution")
-			}
+			//}  //VStack
 		}
 }
 

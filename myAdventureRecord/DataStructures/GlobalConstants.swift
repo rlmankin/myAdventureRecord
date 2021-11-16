@@ -161,11 +161,11 @@ func timeDiff(lhs : Date, rhs : Date ) -> Double {
 func xlocationInPixels(x: Double, chartWidthInPixels : CGFloat, xRange : Double, min: Double) -> CGFloat {
 	let leftEdgeX : CGFloat = CGFloat(min)
 	let xToPixelRatio : CGFloat = chartWidthInPixels / CGFloat(xRange)
-	let returnValue = (x - leftEdgeX) * xToPixelRatio
-	return (x - leftEdgeX) * xToPixelRatio
+	//let returnValue = (x - leftEdgeX) * xToPixelRatio
+	return (CGFloat(x) - leftEdgeX) * xToPixelRatio
 }
 
 func ylocationInPixels( y: Double, chartHeightinPixels: CGFloat, yRange: Double) -> CGFloat {
-	return chartHeightinPixels - (y * (chartHeightinPixels / yRange))
+	return chartHeightinPixels - (CGFloat(y) * (chartHeightinPixels / CGFloat(yRange)))
 }
 
