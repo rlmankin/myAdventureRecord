@@ -298,7 +298,6 @@
 				EE3EB17E25D1F212004C149B /* SummaryTab.swift */,
 				EE87FAE725CB5E0400BA5BA0 /* DistanceGradeTab.swift */,
 				EE87FAE825CB5E0400BA5BA0 /* DistanceElevationTab.swift */,
-				EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */,
 				EE87FAEA25CB5E0400BA5BA0 /* GainTriangleView.swift */,
 			);
 			path = Tabs;
@@ -315,6 +314,7 @@
 		EE87FAEF25CB5E0400BA5BA0 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */,
 				EE893549273ED95600F8FC4A /* DistributionHistogramChartView.swift */,
 				EEFFBE4E2731C3A500B89325 /* DistributionChart.swift */,
 				EE893547273ED62700F8FC4A /* BellCurveChart.swift.swift */,

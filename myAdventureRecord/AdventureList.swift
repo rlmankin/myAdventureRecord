@@ -62,7 +62,7 @@ struct FilterVars {
 	}
 	
 	init() {
-		self.filterByCategory =  Adventure.HikeCategory.all
+		self.filterByCategory =  Adventure.HikeCategory.hike
 		self.searchArea = nullString
 		self.searchTitle  = nullString
 		self.searchStartDate = {let df = DateFormatter()

@@ -38,6 +38,8 @@ struct LowerStatsView: View {
 
 struct SplashTabsView_Previews: PreviewProvider {
     static var previews: some View {
-		LowerStatsView(filteredAdventures: adventureData)
+		let arry =  adventureData.filter {$0.hikeCategory == .hike}
+		//let arry = filteredAdventures.compactMap({$0.distance / metersperMile})
+		LowerStatsView(filteredAdventures: arry)
     }
 }

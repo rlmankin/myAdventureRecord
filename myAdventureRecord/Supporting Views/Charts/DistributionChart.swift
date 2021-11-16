@@ -6,30 +6,73 @@
 //
 
 import SwiftUI
+import SigmaSwiftStatistics
+
+func populateHistorgramArray(arry: [Double]) -> (data: [Double: Int], mean: Double, sigma: Double, min: Double, max: Double) {
+	guard let mean = Sigma.average(arry),
+		  let sigma = Sigma.standardDeviationSample(arry)
+	else {
+		timeStampLog(message: "arry has no min and/or max")
+		return ([0.0:0], 0, 0, 0, 0)
+	}
+	var binKeys : [Double] = []
+	var binValues : [Int] = []
+	let max = ceil(max( mean + (3*sigma), arry.max()!))
+	let min = floor(min( mean - (3*sigma), arry.min()!))
+	let range = max - min
+	let count = arry.count
+	let numBins = Swift.max(ceil(sqrt(Double(range)))	, ceil(sqrt(Double(count))))// round up the sqrt
+	//  alternate : numBins = ceil(sqrt(Double(range)
+	//  alternate : numBins = ceil(sqrt(Double(count)
+	let binWidth = range/numBins
+	// populate binValues
+	
+	for bin in 0 ..<  Int(ceil(numBins)) {
+		binKeys.append(min + Double(bin) * binWidth)
+	}
+	binKeys[0] = floor(binKeys[0])
+	binKeys[binKeys.endIndex-1] = ceil(binKeys[binKeys.endIndex-1])
+	//binValues.append(arry.filter {$0 <= binKeys[0]}.count)
+	for bin in (0 ..< binKeys.endIndex) {
+		if bin == 0 {
+			binValues.append( arry.filter({$0 < binKeys[bin]}).count)
+		} else if bin == binKeys.endIndex - 1 {
+			binValues.append(arry.filter({$0 > binKeys[bin]}).count)
+		} else {
+			binValues.append(arry.filter({$0 >= binKeys[bin] && $0 < binKeys[bin + 1]}).count)		//count   binKey[bin] <= values < binKey[bin + 1]
+		}
+		
+			
+		}
+	
+	
+	let binDict = Dictionary(uniqueKeysWithValues: zip(binKeys, binValues))
+	let sortedbinDict = binDict.sorted(by: {$0.0 < $1.0})
+	print("\(binDict)\n mean: \(mean),\t sigma: \(sigma)")
+	return (binDict, mean, sigma, min, max)
+}
 
 struct DistributionChart: View {
-	var histogramData : [Double: Int]
+	var filteredAdventures : [Double] = []
+	
+	
 	
     var body: some View {
-		let xaxisOffset : CGFloat = 40.0
-			// pixels reserved for xaxis
-		let keyLabelOffset : CGFloat = 30.0
-		let gapWidth : CGFloat = 2.0
-		let countOffset : CGFloat = 10.0		// offset to make count be at the inside top of the bars
 		
-		let topPadding : CGFloat = 20.0
-		//let topReservedSpace = xaxisOffset + topPadding
-			// pixels reserved for gap between chart and top of frame
-		let yaxisOffset : CGFloat = 0.0
-		let keyArray : Array<Double> = Array<Double>(histogramData.keys)
-		let maxKey : CGFloat = histogramData.keys.max()!
-			// maximum key (longest distance)
-		let minKey : CGFloat = histogramData.keys.min()!
-		let maxValue: CGFloat = CGFloat(histogramData.values.max()!)
+		let histogramBins = populateHistorgramArray(arry: filteredAdventures)
+		let mean = histogramBins.mean
+		let sigma = histogramBins.sigma
+		let min = histogramBins.min
+		let max = histogramBins.max
+		let area = Double(histogramBins.data.keys.compactMap({histogramBins.data[$0]}).reduce(0,+))
+		
+		
+		
 			// maximum value in a single bin
 		ZStack {
-			DistributionHistogramChartView(histogramData: histogramData)
-			BellCurveChartView(histogramData: histogramData)
+			
+			BellCurveChartView(area: area , mean: mean, sigma: sigma, min: min, max: max)
+			DistributionHistogramChartView(histogramBins: histogramBins.data)
 		}
 		
     }
@@ -37,6 +80,9 @@ struct DistributionChart: View {
 
 struct DistributionChart_Previews: PreviewProvider {
     static var previews: some View {
-		DistributionChart(histogramData:  [291.7924085343992: 0, 202.02165307623446: 0, 269.349719669858: 1, 336.67778626348155: 0, 179.57896421169326: 0, 157.13627534715206: 0, 89.80820875352852: 0, 44.92283102444615: 0, 246.90703080531682: 0, 134.6935864826109: 0, 224.46434194077563: 0, 67.36551988898734: 0, 314.23509739894035: 0, 22.0: 249, 360.0: 1, 112.2508976180697: 0])
+		let filteredAdventures =  adventureData.filter {$0.hikeCategory == .hike}
+		let arry = filteredAdventures.compactMap({$0.distance / metersperMile})
+		
+		DistributionChart(filteredAdventures: arry)
     }
 }

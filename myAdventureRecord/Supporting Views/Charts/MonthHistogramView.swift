@@ -14,12 +14,14 @@ struct MonthHistogramView: View {
 	
     var body: some View {
 		let xaxisOffset : CGFloat = 40.0
+		let yaxisOffset : CGFloat = 0.0
 		let gapWidth : CGFloat = 2.0
-		var countOffset : CGFloat = 25		// offset to make count be at the inside top of the bars
+		let countOffset : CGFloat = 25		// offset to make count be at the inside top of the bars
 		GeometryReader { reader in
 			let chartHeight = CGFloat(reader.size.height - xaxisOffset)
+			let chartWidth = CGFloat(reader.size.width - yaxisOffset)
 			
-			let binWidth = CGFloat((1.0*reader.size.width)/12)
+			let binWidth = CGFloat((chartWidth)/12)
 			let maxCount = CGFloat(monthDict.values.max()!)				// maximum count in a month
 			let singleHeight = chartHeight/maxCount		// height of a count of one
 			
@@ -42,7 +44,7 @@ struct MonthHistogramView: View {
 					Text("\(month)")
 						.foregroundColor(.white)
 						.rotationEffect(.degrees(-90))
-						.offset(x:rectx, y: reader.size.height - xaxisOffset + 10)
+						.offset(x:rectx, y: chartHeight + 10)
 							// 10 point from bottom of bars
 					Text("\(monthDict[month]!)")
 						//.foregroundColor(monthHeight < 40 ? .gray : .white)

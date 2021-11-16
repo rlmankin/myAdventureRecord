@@ -19,24 +19,7 @@ struct DescriptiveStatsView: View {
 			Text(String( format: "Descriptive Statistics (%4d datapoints)", arry.count))
 				.font(.headline).bold().italic()
 				.padding(.bottom, 6)
-			HStack {
-				
-				if let stat = Sigma.average(arry) {
-					Text(String(format: "Mean:  %5.3f" , stat))
-						.padding(.trailing)
-				}
-					//median
-				if let stat = Sigma.median(arry) {
-					Text(String(format:"Median: %5.3f", stat))
-						.padding(.trailing)
-				}
-					//standard devisation
-				if let stat = Sigma.standardDeviationSample(arry) {
-					Text(String(format: "Std Deviation: %5.3f", stat))
-				}
-			}
-			.font(.subheadline)
-			.alignmentGuide(.leading, computeValue: {_ in -10})
+			
 			
 			
 			//kurtosis & skewness
@@ -57,6 +40,8 @@ struct DescriptiveStatsView: View {
 			let max = arry.max() ?? 0
 			let indexMin = arry.firstIndex(where: {$0 == min})!
 			let indexMax = arry.firstIndex(where: {$0 == max})!
+			let stdDeviation = Sigma.standardDeviationSample(arry)!
+			let mean = Sigma.average(arry)!
 			HStack {
 				
 				if let stat = Sigma.average(arry) {
@@ -69,7 +54,7 @@ struct DescriptiveStatsView: View {
 						.padding(.trailing)
 				}
 					//standard devisation
-				if let stat = Sigma.standardDeviationSample(arry) {
+				if let stat = stdDeviation {
 					Text(String(format: "Std Deviation: %5.3f", stat))
 				}
 			}
@@ -77,21 +62,14 @@ struct DescriptiveStatsView: View {
 			.alignmentGuide(.leading, computeValue: {_ in -10})
 			VStack (alignment: .leading) {
 				
-				if let stat = Sigma.average(arry) {
-					Text(String(format: "Min:  %5.3f" , min))
-						.padding(.trailing)
-					Text("\t\(filteredAdventuresName[indexMin])")
-				}
-					//median
-				if let stat = Sigma.median(arry) {
-					Text(String(format:"Max: %5.3f", max))
-						.padding(.trailing)
-					Text("\t\(filteredAdventuresName[indexMax])")
-				}
-					//standard devisation
-				if let stat = Sigma.standardDeviationSample(arry) {
-					Text(String(format: "Range: %5.3f", max-min))
-				}
+				
+				Text(String(format: "Min:  %5.3f\t -%1.2f sigma" , min, (mean-min) / stdDeviation))
+					.padding(.trailing)
+				Text("\t\(filteredAdventuresName[indexMin])")
+				Text(String(format:"Max: %5.3f\t %1.2f sigma", max, (max-mean) / stdDeviation))
+					.padding(.trailing)
+				Text("\t\(filteredAdventuresName[indexMax])")
+				Text(String(format: "Range: %5.3f", max-min))
 			}
 			.font(.subheadline)
 			.alignmentGuide(.leading, computeValue: {_ in -10})
@@ -105,8 +83,8 @@ struct DescriptiveStatsView: View {
 
 struct DescriptiveStatsView_Previews: PreviewProvider {
     static var previews: some View {
-		var arry = adventureData.compactMap({$0.distance / metersperMile})
-		var arryName = adventureData.compactMap({$0.name})
+		let arry = adventureData.compactMap({$0.distance / metersperMile})
+		let arryName = adventureData.compactMap({$0.name})
         DescriptiveStatsView(filteredAdventures: arry, filteredAdventuresName: arryName)
 		/*
 		let arry1 = adventureData.compactMap({$0.trackData.trackSummary.totalAscent / feetperMeter})
