@@ -47,10 +47,10 @@ struct MonthHistogramView: View {
 						.offset(x:rectx, y: chartHeight + 10)
 							// 10 point from bottom of bars
 					Text("\(monthDict[month]!)")
-						//.foregroundColor(monthHeight < 40 ? .gray : .white)
+						//.foregroundColor(monthHeight < 40 ? .black : .white)
 						.offset(x:rectx,
 								y: valueOffset)
-						.foregroundColor(.gray)
+						.foregroundColor(.black)
 					
 				}
 				.frame(width: binWidth)

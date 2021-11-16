@@ -17,11 +17,11 @@ func populateHistorgramArray(arry: [Double]) -> (data: [Double: Int], mean: Doub
 	}
 	var binKeys : [Double] = []
 	var binValues : [Int] = []
-	let max = ceil(max( mean + (3*sigma), arry.max()!))
-	let min = floor(min( mean - (3*sigma), arry.min()!))
+	let max = /*ceil*/(max( mean + (3*sigma), arry.max()!))
+	let min = /*floor*/(min( mean - (3*sigma), arry.min()!))
 	let range = max - min
 	let count = arry.count
-	let numBins = Swift.max(ceil(sqrt(Double(range)))	, ceil(sqrt(Double(count))))// round up the sqrt
+	let numBins = Swift.max(/*ceil*/(sqrt(Double(range)))	, /*ceil*/(sqrt(Double(count))))// round up the sqrt
 	//  alternate : numBins = ceil(sqrt(Double(range)
 	//  alternate : numBins = ceil(sqrt(Double(count)
 	let binWidth = range/numBins
@@ -30,8 +30,8 @@ func populateHistorgramArray(arry: [Double]) -> (data: [Double: Int], mean: Doub
 	for bin in 0 ..<  Int(ceil(numBins)) {
 		binKeys.append(min + Double(bin) * binWidth)
 	}
-	binKeys[0] = floor(binKeys[0])
-	binKeys[binKeys.endIndex-1] = ceil(binKeys[binKeys.endIndex-1])
+	binKeys[0] = /*floor*/(binKeys[0])
+	binKeys[binKeys.endIndex-1] = /*ceil*/(binKeys[binKeys.endIndex-1])
 	//binValues.append(arry.filter {$0 <= binKeys[0]}.count)
 	for bin in (0 ..< binKeys.endIndex) {
 		if bin == 0 {

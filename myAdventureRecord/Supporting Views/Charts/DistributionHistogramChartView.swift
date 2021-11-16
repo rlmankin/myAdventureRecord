@@ -68,11 +68,11 @@ struct DistributionHistogramChartView: View {
 					 
 					
 					
-					Path {p in
+					/*Path {p in
 						p.move(to: CGPoint(x: rectx, y: reader.size.height))
 						p.addLine(to: CGPoint(x: rectx, y: 0))
 					
-					}.stroke(.yellow)
+					}.stroke(.yellow)*/
 		
 					VStack  {
 						let keyString : String = String(format:"%3.2f", key)
@@ -92,7 +92,7 @@ struct DistributionHistogramChartView: View {
 								String(format: "%3d", histogramBins[key]!)
 						Text(valueString)
 							.font(.subheadline)
-							.foregroundColor(valueHeight < singleHeight ? .yellow : .green)
+							.foregroundColor(valueHeight <= singleHeight ? .white : .black)
 							.offset(x: rectx,
 									y: valueOffset)
 					}
