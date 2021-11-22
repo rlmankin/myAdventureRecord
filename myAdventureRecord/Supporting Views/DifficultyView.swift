@@ -25,7 +25,7 @@ struct DifficultyView: View {
 	
 	var body: some View {
 		
-		timeStampLog(message: "DifficultyView")
+		timeStampLog(message: "-> DifficultyView")
 		return VStack (spacing: 0){
 			
 			

@@ -18,7 +18,7 @@ struct BellCurveChartView: View {
 	
 	
     var body: some View {
-		let xaxisOffset : CGFloat = 40.0
+		let xaxisOffset : CGFloat = 60.0
 			// pixels reserved for xaxis
 		let yaxisOffset : CGFloat = 0.0
 		

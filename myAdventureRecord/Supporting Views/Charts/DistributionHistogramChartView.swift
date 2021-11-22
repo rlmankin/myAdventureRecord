@@ -13,7 +13,7 @@ struct DistributionHistogramChartView: View {
 	
 	
 	var body: some View {
-		let xaxisOffset : CGFloat = 40.0
+		let xaxisOffset : CGFloat = 60.0
 			// pixels reserved for xaxis
 		let yaxisOffset : CGFloat = 0.0
 		let keyLabelOffset : CGFloat = 35.0
@@ -75,7 +75,7 @@ struct DistributionHistogramChartView: View {
 					}.stroke(.yellow)*/
 		
 					VStack  {
-						let keyString : String = String(format:"%3.2f", key)
+						let keyString : String = String(format:"%5.2f", key)
 						Text("\(keyString)")		// xaxis labels
 							.alignmentGuide(.trailing, computeValue: { _ in 0 })
 							.font(.subheadline)

@@ -48,7 +48,7 @@ func populateHistorgramArray(arry: [Double]) -> (data: [Double: Int], mean: Doub
 	
 	let binDict = Dictionary(uniqueKeysWithValues: zip(binKeys, binValues))
 	let sortedbinDict = binDict.sorted(by: {$0.0 < $1.0})
-	print("\(binDict)\n mean: \(mean),\t sigma: \(sigma)")
+	//print("\(binDict)\n mean: \(mean),\t sigma: \(sigma)")
 	return (binDict, mean, sigma, min, max)
 }
 

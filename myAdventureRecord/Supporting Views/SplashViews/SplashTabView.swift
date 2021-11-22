@@ -15,18 +15,20 @@ struct SplashTabView: View {
 	
 	
     var body: some View {
-		VStack {
-			GeometryReader { proxy in
-				HStack {
-					DescriptiveStatsView(filteredAdventures: filteredAdventures,
-										 filteredAdventuresName: filteredAdventuresName)
-						.frame(width: proxy.size.width * 0.4)
-					
-					
-					DistributionChart(filteredAdventures: filteredAdventures)
+		timeStampLog(message: "-> SplashTabView")
+		return
+			VStack {
+				GeometryReader { proxy in
+					HStack {
+						DescriptiveStatsView(filteredAdventures: filteredAdventures,
+											 filteredAdventuresName: filteredAdventuresName)
+							.frame(width: proxy.size.width * 0.4)
+						
+						
+						DistributionChart(filteredAdventures: filteredAdventures)
+					}
 				}
 			}
-		}
     }
 }
 

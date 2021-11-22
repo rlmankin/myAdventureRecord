@@ -25,7 +25,7 @@ struct myAdventureRecordApp: App {
 		}
 		
 		.commands {
-			AdventureCommands()
+			AdventureCommands(stateFlag: .constant(FlagStates.empty))
 		}
 	
 	//var body: some Scene {

@@ -31,7 +31,7 @@ struct SliderView : View {
 	
 	
     var body: some View {
-		timeStampLog(message: "SliderView")
+		timeStampLog(message: "-> SliderView")
 		return
 			HStack (alignment: .center) {
 				Text(valueString.padding(toLength: 20, withPad: " ", startingAt: 0))

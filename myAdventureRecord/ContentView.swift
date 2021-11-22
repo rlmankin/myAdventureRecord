@@ -40,7 +40,7 @@ struct ContentView: View {
 		timeStampLog(message: "->ContentView")
 		return
 			AdventureList()
-				.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 1000, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+				.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 800, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 	}
 	
 }

@@ -10,29 +10,31 @@ import SwiftUI
 struct LowerStatsView: View {
 	var filteredAdventures: [Adventure]
     var body: some View {
-		TabView {
-			SplashTabView(
+		timeStampLog(message: "-> LowerStatsView")
+		return
+			TabView {
+				SplashTabView(
+					filteredAdventures:
+						filteredAdventures.compactMap({$0.distance / metersperMile}),
+					filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
+				).tabItem({		Image(systemName: "thermometer")
+								Text("Distance (miles)")})//.background(Color.red)
+				SplashTabView(
+					filteredAdventures:
+						filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent / feetperMeter}),
+					filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
+				).tabItem({		Image(systemName: "thermometer")
+								Text("Gain (feet)")})//.background(Color.red)
+				
+				SplashTabView(
 				filteredAdventures:
-					filteredAdventures.compactMap({$0.distance / metersperMile}),
+					filteredAdventures.compactMap({$0.trackData.trackSummary.duration/secondsperHour}),
 				filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
-			).tabItem({		Image(systemName: "thermometer")
-							Text("Distance (miles)")})//.background(Color.red)
-			SplashTabView(
-				filteredAdventures:
-					filteredAdventures.compactMap({$0.trackData.trackSummary.totalAscent / feetperMeter}),
-				filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
-			).tabItem({		Image(systemName: "thermometer")
-							Text("Gain (feet)")})//.background(Color.red)
-			
-			SplashTabView(
-			filteredAdventures:
-				filteredAdventures.compactMap({$0.trackData.trackSummary.duration/secondsperHour}),
-			filteredAdventuresName:  filteredAdventures.compactMap({$0.name})
-			)
-			.tabItem({		Image(systemName: "thermometer")
-						Text("Duration (hours)")})//.background(Color.red)
-			
-		}
+				)
+				.tabItem({		Image(systemName: "thermometer")
+							Text("Duration (hours)")})//.background(Color.red)
+				
+			}
     }
 }
 

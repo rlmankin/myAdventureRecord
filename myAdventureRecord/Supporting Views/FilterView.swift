@@ -23,7 +23,7 @@ struct FilterView: View {
     var body: some View {
 		
 		
-		timeStampLog(message: "FilterView")
+		timeStampLog(message: "-> FilterView")
 		return
 			VStack(alignment: .leading) {
 				Group {		// required to overcome 10 view limit
