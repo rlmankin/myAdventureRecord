@@ -18,7 +18,7 @@ struct DistributionHistogramChartView: View {
 		let yaxisOffset : CGFloat = 0.0
 		let keyLabelOffset : CGFloat = 35.0
 		let gapWidth : CGFloat = 2.0
-		let countOffset : CGFloat = 30.0		// offset to make count be at the inside top of the bars
+		let countOffset : CGFloat = 15.0		// offset to make count be at the inside top of the bars
 		
 		let topPadding : CGFloat = 20.0
 		//let topReservedSpace = xaxisOffset + topPadding
@@ -59,7 +59,7 @@ struct DistributionHistogramChartView: View {
 					let recty : CGFloat = ylocationInPixels(y: Double(histogramBins[key]!), chartHeightinPixels: chartHeight, yRange: maxValue)
 					let rect : CGRect = CGRect(x: rectx, y: recty, width:rectw, height: valueHeight)
 					let cornerSize : CGSize = CGSize(width: binWidth/10, height: binWidth/10)
-					let valueOffset : CGFloat = recty - xaxisOffset - (valueHeight <= singleHeight ?  -10 : -countOffset)
+					let valueOffset : CGFloat = recty + (valueHeight > singleHeight ?  -countOffset : -2*countOffset)
 					
 					
 					Path { p in
@@ -81,7 +81,7 @@ struct DistributionHistogramChartView: View {
 							.font(.subheadline)
 							.foregroundColor(.white)
 							.rotationEffect(.degrees(-90))
-							.offset(x:rectx, y: chartHeight + xaxisOffset/3)
+							.offset(x:rectx, y: chartHeight + 10)
 						
 						
 							// This section is written this way, versus something more elegant, to
@@ -92,7 +92,7 @@ struct DistributionHistogramChartView: View {
 								String(format: "%3d", histogramBins[key]!)
 						Text(valueString)
 							.font(.subheadline)
-							.foregroundColor(valueHeight <= singleHeight ? .white : .black)
+							.foregroundColor(valueHeight > singleHeight ? .black : .white)
 							.offset(x: rectx,
 									y: valueOffset)
 					}

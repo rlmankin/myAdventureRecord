@@ -144,14 +144,14 @@ func  enableScreenSleep() -> Bool {
 	return false
 }
 
-func timeStampLog(message: String, noPrint: Bool = false) -> Date {
+func timeStampLog(message: String, noPrint: Bool = false) -> Void {
 	let now = Date()
 	let df = DateFormatter()
 	df.dateFormat = "yyyyMMddd HH:mm:ss.SS"
 	if !noPrint {
 		print("\(df.string(from: now)) :  \(message)")
 	}
-	return now
+	return //now
 }
 
 func timeDiff(lhs : Date, rhs : Date ) -> Double {

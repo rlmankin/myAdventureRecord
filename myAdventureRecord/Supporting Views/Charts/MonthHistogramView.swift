@@ -16,7 +16,7 @@ struct MonthHistogramView: View {
 		let xaxisOffset : CGFloat = 60.0
 		let yaxisOffset : CGFloat = 0.0
 		let gapWidth : CGFloat = 2.0
-		let countOffset : CGFloat = 25		// offset to make count be at the inside top of the bars
+		let countOffset : CGFloat =  15.0		// offset to make count be at the inside top of the bars
 		GeometryReader { reader in
 			let chartHeight : CGFloat = CGFloat(reader.size.height - xaxisOffset)
 			let chartWidth : CGFloat = CGFloat(reader.size.width - yaxisOffset)
@@ -35,22 +35,22 @@ struct MonthHistogramView: View {
 				let rectw : CGFloat  = binWidth - gapWidth
 				let rect : CGRect = CGRect(x: rectx, y: recty, width:rectw, height: monthHeight)
 				let cornerSize : CGSize = CGSize(width: binWidth/10, height: binWidth/10)
-				let valueOffset : CGFloat	= recty - (monthHeight < xaxisOffset ? xaxisOffset : xaxisOffset - countOffset)
+				let valueOffset : CGFloat	= recty + (monthHeight > singleHeight ? -countOffset : -2*countOffset)
 				Path { p in
 					p.addRoundedRect(in: rect, cornerSize: cornerSize)
 				}
 				
 				VStack {
 					Text("\(month)")
-						.foregroundColor(.white)
+						.foregroundColor(.green)
 						.rotationEffect(.degrees(-90))
 						.offset(x:rectx, y: chartHeight + 10)
 							// 10 point from bottom of bars
 					Text("\(monthDict[month]!)")
-						//.foregroundColor(monthHeight < 40 ? .black : .white)
+						.foregroundColor(monthHeight > singleHeight ? .black : .white)
 						.offset(x:rectx,
 								y: valueOffset)
-						.foregroundColor(.black)
+						//.foregroundColor(.yellow)
 					
 				}
 				.frame(width: binWidth)

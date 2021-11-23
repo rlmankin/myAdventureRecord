@@ -36,6 +36,7 @@ struct BellCurveChartView: View {
 				// chartwidth in pixels
 			//  Draw vertical lines for mean, -3sigma, and 3sigma
 			// -3sigma
+			/*
 			Path { p in
 				let xlocation = xlocationInPixels(x: leftEdgeX, chartWidthInPixels: chartWidthinPixels, xRange: xRange, min: min)
 				p.move(to: CGPoint(x: xlocation, y: reader.size.height))
@@ -58,7 +59,7 @@ struct BellCurveChartView: View {
 			}.stroke(.yellow)
 			Text(String(format: "%3.0f", rightEdgeX))
 				.offset(x: xlocationInPixels(x: rightEdgeX, chartWidthInPixels: chartWidthinPixels, xRange: xRange, min: min) - 30)
-			
+			*/
 			let strideStep : CGFloat = xRange / 50
 			let xArray = Array(stride(from: leftEdgeX + strideStep, to: rightEdgeX, by: strideStep))
 			let maxDensity = xArray.compactMap({Sigma.normalDensity(x: $0, μ: mean, σ: sigma)}).max()!
