@@ -20,6 +20,7 @@ let garminSummaryStats = ["name", "Distance", "TimerTime",  "TotalElapsedTime",
 						  "MaxAscentRate", "AvgDescentRate","MaxDescentRate",
 						  "Calories"]
 // helper functions
+	// time difference between two dates
 extension Date {
 
 	static func - (lhs: Date, rhs: Date) -> TimeInterval {
@@ -27,7 +28,14 @@ extension Date {
 	}
 
 }
+
+func timeDiff(lhs : Date, rhs : Date ) -> Double {
+	return lhs - rhs
+}
+
+
 // elevation related helpers
+	// the height in pixels of an elevation (for elevation graphs)
 func elevationHeight( _ height: CGFloat, _ maxEle : Double, _ minEle : Double) -> CGFloat {
 			// calculated  grid distance for the height of the graph
 			// Note:  the trkptList array global to the structure
@@ -37,7 +45,7 @@ func elevationHeight( _ height: CGFloat, _ maxEle : Double, _ minEle : Double) -
 			// determine the spacing by dividing the total height of the
 			//		drawing area by the range of elevations
 }
-
+	// the offset of the elevation to the bottom of the graph
 func elevationOffset(_ elevation: Double, _ axisheight: CGFloat, _ minEle : Double) -> CGFloat {
 			// determines where in the vertical axis a particular elevation will reside
 			//	lower bound (bottom) is offset by the minimum Elevation in the track
@@ -46,6 +54,7 @@ func elevationOffset(_ elevation: Double, _ axisheight: CGFloat, _ minEle : Doub
 	return CGFloat(elevation - minEle) * axisheight		// number of feet
 }
 
+	// function to create vertical grid lines on elevation charts
 func createEleGridPoints( minEle: Double, maxEle: Double, stepSize: Double) -> [Double] {
 	var eleGridline : [Double] = []
 	var i = minEle
@@ -121,6 +130,8 @@ struct ReturnStruct {
 	
 }
 
+
+// enables/disables sleep to insure the code doesn't stop when the sleep timer interrupts
 import IOKit.pwr_mgt
 
 var noSleepAssertionID: IOPMAssertionID = 0
@@ -144,6 +155,7 @@ func  enableScreenSleep() -> Bool {
 	return false
 }
 
+// function to print a basic timestamp to the console
 func timeStampLog(message: String, noPrint: Bool = false) -> Void {
 	let now = Date()
 	let df = DateFormatter()
@@ -152,10 +164,6 @@ func timeStampLog(message: String, noPrint: Bool = false) -> Void {
 		print("\(df.string(from: now)) :  \(message)")
 	}
 	return //now
-}
-
-func timeDiff(lhs : Date, rhs : Date ) -> Double {
-	return lhs - rhs
 }
 
 func xlocationInPixels(x: Double, chartWidthInPixels : CGFloat, xRange : Double, min: Double) -> CGFloat {
@@ -167,5 +175,59 @@ func xlocationInPixels(x: Double, chartWidthInPixels : CGFloat, xRange : Double,
 
 func ylocationInPixels( y: Double, chartHeightinPixels: CGFloat, yRange: Double) -> CGFloat {
 	return chartHeightinPixels - (CGFloat(y) * (chartHeightinPixels / CGFloat(yRange)))
+}
+
+struct SplitStruct: Codable, Hashable {
+	var distance : Double = 0
+	var avgSpeed : Double = 0
+	var gain : Double = 0
+	var grade : Double = 0
+	var startIndex : Int = 0
+	var endIndex : Int = 0
+}
+
+func createSplits(trkptsList: [Trkpt]) -> (eighthSplits: [SplitStruct], mileSplits: [SplitStruct]) {
+	var currentBase8thIndex : Int = 0
+	var currentBaseMileIndex : Int = 0
+	var eighthSplits : [SplitStruct] = []
+	var mileSplits : [SplitStruct] = []
+	var currentSplit = SplitStruct()
+	currentBase8thIndex = 1
+	currentBaseMileIndex = 1
+	for index in (2 ..< trkptsList.endIndex) {
+		let currentTrkpt = trkptsList[index]
+		let base8thTrkpt = trkptsList[currentBase8thIndex]
+		//let eighthDistance = calcDistance(currentTrkpt, base8thTrkpt)
+		//let legArray = trkptsList[currentBase8thIndex...index].compactMap({$0.lastTimeEleTrkpt.distance})
+		let legDistance8th = trkptsList[currentBase8thIndex...index].compactMap({$0.lastTimeEleTrkpt.distance}).reduce(0,+)
+		
+		
+		if (legDistance8th >= metersperMile / 8) || (index == trkptsList.endIndex - 1) {
+			currentSplit.startIndex = currentBase8thIndex
+			currentSplit.endIndex = index
+			currentSplit.distance = legDistance8th
+			currentSplit.avgSpeed = legDistance8th / calcElapsedTime(currentTrkpt, base8thTrkpt)
+			currentSplit.gain = calcGain(currentTrkpt, base8thTrkpt)!
+			currentSplit.grade = currentSplit.gain / legDistance8th
+			eighthSplits.append(currentSplit)
+			currentBase8thIndex = index
+		}
+		
+		let baseMileTrkpt = trkptsList[currentBaseMileIndex]
+		//let mileDistance = calcDistance(currentTrkpt, baseMileTrkpt)
+		let legDistanceMile = trkptsList[currentBaseMileIndex...index].compactMap({$0.lastTimeEleTrkpt.distance}).reduce(0,+)
+		if legDistanceMile >= metersperMile  || (index == trkptsList.endIndex - 1) {
+			currentSplit.startIndex = currentBaseMileIndex
+			currentSplit.endIndex = index
+			currentSplit.distance = legDistanceMile
+			currentSplit.avgSpeed = legDistanceMile / calcElapsedTime(currentTrkpt, baseMileTrkpt)
+			currentSplit.gain = calcGain(currentTrkpt, baseMileTrkpt)!
+			currentSplit.grade = currentSplit.gain / legDistanceMile
+			mileSplits.append(currentSplit)
+			currentBaseMileIndex = index
+		}
+	}
+	
+	return ( eighthSplits,mileSplits)
 }
 

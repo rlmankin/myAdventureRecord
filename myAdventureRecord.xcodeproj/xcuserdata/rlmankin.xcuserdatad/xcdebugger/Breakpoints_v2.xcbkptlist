@@ -7,48 +7,31 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A67C6782-A19E-4BA7-89D3-27032E7444F4"
+            uuid = "4AD26990-4A25-4AE2-9084-FEB8C615CDBA"
             shouldBeEnabled = "No"
-            condition = "chartHeight &gt; 0"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "myAdventureRecord/Supporting Views/Charts/DistributionHistogramChartView.swift"
+            filePath = "SplitsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "padStringWithFormat(value:format:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6022AAD3-D941-47E1-806D-E108F475652E"
+            uuid = "86C86A77-473F-4B5E-9487-3CEF9B52B434"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "myAdventureRecord/Supporting Views/Charts/DistributionHistogramChartView.swift"
+            filePath = "SplitsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "body"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C4BD06C3-86D1-4134-8CF7-8FD7A6E4DBFB"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "myAdventureRecord/Supporting Views/Charts/DistributionHistogramChartView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

@@ -89,6 +89,8 @@ struct AdventureDetail: View {
 
 		}
 		
+		let x = createSplits(trkptsList: adventure.trackData.trkptsList)
+		
 		
 		return ScrollView {
 			
@@ -163,8 +165,15 @@ struct AdventureDetail: View {
 						Image(systemName: "chart.bar.fill")
 						Text("Summary")
 					})
+				let adventureSplits = createSplits(trkptsList: adventure.trackData.trkptsList)
+				SplitsView(eighthSplits: adventureSplits.eighthSplits, mileSplits: adventureSplits.mileSplits)
+					.tabItem({
+						Image(systemName: "chart.bar.fill")
+						Text("Splits")
+					})
 				
-			}.frame(minWidth: 500, idealWidth: 500, maxWidth: .infinity, minHeight: 400,idealHeight: 700, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .center)
+				
+			}.frame(minWidth: 500, idealWidth: 500, maxWidth: .infinity, minHeight: 400,idealHeight: 700, maxHeight: .infinity, alignment: .center)
 			
 			
 			

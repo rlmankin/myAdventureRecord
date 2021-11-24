@@ -26,8 +26,15 @@ struct Trkpt: Codable, Hashable, Identifiable {
 																				//		timestamped trackpoint and the current trackpoint
 		var gainSpeed: Double {													// the speed overwhich the gain was achieved (can be +/- depending on ascent/descent)
 			get {
-				assert(elapsedTime != 0, "invalid get in FromValidEleTime")
+				assert(elapsedTime != 0, "invalid gailSpeed get in FromValidEleTime")
 				return gain / elapsedTime
+			}
+		}
+		
+		var grade: Double {
+			get {
+				assert(distance != 0, "invalide grade get in FromValidEleTime")
+				return gain / distance
 			}
 		}
 		init() {																// the structure's initializer

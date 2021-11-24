@@ -20,6 +20,7 @@
 		EE1492A725F7CB1C00DE184A /* XMLFilesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A625F7CB1C00DE184A /* XMLFilesData.swift */; };
 		EE3EB17F25D1F212004C149B /* SummaryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3EB17E25D1F212004C149B /* SummaryTab.swift */; };
 		EE5BF7A9270DE5210045B3E0 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5BF7A8270DE5210045B3E0 /* SliderView.swift */; };
+		EE5E0372274E7EF5001D8230 /* SplitsChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5E0371274E7EF5001D8230 /* SplitsChartView.swift */; };
 		EE8218822703CAD300430188 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8218812703CAD300430188 /* FilterView.swift */; };
 		EE87E98725F04F98005C5669 /* DifficultyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87E98625F04F98005C5669 /* DifficultyView.swift */; };
 		EE87FAC225CB5DA400BA5BA0 /* myAdventureRecordApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE87FAC125CB5DA400BA5BA0 /* myAdventureRecordApp.swift */; };
@@ -63,6 +64,7 @@
 		EE89354A273ED95600F8FC4A /* DistributionHistogramChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE893549273ED95600F8FC4A /* DistributionHistogramChartView.swift */; };
 		EE8B90C32603867000050D19 /* AdventureSection2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8B90C22603867000050D19 /* AdventureSection2View.swift */; };
 		EE99D7C72726EA2C00338ADE /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE99D7C62726EA2C00338ADE /* SplashView.swift */; };
+		EE9AFD96274D9D5C00F84D3F /* SplitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9AFD95274D9D5C00F84D3F /* SplitsView.swift */; };
 		EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A625D4992D00B72577 /* parseGPXXML.swift */; };
 		EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A825D56FF300B72577 /* GpxParseView.swift */; };
 		EEEB2A2E263AEC11004D3602 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEEB2A2D263AEBF8004D3602 /* SQLite.framework */; };
@@ -110,6 +112,7 @@
 		EE1D66DF25CCB48A0050EB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE3EB17E25D1F212004C149B /* SummaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryTab.swift; sourceTree = "<group>"; };
 		EE5BF7A8270DE5210045B3E0 /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		EE5E0371274E7EF5001D8230 /* SplitsChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitsChartView.swift; sourceTree = SOURCE_ROOT; };
 		EE8218812703CAD300430188 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		EE87E98625F04F98005C5669 /* DifficultyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyView.swift; sourceTree = "<group>"; };
 		EE87FABE25CB5DA400BA5BA0 /* myAdventureRecord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myAdventureRecord.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +160,7 @@
 		EE893549273ED95600F8FC4A /* DistributionHistogramChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistributionHistogramChartView.swift; sourceTree = "<group>"; };
 		EE8B90C22603867000050D19 /* AdventureSection2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureSection2View.swift; sourceTree = "<group>"; };
 		EE99D7C62726EA2C00338ADE /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		EE9AFD95274D9D5C00F84D3F /* SplitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitsView.swift; sourceTree = SOURCE_ROOT; };
 		EEDA19A625D4992D00B72577 /* parseGPXXML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parseGPXXML.swift; sourceTree = "<group>"; };
 		EEDA19A825D56FF300B72577 /* GpxParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxParseView.swift; sourceTree = "<group>"; };
 		EEEB2A2C263AEBF8004D3602 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = SQLite.framework.dSYM; sourceTree = "<group>"; };
@@ -295,6 +299,7 @@
 		EE87FAE625CB5E0400BA5BA0 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
+				EE9AFD95274D9D5C00F84D3F /* SplitsView.swift */,
 				EE3EB17E25D1F212004C149B /* SummaryTab.swift */,
 				EE87FAE725CB5E0400BA5BA0 /* DistanceGradeTab.swift */,
 				EE87FAE825CB5E0400BA5BA0 /* DistanceElevationTab.swift */,
@@ -314,6 +319,7 @@
 		EE87FAEF25CB5E0400BA5BA0 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				EE5E0371274E7EF5001D8230 /* SplitsChartView.swift */,
 				EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */,
 				EE893549273ED95600F8FC4A /* DistributionHistogramChartView.swift */,
 				EEFFBE4E2731C3A500B89325 /* DistributionChart.swift */,
@@ -463,6 +469,7 @@
 			files = (
 				EE1492A525F7B99600DE184A /* BPListView.swift in Sources */,
 				EE87FB0325CB5E0400BA5BA0 /* StatsStructs.swift in Sources */,
+				EE9AFD96274D9D5C00F84D3F /* SplitsView.swift in Sources */,
 				EE100A0E272EF161006BB086 /* MonthHistogramView.swift in Sources */,
 				EE87FB1725CB5E0500BA5BA0 /* MapView.swift in Sources */,
 				EE87FB0425CB5E0400BA5BA0 /* Track.swift in Sources */,
@@ -480,6 +487,7 @@
 				EE87FB0C25CB5E0500BA5BA0 /* DBViewController.swift in Sources */,
 				EE87FB1425CB5E0500BA5BA0 /* DistanceSpeedTab.swift in Sources */,
 				EE87FB1225CB5E0500BA5BA0 /* DistanceGradeTab.swift in Sources */,
+				EE5E0372274E7EF5001D8230 /* SplitsChartView.swift in Sources */,
 				EE87FB1925CB5E0500BA5BA0 /* YAxisView.swift in Sources */,
 				EE99D7C72726EA2C00338ADE /* SplashView.swift in Sources */,
 				EE87FB0925CB5E0500BA5BA0 /* DistanceElevationChart.swift in Sources */,
