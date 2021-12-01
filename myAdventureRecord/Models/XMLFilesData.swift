@@ -16,4 +16,8 @@ final class	BPFiles: ObservableObject {
 			return !self.xmlFiles.isEmpty
 		}
 	}
+	
+	func clear() -> Void {
+		self.xmlFiles = []
+	}
 }

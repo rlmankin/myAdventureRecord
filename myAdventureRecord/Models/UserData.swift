@@ -19,9 +19,10 @@ final class	UserData: ObservableObject {
 	func append(item: Track) {
 		var localAdventure = loadAdventureTrack(track: item)
 		self.adventures.append(localAdventure)
-		adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
+		adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})		// crashes when no startTime  11/30/21
 		//self.reload()
 	}
+	
 	
 	
 }

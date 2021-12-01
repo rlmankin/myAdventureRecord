@@ -61,7 +61,7 @@ struct BatchParseView: View {
 		}
 		
 		
-		let disableSleeping = disableScreenSleep()					// When the screen sleeps the parse stops.  Since parsing can take quite awhile,
+		_ = disableScreenSleep()					// When the screen sleeps the parse stops.  Since parsing can take quite awhile,
 																	//	disable sleeping until the parse is complete
 		for fileIndex in (0 ..< bpFiles.xmlFiles.endIndex) {
 				//print("pAIPL: launch parse \(bpFiles.xmlFiles[fileIndex].url)")
@@ -71,9 +71,8 @@ struct BatchParseView: View {
 				
 				DispatchQueue.main.async {
 					bpFiles.xmlFiles[fileIndex].parseInProgress = .inProgress
-					///print("pAIPL: \(bpFiles.xmlFiles[fileIndex].url.lastPathComponent).color = \(bpFiles.xmlFiles[fileIndex].color)")
 				}
-				let  parseSuccess = parseGPX.parseSingleFile(bpFiles.xmlFiles[fileIndex].url)
+				let parseSuccess = parseGPX.parseSingleFile(bpFiles.xmlFiles[fileIndex].url)
 				if parseSuccess {
 					
 					for track in parseGPX.parsedTracks {
@@ -93,23 +92,6 @@ struct BatchParseView: View {
 							} else {
 								fatalError("dbInsert in batchParse: \(track.header) not found in parseGPX.parsedTracks")
 							}
-						
-/*							let trackDb = sqlHikingData						//	open and connect to the hinkingdbTable of the SQL hiking database
-							//let trkptDb = SqlTrkptsDatabase()						//	connect to the trkptsTable of the SQL hiking database
-							let trackdbRow = trackDb.sqlInsertDbRow(track)			// trackRow is the row in the hikingdbTable where the track was inserted
-							bpFiles.xmlFiles[fileIndex].trackdbRow.append(Int(trackdbRow))
-							let numberOfTrkptRows = trackDb.sqlInsertTrkptList(trackdbRow, track.trkptsList)
-								// trkptRow is the number of rows in the trackptTable where the trackpoint list was inserted
-								//	trackRow is placed into the associatedTrackID field in the trackpointdbTable
-							let advdBRow = trackDb.sqlInsertAdvRow(Int64(track.trkUniqueID), loadAdventureTrack(track: track))
-								// advRow is the row in the adventuredbTable where the adventure was inserted,
-								//	trackRow is place into the associatedTrackID field in the adventuredbTable
-							bpFiles.xmlFiles[fileIndex].advdbRow.append(Int(advdBRow))
-*/
-							
-							
-							//bpFiles.xmlFiles[fileIndex].trackdbRow.append(numberOfTrkptRows)
-							
 							//print("GPX file: \(track.header) - inserted @ row: \(trackRow), trkPts @ row: \(trkptRow)")
 						} else {
 							bpFiles.xmlFiles[fileIndex].trackdbRow.append(-1)
@@ -125,25 +107,20 @@ struct BatchParseView: View {
 				}
 			}
 		}
-		let enableSleeping = enableScreenSleep()					// Since the parse is complete, re-enable the screen sleep function
+		_ = enableScreenSleep()					// Since the parse is complete, re-enable the screen sleep function
 		return true
 	}
 	
-	func getFile(startDate: Date, endDate: Date) -> [ReturnStruct]
+	func getFilesToParse(startDate: Date, endDate: Date) -> [ReturnStruct]
 	{
 		
-		var returnItem = ReturnStruct(url:URL(string:"blah")!, parseThis: true, creationDate: Date(), parseInProgress: .notStarted,
+		var returnItem : ReturnStruct = ReturnStruct(url:URL(string:"blah")!, parseThis: true, creationDate: Date(), parseInProgress: .notStarted,
 									  numTrkpts: [0], trackdbRow: [0], advdbRow: [0])
 		var returnString = [ReturnStruct]()
 		let fm = FileManager.default
 		let path = "/users/rlmankin/documents/hiking/hiking tracks/"
-		
-		
 		do {
-			
-			
 			let items = try fm.contentsOfDirectory(atPath: path)
-			
 			for item in items {
 				let itemURL = URL(fileURLWithPath: (path  + item))
 				if itemURL.pathExtension.uppercased() == "GPX" {
@@ -161,7 +138,7 @@ struct BatchParseView: View {
 		} catch {
 			print("BatchParseView: getFile: contentsOfDirectory | attributesOfItem has failed")
 		}
-		returnString.sort(by: {$0.creationDate < $1.creationDate})
+		returnString.sort(by: {$0.creationDate > $1.creationDate})
 		return returnString
 	}
 	
@@ -171,6 +148,7 @@ struct BatchParseView: View {
 	
 		return  Group {
 			if !bpFiles.xmlFilesAvailable {	// there are no files
+				// create the batch parse input form
 				Form  {
 					VStack (alignment: .leading) {
 						HStack  {
@@ -187,18 +165,19 @@ struct BatchParseView: View {
 						}
 						
 						HStack {
+								// toggle for whether to insert into the database or not
 							Toggle(isOn: $insertInDb, label: {
 								Text("Insert into Hiking Db?")
 							})
 							Spacer()
+								// button to allow to cancel out of this, BEFORE, finding files.  This will go back to the statistics view
 							Button( action: {
-									bpFiles.xmlFiles = getFile(startDate: startDate, endDate: endDate)
+									bpFiles.xmlFiles = getFilesToParse(startDate: startDate, endDate: endDate)
 									   //xmlFilesAvailable = !bpFiles.xmlFiles.isEmpty
 							}) 	{Text("Find files").frame( alignment: .center)
 								}
 							Button( action: {
 								stateFlag = FlagStates.empty
-								
 							}) {Text("Cancel")}
 							Spacer()
 						}
@@ -207,21 +186,32 @@ struct BatchParseView: View {
 					
 					
 			} else {
-				
+					// there are files in the bpFiles array
 				HStack {
-					Text("Check to Parse")
-					Spacer()
+						// button to cancel out of the parsing view when files are selected
+						// 12012021:  currently there is not a way to clear the bpFiles array that doesn't cause a crase in @main for 'index out of range'.
+						//		perhaps changing the BPFiles from an environment variable to a @State/@Binging??
 					Button( action: {
-							let parseQueue = DispatchQueue(label: "batchParseQueue", attributes: .concurrent)
-								//print("Body: bpFiles.xmlFiles @ button dispatch: \(bpFiles.xmlFiles)")
-							parseQueue.async {
-								parseAndInsertParseList(insert: insertInDb)
-								//userData.reload(tracksOnly: true)
-								beenParsed = true
+									stateFlag = FlagStates.empty
+									// bpFiles remains with contents from the original find.  Simple efforts (i.e. bpFiles.xmlFIles = [] or bpFiles.clear(), cause of index out of range wrror in @App.
+									//		Need to find a different way to clear the bpFiles array
+									
+									}
+						)
+						{ Text("Cancel")}
+							Spacer()
+						// button to parse the files identified.
+					Button( action: {
+									// create a background queue
+								let parseQueue = DispatchQueue(label: "batchParseQueue", attributes: .concurrent)
+									// parse and insert the results into the database for each file in bpFiles
+								parseQueue.async {
+									parseAndInsertParseList(insert: insertInDb)
+									beenParsed = true
+								}
 							}
-						}
-					   )
-					{Text("parse files?").frame(alignment: .center) }.disabled(beenParsed)
+					  	)
+						{Text("parse files?").frame(alignment: .center) }.disabled(beenParsed)
 					 Spacer()
 					 Toggle(isOn: $insertInDb, label: {
 						Text("Insert?")
@@ -229,7 +219,7 @@ struct BatchParseView: View {
 					 ).disabled(beenParsed)
 					Spacer()
 				}
-				if !bpFiles.xmlFiles.isEmpty {
+				if bpFiles.xmlFilesAvailable {
 					BPListView()
 				}
 					
