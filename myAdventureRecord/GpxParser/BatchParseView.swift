@@ -11,8 +11,6 @@ import SwiftUI
 struct GetDateView: View {
 	@Binding var startDate : Date
 	@Binding var endDate: Date
-	//@Binding var xmlFilesAvailable: Bool
-	//@EnvironmentObject var bpFiles: BPFiles
 	
 	var body: some View {
 		Form  {
@@ -189,17 +187,13 @@ struct BatchParseView: View {
 					// there are files in the bpFiles array
 				HStack {
 						// button to cancel out of the parsing view when files are selected
-						// 12012021:  currently there is not a way to clear the bpFiles array that doesn't cause a crase in @main for 'index out of range'.
-						//		perhaps changing the BPFiles from an environment variable to a @State/@Binging??
 					Button( action: {
-									stateFlag = FlagStates.empty
-									// bpFiles remains with contents from the original find.  Simple efforts (i.e. bpFiles.xmlFIles = [] or bpFiles.clear(), cause of index out of range wrror in @App.
-									//		Need to find a different way to clear the bpFiles array
-									
-									}
+									// clear the bpFile array, allowing the file list to be emptied from the cancel.
+								bpFiles.clear()
+								}
 						)
 						{ Text("Cancel")}
-							Spacer()
+					Spacer()
 						// button to parse the files identified.
 					Button( action: {
 									// create a background queue

@@ -27,7 +27,7 @@ struct BPListView: View {
 		return
 			Group {
 				List (0 ..< bpFiles.xmlFiles.endIndex, id:\.self) { fileIndex in
-						BParseRow(index: fileIndex)
+					BParseRow(bpFile: bpFiles.xmlFiles[fileIndex])
 				}
 				
 			}
