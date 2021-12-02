@@ -47,6 +47,14 @@ func loadAdventureData() -> [Adventure] {
 		
 	}
 	//print("Total TrkptLoadTime = \(cumTrkptListLoadTime)")
+	let nilStarts = adventures.map({$0.trackData.trackSummary.startTime == nil})
+	for index in (0 ..< nilStarts.endIndex) {
+		if nilStarts[index] { 	// adventure startTime is nil
+			let dc = DateComponents(year: 2013, month: 01, day: 01)
+			adventures[index].trackData.trackSummary.startTime = Calendar.current.date(from: dc)	// set nil entries to 01/01/2013
+			print("nil date found: \(index)")
+		}
+	}
 	adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})
 	timeStampLog(message: "<-loadAdventureData")
 	return adventures

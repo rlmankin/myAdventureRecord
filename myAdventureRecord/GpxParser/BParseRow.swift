@@ -16,9 +16,9 @@ struct BParseRow: View {
 		
 		return
 			HStack (spacing: 3){
-				Toggle(isOn: $bpFile.parseThis, label: {
-					EmptyView()
-				})
+				//Toggle(isOn: $bpFile.parseThis, label: {		// this doesnt move back to the upper level
+				//	EmptyView()
+				//})
 				//	name of file
 				Text("\(bpFile.url.lastPathComponent) ")
 					.frame(width:350, alignment: .leading)

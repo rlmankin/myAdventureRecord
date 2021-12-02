@@ -89,7 +89,7 @@ struct AdventureDetail: View {
 
 		}
 		
-		let x = createSplits(trkptsList: adventure.trackData.trkptsList)
+		//let x = createSplits(trkptsList: adventure.trackData.trkptsList)
 		
 		
 		return ScrollView {

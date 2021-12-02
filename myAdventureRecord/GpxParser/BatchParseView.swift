@@ -39,7 +39,8 @@ struct BatchParseView: View {
 	
 	@EnvironmentObject var userData: UserData
 	@EnvironmentObject var parseGPX :  parseController
-	@EnvironmentObject var bpFiles : BPFiles
+	//@EnvironmentObject var bpFiles : BPFiles
+	@State private var bpFiles =  BPFiles()
 	@State private var startDate = Date()
 	@State private var endDate = Date()
 	//@State private var xmlFiles = [ReturnStruct]()
@@ -47,6 +48,7 @@ struct BatchParseView: View {
 	@State private var beenParsed : Bool = false
 	@State private var insertInDb : Bool = false
 	@Binding var stateFlag : FlagStates?
+	@State private var bparseCancelled : Bool = false
 	
 	
 	
@@ -109,6 +111,12 @@ struct BatchParseView: View {
 		return true
 	}
 	
+	func removeTime(date: Date) -> Date {
+		let calendar = Calendar.current
+		let dateComponents = Calendar.current.dateComponents([.year,.month,.day], from: date)
+		return calendar.date(from: dateComponents)!
+	}
+	
 	func getFilesToParse(startDate: Date, endDate: Date) -> [ReturnStruct]
 	{
 		
@@ -125,7 +133,12 @@ struct BatchParseView: View {
 					let itemAttributes = try fm.attributesOfItem(atPath: itemURL.path)
 					let itemCreationDate = itemAttributes[.creationDate] as! Date
 					//print("\(itemURL.lastPathComponent): \(itemCreationDate)\n")
-					if (itemCreationDate <= endDate) && (itemCreationDate >= startDate) {
+					let itemDay = removeTime(date: itemCreationDate)
+					let startDay = removeTime(date: startDate)
+					let endDay = removeTime(date: endDate)
+					let dateRange = startDay ... endDay
+					
+					if dateRange.contains(itemDay) {
 						returnItem.url = itemURL
 						returnItem.creationDate = itemCreationDate
 						returnItem.parseInProgress = .notStarted
@@ -144,8 +157,8 @@ struct BatchParseView: View {
 		
 			//print("batchparseview body: avail: \(xmlFilesAvailable)\n \(bpFiles.xmlFiles.map {$0.color})")
 	
-		return  Group {
-			if !bpFiles.xmlFilesAvailable {	// there are no files
+		//return  Group {
+			if !bpFiles.xmlFilesAvailable  || bparseCancelled{	// there are no files  or previous batchParse has been cancelled.
 				// create the batch parse input form
 				Form  {
 					VStack (alignment: .leading) {
@@ -170,6 +183,7 @@ struct BatchParseView: View {
 							Spacer()
 								// button to allow to cancel out of this, BEFORE, finding files.  This will go back to the statistics view
 							Button( action: {
+									bparseCancelled = false
 									bpFiles.xmlFiles = getFilesToParse(startDate: startDate, endDate: endDate)
 									   //xmlFilesAvailable = !bpFiles.xmlFiles.isEmpty
 							}) 	{Text("Find files").frame( alignment: .center)
@@ -188,11 +202,11 @@ struct BatchParseView: View {
 				HStack {
 						// button to cancel out of the parsing view when files are selected
 					Button( action: {
-									// clear the bpFile array, allowing the file list to be emptied from the cancel.
-								bpFiles.clear()
-								}
+								stateFlag = (beenParsed == true ? FlagStates.empty : FlagStates.batchParse)
+								bparseCancelled = true
+							}
 						)
-						{ Text("Cancel")}
+					{ Text("\(beenParsed == true ? "Done" : "Cancel")")}
 					Spacer()
 						// button to parse the files identified.
 					Button( action: {
@@ -214,7 +228,8 @@ struct BatchParseView: View {
 					Spacer()
 				}
 				if bpFiles.xmlFilesAvailable {
-					BPListView()
+					BPListView(bpFiles: $bpFiles)
+						
 				}
 					
 					
@@ -222,13 +237,12 @@ struct BatchParseView: View {
 			}
 			
 			
-		}
+		//}
     }
 }
 
 struct BatchParseView_Previews: PreviewProvider {
     static var previews: some View {
-		BatchParseView(stateFlag: .constant(.batchParse))
-			.environmentObject(BPFiles())
+		BatchParseView(stateFlag: .constant(FlagStates.batchParse))
     }
 }

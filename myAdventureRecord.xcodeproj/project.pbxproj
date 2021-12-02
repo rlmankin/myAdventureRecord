@@ -65,6 +65,7 @@
 		EE8B90C32603867000050D19 /* AdventureSection2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8B90C22603867000050D19 /* AdventureSection2View.swift */; };
 		EE99D7C72726EA2C00338ADE /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE99D7C62726EA2C00338ADE /* SplashView.swift */; };
 		EE9AFD96274D9D5C00F84D3F /* SplitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9AFD95274D9D5C00F84D3F /* SplitsView.swift */; };
+		EEB33BED27581DBE00CCB514 /* SplitHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB33BEC27581DBD00CCB514 /* SplitHeaderView.swift */; };
 		EEDA19A725D4992D00B72577 /* parseGPXXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A625D4992D00B72577 /* parseGPXXML.swift */; };
 		EEDA19A925D56FF300B72577 /* GpxParseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDA19A825D56FF300B72577 /* GpxParseView.swift */; };
 		EEEB2A2E263AEC11004D3602 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEEB2A2D263AEBF8004D3602 /* SQLite.framework */; };
@@ -161,6 +162,7 @@
 		EE8B90C22603867000050D19 /* AdventureSection2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureSection2View.swift; sourceTree = "<group>"; };
 		EE99D7C62726EA2C00338ADE /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		EE9AFD95274D9D5C00F84D3F /* SplitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitsView.swift; sourceTree = SOURCE_ROOT; };
+		EEB33BEC27581DBD00CCB514 /* SplitHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SplitHeaderView.swift; path = "myAdventureRecord/Supporting Views/SplitHeaderView.swift"; sourceTree = SOURCE_ROOT; };
 		EEDA19A625D4992D00B72577 /* parseGPXXML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parseGPXXML.swift; sourceTree = "<group>"; };
 		EEDA19A825D56FF300B72577 /* GpxParseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxParseView.swift; sourceTree = "<group>"; };
 		EEEB2A2C263AEBF8004D3602 /* SQLite.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = SQLite.framework.dSYM; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 		EE87FAEF25CB5E0400BA5BA0 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				EEB33BEC27581DBD00CCB514 /* SplitHeaderView.swift */,
 				EE5E0371274E7EF5001D8230 /* SplitsChartView.swift */,
 				EE87FAE925CB5E0400BA5BA0 /* DistanceSpeedTab.swift */,
 				EE893549273ED95600F8FC4A /* DistributionHistogramChartView.swift */,
@@ -500,6 +503,7 @@
 				EE100A0C272EF0CD006BB086 /* RangeSlider.swift in Sources */,
 				EE87FB1B25CB5E0500BA5BA0 /* MinMaxChart.swift in Sources */,
 				EE87FB0825CB5E0500BA5BA0 /* DistanceSpeedChart.swift in Sources */,
+				EEB33BED27581DBE00CCB514 /* SplitHeaderView.swift in Sources */,
 				EE100A0A27298841006BB086 /* SplashTabView.swift in Sources */,
 				EE87FB1025CB5E0500BA5BA0 /* UserData.swift in Sources */,
 				EE87FB2325CB5E0500BA5BA0 /* AdventureRow.swift in Sources */,

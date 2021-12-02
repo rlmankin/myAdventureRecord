@@ -11,7 +11,7 @@ import SwiftUI
 struct myAdventureRecordApp: App {
 	@StateObject private var userData = UserData()
 	@StateObject private var parseGPX = parseController()
-	@StateObject private var bpFiles = BPFiles()
+	//@StateObject private var bpFiles = BPFiles()
 	
 	var body: some Scene {
 		
@@ -20,7 +20,7 @@ struct myAdventureRecordApp: App {
 		return WindowGroup {
 			ContentView().environmentObject(userData)
 						 .environmentObject(parseGPX)
-						 .environmentObject(bpFiles)
+						// .environmentObject(bpFiles)
 			
 		}
 		
