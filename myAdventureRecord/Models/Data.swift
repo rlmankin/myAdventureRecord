@@ -86,6 +86,9 @@ func loadAdventureTrack(track: Track) -> Adventure {
 		//		which should NOT be done in this function
 	adventure.trackData.trkptsList = track.trkptsList
 		//	if there are no trackpoints the there is no need to calculate any additional fields
+	let firstTrkpt = sqlHikingData.sqlRetrieveFirstTrkpt(adventure.id)
+	adventure.coordinates.latitude = firstTrkpt.latitude
+	adventure.coordinates.longitude = firstTrkpt.longitude
 	if !adventure.trackData.trkptsList.isEmpty {
 			//	coordinates set the center of the map at the starting location and hold the maximum/minimum latitude/longitude to set the area
 			//	of the track.  This is used to set the center and area of the map

@@ -79,34 +79,45 @@ struct MapView : View {
 		let maxLat = track.trkptsList.compactMap({$0.latitude}).max()!
 		let minLon = track.trkptsList.compactMap({$0.longitude}).min()!
 		let maxLon = track.trkptsList.compactMap({$0.longitude}).max()!
-		
-		let span = MKCoordinateSpan(latitudeDelta: CLLocationDegrees(abs(maxLat-minLat) + 0.2),
-									longitudeDelta: CLLocationDegrees(abs(maxLon-minLon) + 0.2))
+		let deltaLat = maxLat - minLat
+		let deltaLon = maxLon - minLon
+		let span = MKCoordinateSpan(latitudeDelta: CLLocationDegrees(1.25*deltaLat),
+									longitudeDelta: CLLocationDegrees(1.2*deltaLon))
+		//let span = MKCoordinateSpan(latitudeDelta: CLLocationDegrees(0.2),
+		//							longitudeDelta: CLLocationDegrees(0.2))
 			// set up a "standard" span of 0.2 degrees.  I may change this later
 			// to set the span to be the size of the track 'bounding box'
 		// if more than one detail tab is available, this statement will crash with a parallel access error
 		//		Need to find a way to either put some kind of semaphore in or grant shared access.
-		let region = MKCoordinateRegion(center: coordinate, span: span)
-		view.setRegion(region, animated: false)	// show the map immediately
+		
+		let center = CLLocationCoordinate2D(latitude: minLat + deltaLat/2, longitude: minLon + (deltaLon)/2)
+		let region = MKCoordinateRegion(center: center, span: span)
+		view.setRegion(region, animated: true)	// true - animate the map transition.  false -show the map immediately
 		view.mapType = .hybrid
 		
-		//trailhead marker
-		let trailHead = MKPointAnnotation()
-		trailHead.title = "trailhead"
-		trailHead.coordinate = coordinate
-		view.addAnnotation(trailHead)
+		
 		
 		// route (test case for now)
 		let trkPtAsLocations = convertTrkPtToLocation(track.trkptsList)
-		let trkPtAsAnnotations = convertLocationsToAnnotations(trkPtAsLocations)
+		//let trkPtAsAnnotations = convertLocationsToAnnotations(trkPtAsLocations)
 		//  trkPtAsAnnotations is currently not used to provide base functions for displaying waypoints later
+		//trailhead marker
+		let centerpoint = MKPointAnnotation()
+		centerpoint.title = "center"
+		centerpoint.coordinate = center
+		view.addAnnotation(centerpoint)
 		
+		let trailHead = MKPointAnnotation()
+		trailHead.title = "trailhead"
+		trailHead.coordinate = trkPtAsLocations[0]
+		view.addAnnotation(trailHead)
 		//view.addAnnotations(y)
 		let polyline = MKPolyline(coordinates: trkPtAsLocations, count: trkPtAsLocations.count)
 		view.addOverlay(polyline)
-		let mapRect = polyline.boundingMapRect
-		view.setVisibleMapRect(mapRect, animated: true)
+		//let mapRect = polyline.boundingMapRect
+		//view.setVisibleMapRect(mapRect, animated: true)
 		view.addOverlay(polyline)
+ 
 	}
 }
 

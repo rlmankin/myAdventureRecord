@@ -54,8 +54,10 @@ struct DistanceElevationTab: View {
 				
 				if !showGraph {
 					Button("click to see graph", action: { showGraph.toggle()})
+					Spacer()
 				} else {
 					DistanceElevationChart(track: adventure.trackData)
+						.animation(.linear(duration: 2.0))
 				}
 				
 				

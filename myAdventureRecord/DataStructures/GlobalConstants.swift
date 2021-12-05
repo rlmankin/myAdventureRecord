@@ -231,3 +231,25 @@ func createSplits(trkptsList: [Trkpt]) -> (eighthSplits: [SplitStruct], mileSpli
 	return ( eighthSplits,mileSplits)
 }
 
+
+let fixedLength : Int = 8
+func padStringWithFormat (value : String, format: Int) -> String {
+	var formattedValue : String = value
+	let stringLength : Int = value.count
+	
+	
+	if stringLength <= fixedLength {
+		formattedValue = String(repeating: " ", count: fixedLength - stringLength) + formattedValue
+	}
+	return formattedValue
+}
+func padNumberWithFormat (value : Double, format: String) -> String {
+	var formattedValue = String(format: format, value)
+	let stringLength : Int = formattedValue.count
+	
+	
+	if stringLength <= fixedLength {
+		formattedValue = String(repeating: " ", count: fixedLength - stringLength) + formattedValue
+	}
+	return formattedValue
+}

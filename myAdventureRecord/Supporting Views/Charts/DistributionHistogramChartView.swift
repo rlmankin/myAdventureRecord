@@ -16,7 +16,7 @@ struct DistributionHistogramChartView: View {
 		let xaxisOffset : CGFloat = 60.0
 			// pixels reserved for xaxis
 		let yaxisOffset : CGFloat = 0.0
-		let keyLabelOffset : CGFloat = 35.0
+		let keyLabelOffset : CGFloat = 10.0
 		let gapWidth : CGFloat = 2.0
 		let countOffset : CGFloat = 15.0		// offset to make count be at the inside top of the bars
 		
@@ -43,16 +43,8 @@ struct DistributionHistogramChartView: View {
 				let binWidth : CGFloat = reader.size.width / CGFloat(histogramBins.count)
 					// binWidth in pixels
 				let rectw : CGFloat = binWidth - gapWidth
-				let singleWidth : CGFloat = chartWidth/(maxKey - minKey)
-					// width of a single pxiel (in miles)
 				let singleHeight : CGFloat = chartHeight/maxValue
-					// height of a value of 1
-				/*Text("\(binWidth), \(chartWidth), \(histogramBins.count)")		// xaxis labels
-					.font(.subheadline)
-					   .foregroundColor(.yellow)
-					   .rotationEffect(.degrees(-90))
-					   .offset(x:0, y: 140)
-					   .border(.yellow, width: 2)*/
+				
 				ForEach (keyArray, id: \.self) { key in
 					let valueHeight : CGFloat = CGFloat(histogramBins[key]!) * singleHeight
 					let rectx : CGFloat = xlocationInPixels(x: key, chartWidthInPixels: chartWidth, xRange: xRange, min: minKey)
@@ -66,22 +58,15 @@ struct DistributionHistogramChartView: View {
 						p.addRoundedRect(in: rect, cornerSize: cornerSize)
 					}
 					 
-					
-					
-					/*Path {p in
-						p.move(to: CGPoint(x: rectx, y: reader.size.height))
-						p.addLine(to: CGPoint(x: rectx, y: 0))
-					
-					}.stroke(.yellow)*/
-		
 					VStack  {
-						let keyString : String = String(format:"%5.2f", key)
+						let keyString : String = String(format:"%5.1f", key)
 						Text("\(keyString)")		// xaxis labels
 							.alignmentGuide(.trailing, computeValue: { _ in 0 })
 							.font(.subheadline)
 							.foregroundColor(.white)
 							.rotationEffect(.degrees(-90))
-							.offset(x:rectx, y: chartHeight + 10)
+							.fixedSize()
+							.offset(x:rectx, y: chartHeight + keyLabelOffset)
 						
 						
 							// This section is written this way, versus something more elegant, to
@@ -109,7 +94,7 @@ struct DistributionHistogramChartView: View {
 
 struct DistributionHistogramChartView_Previews: PreviewProvider {
     static var previews: some View {
-		let filteredAdventures =  adventureData.filter {$0.hikeCategory == .hike}
+		let filteredAdventures =  adventureData.filter {$0.hikeCategory == .all}
 		
 		let arry = filteredAdventures.compactMap({$0.distance / metersperMile})
 		let arryBins = populateHistorgramArray(arry : arry)

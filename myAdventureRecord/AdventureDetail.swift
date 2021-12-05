@@ -150,30 +150,33 @@ struct AdventureDetail: View {
 			TabView {
 				DistanceElevationTab(adventure: adventure)
 					.tabItem({
-								Image(systemName: "thermometer")
-								Text("Elevation")})//.background(Color.red)
+						Image(systemName: "thermometer")
+						Text("Elevation")})//.background(Color.red)
+				let adventureSplits = createSplits(trkptsList: adventure.trackData.trkptsList)
+				SplitsView(eighthSplits: adventureSplits.eighthSplits, mileSplits: adventureSplits.mileSplits)
+					.tabItem({
+						Image(systemName: "chart.bar.fill")
+						Text("Splits").foregroundColor(.green)
+					})
 				DistanceGradeTab(adventure: adventure)
 					.tabItem({
-								Image(systemName: "chart.bar.fill")
-								Text("Grade")})
+						Image(systemName: "chart.bar.fill")
+						Text("Grade")})
 				DistanceSpeedTab(adventure: adventure)
 					.tabItem({
-								Image(systemName: "chart.bar.fill")
-								Text("Speed")})
+						Image(systemName: "chart.bar.fill")
+						Text("Speed")})
 				SummaryTab(adventure: adventure)
 					.tabItem({
 						Image(systemName: "chart.bar.fill")
 						Text("Summary")
 					})
-				let adventureSplits = createSplits(trkptsList: adventure.trackData.trkptsList)
-				SplitsView(eighthSplits: adventureSplits.eighthSplits, mileSplits: adventureSplits.mileSplits)
-					.tabItem({
-						Image(systemName: "chart.bar.fill")
-						Text("Splits")
-					})
+				
+				
 				
 				
 			}.frame(minWidth: 500, idealWidth: 500, maxWidth: .infinity, minHeight: 400,idealHeight: 700, maxHeight: .infinity, alignment: .center)
+				
 			
 			
 			

@@ -284,6 +284,11 @@ struct AdventureList: View {
 					// Command pulldown menu.  Used for specific operations (e.g. parse a file, list the database, batchparse many files)
 						ToolbarItem() {
 							Menu("Commands") {
+								Button("Splah") {
+									self.stateFlag = .empty
+									showDBTable = false
+									
+								}
 								Button("Filter") {
 									self.stateFlag = .showFilterView
 									showDBTable = false

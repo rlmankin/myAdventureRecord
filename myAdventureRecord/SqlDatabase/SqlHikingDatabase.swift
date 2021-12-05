@@ -994,6 +994,23 @@ class SqlHikingDatabase: NSObject {
 			}
 		}
 	}
+	
+	func sqlRetrieveFirstTrkpt( _ trackRowID: Int) -> Trkpt {
+		let rowIDexpression = Expression<Int>(String(trackRowID))
+		let tpdbTable = Table(sqltpDbTableName)
+		let query = tpdbTable.filter(sqltpDbTable.sqltpAssociatedTrackID == rowIDexpression)
+								.limit(1)
+		var temptp = Trkpt()
+		
+		if let tpFileHandle = sqlDbFileHandle {
+			let results = try! tpFileHandle.prepare(query)
+			for key in results {
+				temptp.latitude = key[sqltpDbTable.sqlLatitude]
+				temptp.longitude = key[sqltpDbTable.sqlLongitude]
+			}
+		}
+		return temptp
+	}
 
 	func sqlRetrieveTrkptlist(_ trackRowID: Int) -> [Trkpt] {
 		let rowIDexpression = Expression<Int>(String(trackRowID))
