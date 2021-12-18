@@ -20,17 +20,9 @@ struct myAdventureRecordApp: App {
 		return WindowGroup {
 			ContentView().environmentObject(userData)
 						 .environmentObject(parseGPX)
-						// .environmentObject(bpFiles)
-			
 		}
-		
 		.commands {
 			AdventureCommands(stateFlag: .constant(FlagStates.empty))
 		}
-	
-	//var body: some Scene {
-    //    let mainWindow = WindowGroup {
-	//		ContentView().environmentObject(userData)
-   //     }
     }
 }

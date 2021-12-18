@@ -13,9 +13,10 @@ import SwiftUI
 import ImageIO
 import CoreLocation
 
-var adventureData: [Adventure]  = loadAdventureData()				// 	create adventures from track data in the databse
+
 
 let sqlHikingData = SqlHikingDatabase()								// 	open and load the various tables from the database
+var adventureData: [Adventure]  = loadAdventureData()				// 	create adventures from track data in the databse
 
 func loadAdventureData() -> [Adventure] {
 	//	loadAdventureData loops through all tracks in the database and creates the adventure structure for all entries.
@@ -46,7 +47,7 @@ func loadAdventureData() -> [Adventure] {
 		//timeStamp(message: "<- \(item.header)")
 		
 	}
-	//print("Total TrkptLoadTime = \(cumTrkptListLoadTime)")
+	timeStampLog(message: "<- trackLoadTime")
 	let nilStarts = adventures.map({$0.trackData.trackSummary.startTime == nil})
 	for index in (0 ..< nilStarts.endIndex) {
 		if nilStarts[index] { 	// adventure startTime is nil
@@ -62,10 +63,12 @@ func loadAdventureData() -> [Adventure] {
 
 
 func loadAdventureTrack(track: Track) -> Adventure {
+	// NOTE: this is not a complete adventure, only the parts of the adventure structure found in the track structure
 	// loadAdventureTrack fills all applicable adventure fields from a track structure
-	// 	the trackpoints list is retrieved in the parent function or is already carried within the track structure
+	// 	the trackpoints list is retrieved in AdventureDetail when that adventure is requested
 	// this function is called throughout the app, so there should be no time consuming acticities in here (e.g.
 	//	calls to retrieve information from the database
+	//timeStampLog(message: "-> loadAdventureTrack")
 	var adventure = Adventure()
 	
 	adventure.id = track.trkUniqueID								// 	trkUniqueID is the critical field.  It is used to link all table entries
@@ -82,33 +85,9 @@ func loadAdventureTrack(track: Track) -> Adventure {
 		adventure.distance = track.trackSummary.distance
 	}
 	
-		//	DO NOT replace this line with a call to retrieve the trackpoint list.  Retrieving the trackpoint list a a timeconsuming function
-		//		which should NOT be done in this function
+		
 	adventure.trackData.trkptsList = track.trkptsList
-		//	if there are no trackpoints the there is no need to calculate any additional fields
-	let firstTrkpt = sqlHikingData.sqlRetrieveFirstTrkpt(adventure.id)
-	adventure.coordinates.latitude = firstTrkpt.latitude
-	adventure.coordinates.longitude = firstTrkpt.longitude
-	if !adventure.trackData.trkptsList.isEmpty {
-			//	coordinates set the center of the map at the starting location and hold the maximum/minimum latitude/longitude to set the area
-			//	of the track.  This is used to set the center and area of the map
-		adventure.coordinates.latitude = adventure.trackData.trkptsList[0].latitude
-																	//	find the latitude of the start of the track
-		adventure.coordinates.longitude = adventure.trackData.trkptsList[0].longitude
-																	//	find the longitude of the start of the track
-			// find the maximum latitude and longitude.
-			//	probably should 'guard' these to avoid an unexpected crash for nil
-		adventure.coordinates.maxLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).max()!
-		adventure.coordinates.maxLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).max()!
-				// find the minumum latitude and longitude
-		adventure.coordinates.minLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).min()!
-		adventure.coordinates.minLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).min()!
-				// calculate the 'span' of the latitude and longitude.  This sets the various 'corners' of the map
-		adventure.latitudeSpan = CLLocationDegrees( max( abs( adventure.coordinates.latitude - adventure.coordinates.maxLatitude),
-									  abs( adventure.coordinates.latitude - adventure.coordinates.minLatitude)))
-		adventure.longitudeSpan = CLLocationDegrees(max( abs( adventure.coordinates.longitude - adventure.coordinates.maxLongitude),
-									  abs( adventure.coordinates.longitude - adventure.coordinates.minLongitude)))
-	}
+		// 	if there is no trackpoint list, then defer loading all latitude/longitude related adventure items to AdventureDetail
 		//	set the hike date, using the 'usual' Apple date functions.  NOTE:  this uses a Swift closure, unusual for me to use.
 	adventure.hikeDate = {
 		let dateFmt = DateFormatter()
@@ -117,7 +96,9 @@ func loadAdventureTrack(track: Track) -> Adventure {
 			//	probably should 'guard' this to avoid an unexpected crash for nil
 		return String(format: "\(dateFmt.string(from: track.trackSummary.startTime ?? Date()))")
 	}()
-		// return, NOTE: this is not a complete adventure, only the parts of the adventure structure found in the track structure
+		
+	//timeStampLog(message: "<- loadAdventureTrack")
+	
 	return adventure
 }
 
@@ -131,37 +112,6 @@ func loadPartialAdventure(partial: Adventure, target: inout Adventure) {
 	target.hikeCategory = partial.hikeCategory
 	target.isFavorite = partial.isFavorite
 }
-
-
-
-//****************
-// The following are copied from the MacLandmarks tutorial.  I need to understand
-//	them before deciding if I should replace my versions with these.
-//	Note: as of 12/7/2020, I do not have an alternative to the "ImageStore" class
-//****************
-
-/*func load<T: Decodable>(_ filename: String) -> T {
-	let data: Data
-	
-	guard let file = Bundle.main.url(forResource: filename, withExtension: nil)
-	else {
-		fatalError("Couldn't find \(filename) in main bundle.")
-	}
-	
-	do {
-		data = try Data(contentsOf: file)
-	} catch {
-		fatalError("Couldn't load \(filename) from main bundle:\n\(error)")
-	}
-	
-	do {
-		let decoder = JSONDecoder()
-		return try decoder.decode(T.self, from: data)
-	} catch {
-		fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
-	}
-}
-*/
 
 final class ImageStore {
 	
@@ -211,39 +161,3 @@ final class ImageStore {
 	}
 
 }
-
-//   Original ImageStore Class
-
-/*final class ImageStore {
-	typealias _ImageDictionary = [String: CGImage]
-	fileprivate var images: _ImageDictionary = [:]
-
-	private static var scale = 2
-	
-	static var shared = ImageStore()
-	
-	func image(name: String) -> Image {
-		let index = _guaranteeImage(name: name)
-		
-		return Image(images.values[index], scale: CGFloat(ImageStore.scale), label: Text(name))
-	}
-
-	static func loadImage(name: String) -> CGImage {
-		guard
-			let url = Bundle.main.url(forResource: name, withExtension: "jpg"),
-			let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil),
-			let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil)
-		else {
-			fatalError("Couldn't load image \(name).jpg from main bundle.")
-		}
-		return image
-	}
-	
-	fileprivate func _guaranteeImage(name: String) -> _ImageDictionary.Index {
-		if let index = images.index(forKey: name) { return index }
-		
-		images[name] = ImageStore.loadImage(name: name)
-		return images.index(forKey: name)!
-	}
-
-}*/

@@ -996,6 +996,7 @@ class SqlHikingDatabase: NSObject {
 	}
 	
 	func sqlRetrieveFirstTrkpt( _ trackRowID: Int) -> Trkpt {
+		timeStampLog(message: "-> sqlRetrieveFirstTrkpt")
 		let rowIDexpression = Expression<Int>(String(trackRowID))
 		let tpdbTable = Table(sqltpDbTableName)
 		let query = tpdbTable.filter(sqltpDbTable.sqltpAssociatedTrackID == rowIDexpression)
@@ -1009,6 +1010,7 @@ class SqlHikingDatabase: NSObject {
 				temptp.longitude = key[sqltpDbTable.sqlLongitude]
 			}
 		}
+		timeStampLog(message: "<- sqlRetrieveFirstTrkpt")
 		return temptp
 	}
 
@@ -1066,6 +1068,8 @@ class SqlHikingDatabase: NSObject {
 	func reloadTracks(someRows : [Int] = [], tracksOnly : Bool = false) {									// Provide an array of row numbers (uniqueID)
 		if someRows.isEmpty {
 			self.tracks.removeAll()
+			
+			timeStampLog(message: "-> SqlHikingDatabase.reloadTracks.sqlGetAllRows")
 			self.tracks = self.sqlGetAllRows()
 			if !tracksOnly {
 				self.trkpts = self.sqlGetAllTpRows()

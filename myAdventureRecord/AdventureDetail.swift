@@ -86,7 +86,24 @@ struct AdventureDetail: View {
 		if adventure.trackData.trkptsList.isEmpty {
 			userData.adventures[adventureIndex].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(adventure.id)				//	retrieve the trackspoint list from the trackpointlist table in the database
 			adventure.trackData.trkptsList = userData.adventures[adventureIndex].trackData.trkptsList
-
+				//	coordinates set the center of the map at the starting location and hold the maximum/minimum latitude/longitude to set the area
+				//	of the track.  This is used to set the center and area of the map
+			adventure.coordinates.latitude = adventure.trackData.trkptsList[0].latitude
+																		//	find the latitude of the start of the track
+			adventure.coordinates.longitude = adventure.trackData.trkptsList[0].longitude
+																		//	find the longitude of the start of the track
+				// find the maximum latitude and longitude.
+				//	probably should 'guard' these to avoid an unexpected crash for nil
+			adventure.coordinates.maxLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).max()!
+			adventure.coordinates.maxLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).max()!
+					// find the minumum latitude and longitude
+			adventure.coordinates.minLatitude = adventure.trackData.trkptsList.compactMap({$0.latitude}).min()!
+			adventure.coordinates.minLongitude = adventure.trackData.trkptsList.compactMap({$0.longitude}).min()!
+					// calculate the 'span' of the latitude and longitude.  This sets the various 'corners' of the map
+			adventure.latitudeSpan = CLLocationDegrees( max( abs( adventure.coordinates.latitude - adventure.coordinates.maxLatitude),
+										  abs( adventure.coordinates.latitude - adventure.coordinates.minLatitude)))
+			adventure.longitudeSpan = CLLocationDegrees(max( abs( adventure.coordinates.longitude - adventure.coordinates.maxLongitude),
+										  abs( adventure.coordinates.longitude - adventure.coordinates.minLongitude)))
 		}
 		
 		//let x = createSplits(trkptsList: adventure.trackData.trkptsList)

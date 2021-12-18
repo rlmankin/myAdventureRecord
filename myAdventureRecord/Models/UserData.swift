@@ -9,7 +9,11 @@ import Combine
 import SwiftUI
 
 final class	UserData: ObservableObject {
-	@Published var adventures = adventureData
+	@Published var adventures : [Adventure] //= adventureData
+	
+	init() {
+		self.adventures = []
+	}
 	
 	func reload(tracksOnly: Bool = false) {
 		adventureData = loadAdventureData()
@@ -17,10 +21,13 @@ final class	UserData: ObservableObject {
 	}
 	
 	func append(item: Track) {
-		var localAdventure = loadAdventureTrack(track: item)
-		self.adventures.append(localAdventure)
+		self.adventures.append(loadAdventureTrack(track: item))
 		adventures.sort( by: { $0.trackData.trackSummary.startTime! >= $1.trackData.trackSummary.startTime!})		// crashes when no startTime  11/30/21
 		//self.reload()
+	}
+	
+	func loadUserData() async -> Void {
+		self.adventures = adventureData
 	}
 	
 	

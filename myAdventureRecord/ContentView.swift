@@ -33,14 +33,24 @@ struct DetailButtonStyle: ButtonStyle {
 }
 
 struct ContentView: View {
+	@EnvironmentObject var userData: UserData
 	
-	
-	
+	@ViewBuilder
 	var body: some View {
-		timeStampLog(message: "->ContentView")
-		return
-			AdventureList()
+		//timeStampLog(message: "->ContentView")
+	
+		
+		if userData.adventures.isEmpty {
+			ProgressView() //Text("Loading ...")
+			
 				.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 800, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+				.task {
+					 await userData.loadUserData()
+				}
+		} else {
+			AdventureList()
+					.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 800, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+		}
 	}
 	
 }

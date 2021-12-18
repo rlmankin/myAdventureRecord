@@ -28,7 +28,7 @@ struct DistributionHistogramChartView: View {
 		let maxKey : CGFloat = histogramBins.keys.max()!
 			// maximum key (longest distance)
 		let minKey : CGFloat = histogramBins.keys.min()!
-		let keyDistance : CGFloat = keyArray[1] - keyArray[0]
+		let keyDistance : CGFloat = (keyArray.count < 2 ? 0 : keyArray[1] - keyArray[0])
 		let xRange : Double = Double(maxKey - minKey + keyDistance)
 		let maxValue: CGFloat = CGFloat(histogramBins.values.max()!)
 			// maximum value in a single bin
