@@ -108,7 +108,7 @@ struct Adventure: Hashable, Codable, Identifiable {
 		
 		var description: String {
 			switch self {
-			case .all : return "all"
+			case .all : return "none"
 			case .hike: return "Hike"
 			case .walkabout: return "Walkabout"
 			case .orv : return "Off Road"

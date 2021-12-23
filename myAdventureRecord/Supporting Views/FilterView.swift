@@ -24,6 +24,7 @@ struct FilterView: View {
 		
 		
 		timeStampLog(message: "-> FilterView")
+		
 		return
 			VStack(alignment: .leading) {
 				Group {		// required to overcome 10 view limit
@@ -34,9 +35,21 @@ struct FilterView: View {
 						Spacer()
 					}
 					HStack {
+						
 						Spacer()
 						ForEach ( Adventure.HikeCategory.allCases, id: \.self) { category in
-							Button(category.description, action: {filtervars.filterByCategory = category})
+							Button(category.description,
+								   action: {
+								if category == .all {
+									filtervars.filterByCategory.removeAll()
+								} else {
+									if filtervars.filterByCategory.contains(category) {
+										filtervars.filterByCategory.remove(at: filtervars.filterByCategory.firstIndex(of: category)!)
+									} else {
+										filtervars.filterByCategory.append(category)
+									}
+								}
+						})
 						}
 						Spacer()
 					}
@@ -51,9 +64,11 @@ struct FilterView: View {
 						HStack {
 							let difficultyCases = [Color.green, Color.blue, Color.yellow, Color.orange, Color.red]
 							Spacer()
-							Button("all", action: { filtervars.filterByDifficulty = (score:0.0,color:Color.gray)})
+							Button("all",
+								   action: { filtervars.filterByDifficulty = (score:0.0,color:Color.gray)})
 							ForEach ( difficultyCases, id: \.self) { difficulty in
-								Button(difficulty.description, action: {filtervars.filterByDifficulty = (score: 0.0, color: difficulty)})
+								Button(difficulty.description,
+									   action: {filtervars.filterByDifficulty = (score: 0.0, color: difficulty)})
 							}
 							Spacer()
 						}

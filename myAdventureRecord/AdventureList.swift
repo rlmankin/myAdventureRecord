@@ -26,7 +26,8 @@ struct FilterRange {
 	}
 }
 struct FilterVars {
-	var filterByCategory : Adventure.HikeCategory
+	var filterByCategory : [Adventure.HikeCategory]
+	var filterFlag : Bool
 	var filterByDifficulty : (score: Double, color: Color)
 	
 	var showFilterView : Bool
@@ -42,7 +43,8 @@ struct FilterVars {
 	var searchMaxElevation = FilterRange()
 	
 	mutating func setVarsToDefault() {
-		self.filterByCategory =  Adventure.HikeCategory.all
+		self.filterByCategory =  [.hike, .walkabout, .orv, .scenicDrive, .snowshoe, .none]
+		self.filterFlag = true
 		self.searchArea = nullString
 		self.searchTitle  = nullString
 		self.searchStartDate = Date()
@@ -62,7 +64,9 @@ struct FilterVars {
 	}
 	
 	init() {
-		self.filterByCategory =  Adventure.HikeCategory.all
+		timeStampLog(message: "-> FilterVars.init")
+		self.filterByCategory =  [.hike, .walkabout, .orv, .scenicDrive, .snowshoe, .none]
+		self.filterFlag = true
 		self.searchArea = nullString
 		self.searchTitle  = nullString
 		self.searchStartDate = {let df = DateFormatter()
@@ -86,6 +90,7 @@ struct FilterVars {
 		self.searchMaxElevation.upper = 15000.0
 		self.filterByDifficulty = (0.0, Color.gray)
 		showFilterView = false
+		timeStampLog(message: "<- FilterVars.init")
 	}
 }
 
@@ -126,11 +131,13 @@ struct AdventureList: View {
 	}
 	
 	var filteredAdventures : [Adventure] {
-		var filteredAdventures : [Adventure] = userData.adventures
-		if filtervars.filterByCategory != .all {
-			filteredAdventures =  userData.adventures.filter {$0.hikeCategory == filtervars.filterByCategory}
-			}
 		
+		var filteredAdventures : [Adventure] = userData.adventures
+		
+		//if !filtervars.filterByCategory.contains(.all) {
+			let intersection = Array(Set(filteredAdventures.map({$0.hikeCategory})).intersection(filtervars.filterByCategory))
+			filteredAdventures =  userData.adventures.filter { intersection.contains( $0.hikeCategory)}
+		//}
 		let x = userData.adventures[4].difficulty
 		if filtervars.filterByDifficulty.color != Color.gray {
 			filteredAdventures = userData.adventures.filter { $0.difficulty.color == filtervars.filterByDifficulty.color}

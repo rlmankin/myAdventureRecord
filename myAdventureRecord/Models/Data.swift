@@ -47,7 +47,7 @@ func loadAdventureData() -> [Adventure] {
 		//timeStamp(message: "<- \(item.header)")
 		
 	}
-	timeStampLog(message: "<- trackLoadTime")
+	//timeStampLog(message: "<- trackLoadTime")
 	let nilStarts = adventures.map({$0.trackData.trackSummary.startTime == nil})
 	for index in (0 ..< nilStarts.endIndex) {
 		if nilStarts[index] { 	// adventure startTime is nil
