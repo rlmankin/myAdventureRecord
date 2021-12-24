@@ -19,6 +19,7 @@
 		EE1492A525F7B99600DE184A /* BPListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A425F7B99600DE184A /* BPListView.swift */; };
 		EE1492A725F7CB1C00DE184A /* XMLFilesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1492A625F7CB1C00DE184A /* XMLFilesData.swift */; };
 		EE3EB17F25D1F212004C149B /* SummaryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3EB17E25D1F212004C149B /* SummaryTab.swift */; };
+		EE409D162775FB9A00319342 /* FilterButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE409D152775FB9A00319342 /* FilterButtonsView.swift */; };
 		EE5BF7A9270DE5210045B3E0 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5BF7A8270DE5210045B3E0 /* SliderView.swift */; };
 		EE5E0372274E7EF5001D8230 /* SplitsChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5E0371274E7EF5001D8230 /* SplitsChartView.swift */; };
 		EE8218822703CAD300430188 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8218812703CAD300430188 /* FilterView.swift */; };
@@ -112,6 +113,7 @@
 		EE1492A625F7CB1C00DE184A /* XMLFilesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLFilesData.swift; sourceTree = "<group>"; };
 		EE1D66DF25CCB48A0050EB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE3EB17E25D1F212004C149B /* SummaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryTab.swift; sourceTree = "<group>"; };
+		EE409D152775FB9A00319342 /* FilterButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButtonsView.swift; sourceTree = "<group>"; };
 		EE5BF7A8270DE5210045B3E0 /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
 		EE5E0371274E7EF5001D8230 /* SplitsChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitsChartView.swift; sourceTree = SOURCE_ROOT; };
 		EE8218812703CAD300430188 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 		EE87FAE525CB5E0400BA5BA0 /* Supporting Views */ = {
 			isa = PBXGroup;
 			children = (
+				EE409D152775FB9A00319342 /* FilterButtonsView.swift */,
 				EE6023C92736B462003B2AF9 /* SplashViews */,
 				EE5BF7A8270DE5210045B3E0 /* SliderView.swift */,
 				EE8218812703CAD300430188 /* FilterView.swift */,
@@ -472,6 +475,7 @@
 			files = (
 				EE1492A525F7B99600DE184A /* BPListView.swift in Sources */,
 				EE87FB0325CB5E0400BA5BA0 /* StatsStructs.swift in Sources */,
+				EE409D162775FB9A00319342 /* FilterButtonsView.swift in Sources */,
 				EE9AFD96274D9D5C00F84D3F /* SplitsView.swift in Sources */,
 				EE100A0E272EF161006BB086 /* MonthHistogramView.swift in Sources */,
 				EE87FB1725CB5E0500BA5BA0 /* MapView.swift in Sources */,

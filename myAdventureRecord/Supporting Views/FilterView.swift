@@ -12,6 +12,14 @@ struct FilterView: View {
 	//@EnvironmentObject var userData: UserData
 	@Binding var filtervars: FilterVars
 	@Binding  var stateFlag : FlagStates?
+	// populate the button category array
+	@State private var categoryButtonOpacity : [Adventure.HikeCategory: Double] = {
+		var tempDict : [Adventure.HikeCategory: Double] = [:]
+		for key in Adventure.HikeCategory.allCases {
+			tempDict[key] = 0.5
+		}
+		return tempDict
+	}()
 	
 	
 	func setStateToDefault() {
@@ -20,7 +28,10 @@ struct FilterView: View {
 		
 	}
 	
+	
+	
     var body: some View {
+		
 		
 		
 		timeStampLog(message: "-> FilterView")
@@ -28,53 +39,8 @@ struct FilterView: View {
 		return
 			VStack(alignment: .leading) {
 				Group {		// required to overcome 10 view limit
-					HStack {
-						Spacer()
-						Text("Type")
-							.font(.headline)
-						Spacer()
-					}
-					HStack {
-						
-						Spacer()
-						ForEach ( Adventure.HikeCategory.allCases, id: \.self) { category in
-							Button(category.description,
-								   action: {
-								if category == .all {
-									filtervars.filterByCategory.removeAll()
-								} else {
-									if filtervars.filterByCategory.contains(category) {
-										filtervars.filterByCategory.remove(at: filtervars.filterByCategory.firstIndex(of: category)!)
-									} else {
-										filtervars.filterByCategory.append(category)
-									}
-								}
-						})
-						}
-						Spacer()
-					}
-					Group {
-						HStack {
-							Spacer()
-							Text("Difficulty")
-								.font(.headline)
-							Spacer()
-						}
-						
-						HStack {
-							let difficultyCases = [Color.green, Color.blue, Color.yellow, Color.orange, Color.red]
-							Spacer()
-							Button("all",
-								   action: { filtervars.filterByDifficulty = (score:0.0,color:Color.gray)})
-							ForEach ( difficultyCases, id: \.self) { difficulty in
-								Button(difficulty.description,
-									   action: {filtervars.filterByDifficulty = (score: 0.0, color: difficulty)})
-							}
-							Spacer()
-						}
-					}
 					
-					
+					FilterButtonsView(filtervars: $filtervars)
 					HStack {
 						Text("Area")
 						TextField(filtervars.searchArea, text: $filtervars.searchArea)

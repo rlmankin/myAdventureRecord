@@ -26,9 +26,9 @@ struct FilterRange {
 	}
 }
 struct FilterVars {
+	
 	var filterByCategory : [Adventure.HikeCategory]
-	var filterFlag : Bool
-	var filterByDifficulty : (score: Double, color: Color)
+	var filterByDifficulty : [Color]
 	
 	var showFilterView : Bool
 	
@@ -44,7 +44,7 @@ struct FilterVars {
 	
 	mutating func setVarsToDefault() {
 		self.filterByCategory =  [.hike, .walkabout, .orv, .scenicDrive, .snowshoe, .none]
-		self.filterFlag = true
+		self.filterByDifficulty = difficultyCases
 		self.searchArea = nullString
 		self.searchTitle  = nullString
 		self.searchStartDate = Date()
@@ -59,14 +59,14 @@ struct FilterVars {
 		self.searchDescent.upper = 0.0
 		self.searchMaxElevation.lower = 0.0
 		self.searchMaxElevation.upper = 15000.0
-		self.filterByDifficulty = (0.0, Color.gray)
+		
 	
 	}
 	
 	init() {
 		timeStampLog(message: "-> FilterVars.init")
 		self.filterByCategory =  [.hike, .walkabout, .orv, .scenicDrive, .snowshoe, .none]
-		self.filterFlag = true
+		self.filterByDifficulty = difficultyCases
 		self.searchArea = nullString
 		self.searchTitle  = nullString
 		self.searchStartDate = {let df = DateFormatter()
@@ -88,7 +88,6 @@ struct FilterVars {
 		self.searchDescent.upper = 0.0
 		self.searchMaxElevation.lower = 0.0
 		self.searchMaxElevation.upper = 15000.0
-		self.filterByDifficulty = (0.0, Color.gray)
 		showFilterView = false
 		timeStampLog(message: "<- FilterVars.init")
 	}
@@ -134,14 +133,11 @@ struct AdventureList: View {
 		
 		var filteredAdventures : [Adventure] = userData.adventures
 		
-		//if !filtervars.filterByCategory.contains(.all) {
-			let intersection = Array(Set(filteredAdventures.map({$0.hikeCategory})).intersection(filtervars.filterByCategory))
-			filteredAdventures =  userData.adventures.filter { intersection.contains( $0.hikeCategory)}
-		//}
-		let x = userData.adventures[4].difficulty
-		if filtervars.filterByDifficulty.color != Color.gray {
-			filteredAdventures = userData.adventures.filter { $0.difficulty.color == filtervars.filterByDifficulty.color}
-		}
+		let categoryIntersection = Array(Set(filteredAdventures.map({$0.hikeCategory})).intersection(filtervars.filterByCategory))
+		filteredAdventures =  filteredAdventures.filter { categoryIntersection.contains( $0.hikeCategory)}
+		
+		let difficultyIntersection = Array(Set(filteredAdventures.map({$0.difficulty.color})).intersection(filtervars.filterByDifficulty))
+		filteredAdventures = filteredAdventures.filter { difficultyIntersection.contains( $0.difficulty.color)}
 		
 		if filtervars.searchArea != nullString {
 			filteredAdventures = filteredAdventures.filter {$0.area.lowercased().contains(filtervars.searchArea.lowercased()) }
@@ -294,6 +290,10 @@ struct AdventureList: View {
 								
 							}
 							Button("Filter") {
+									// Clear any previous filter criteria before calling FilterView
+								self.filtervars.filterByCategory.removeAll()
+								self.filtervars.filterByDifficulty.removeAll()
+									// Show the FilterView
 								self.stateFlag = .showFilterView
 								showDBTable = false
 								
