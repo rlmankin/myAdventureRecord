@@ -9,38 +9,27 @@ import SwiftUI
 
 
 struct FilterView: View {
-	//@EnvironmentObject var userData: UserData
+	@EnvironmentObject var userData: UserData
 	@Binding var filtervars: FilterVars
-	@Binding  var stateFlag : FlagStates?
-	// populate the button category array
-	@State private var categoryButtonOpacity : [Adventure.HikeCategory: Double] = {
-		var tempDict : [Adventure.HikeCategory: Double] = [:]
-		for key in Adventure.HikeCategory.allCases {
-			tempDict[key] = 0.5
-		}
-		return tempDict
-	}()
-	
-	
-	func setStateToDefault() {
-		filtervars.setVarsToDefault()
-		stateFlag = FlagStates.empty
-		
-	}
-	
-	
+	@Binding var stateFlag : FlagStates?
+	var noFilteredAdventures : Bool
 	
     var body: some View {
+
 		
 		
-		
-		timeStampLog(message: "-> FilterView")
+		timeStampLog(message: "-> FilterView, \(noFilteredAdventures), Length \(filtervars.searchLength.lower), \(filtervars.searchLength.upper)")
 		
 		return
+		
+		
 			VStack(alignment: .leading) {
-				Group {		// required to overcome 10 view limit
-					
-					FilterButtonsView(filtervars: $filtervars)
+					//  present the Button View (category & difficulty).  Since I start with an empty list,
+					//		leaving these unset will present no hikes, therefore no additional filters are useful
+				FilterButtonsView(filtervars: $filtervars)
+				if noFilteredAdventures {						// no hikes to present
+					EmptyView()
+				} else {											// add in the additional filters
 					HStack {
 						Text("Area")
 						TextField(filtervars.searchArea, text: $filtervars.searchArea)
@@ -61,21 +50,18 @@ struct FilterView: View {
 								displayedComponents: [.date])
 							.datePickerStyle(DefaultDatePickerStyle())
 					}
+				
+					FilterSlidersView(filtervars: $filtervars)
 				}
-				Group {			// requited to overcome 10 view limit
-					SliderView(filtervar: $filtervars.searchLength, valueRange: 0.0 ... 500.0, valueString: "Length (miles)", baseMinValue: 0, baseMaxValue: 500)
-					SliderView(filtervar: $filtervars.searchPace, valueRange: 0.0 ... 75.0, valueString: "Pace (mph)", baseMinValue: 0, baseMaxValue: 75)
-					SliderView(filtervar: $filtervars.searchAscent, valueRange: 0.0 ... 30000.0, valueString: "Ascent (ft)", baseMinValue: 0, baseMaxValue: 30000)
-					SliderView(filtervar: $filtervars.searchDescent, valueRange: -20000.0 ... 0, valueString: "Descent (ft)", baseMinValue: -20000, baseMaxValue: 0)
-					SliderView(filtervar: $filtervars.searchMaxElevation, valueRange: 0 ... 15000, valueString: "Elevation (ft)", baseMinValue: 0, baseMaxValue: 15000)
+				
 					 
-					}
+					
 				
 				Button("Cancel") {
 						//self.setStateToDefault()
 					self.stateFlag = FlagStates.empty
 				}
-		}
+		}  // VStack
 	}
 }
 
@@ -83,8 +69,9 @@ struct FilterView: View {
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
 		let filtervars = FilterVars()
+		let filteredAdventures = adventureData.filter({$0.hikeCategory == .scenicDrive})
 		Group {
-			FilterView(filtervars: .constant(filtervars), stateFlag: .constant(FlagStates.showFilterView))
+			FilterView(filtervars: .constant(filtervars), stateFlag: .constant(FlagStates.showFilterView), noFilteredAdventures: true)
 				.padding()
 		}
 			

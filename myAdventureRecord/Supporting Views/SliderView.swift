@@ -11,35 +11,29 @@ struct SliderView : View {
 
 
 	@Binding var filtervar : FilterRange
-	var valueRange : ClosedRange<Double>
-	var valueString : String
-	var baseMinValue : Double
-	var baseMaxValue : Double
+	var range : ClosedRange<Double>
+	var label : String
 	
 	init(filtervar: Binding<FilterRange>,
-		 valueRange : ClosedRange<Double>,
-		 valueString: String,
-		 baseMinValue: Double,
-		 baseMaxValue: Double
+		 range : ClosedRange<Double>,
+		 label: String
 		) {
 		self._filtervar = filtervar
-		self.valueRange = valueRange
-		self.valueString = valueString
-		self.baseMinValue = baseMinValue
-		self.baseMaxValue = baseMaxValue
+		self.range = range
+		self.label = label
 	}
 	
 	
     var body: some View {
-		timeStampLog(message: "-> SliderView")
+		timeStampLog(message: "-> SliderView \(range), \(label)")
 		return
 			HStack (alignment: .center) {
-				Text(valueString.padding(toLength: 20, withPad: " ", startingAt: 0))
+				Text(label.padding(toLength: 20, withPad: " ", startingAt: 0))
 					.font(.caption)
 					.border(Color.orange)
 					.padding(2.0)
 				Spacer()
-				RangeSlider(boundLowerValue: $filtervar.lower, boundUpperValue: $filtervar.upper, range: baseMinValue ... baseMaxValue, label: "Length", sliderFrameWidth: 450)
+				RangeSlider(boundLowerValue: $filtervar.lower, boundUpperValue: $filtervar.upper, range: range, label: label, sliderFrameWidth: 450)
 			}.frame(width: 500)
 	}
 }
@@ -47,7 +41,7 @@ struct SliderView : View {
 struct SliderView_Previews: PreviewProvider {
     static var previews: some View {
 		let filtervar = FilterVars()
-		SliderView(filtervar: .constant(filtervar.searchLength), valueRange: -100...100, valueString: "Test", baseMinValue: -100, baseMaxValue: 100)
+		SliderView(filtervar: .constant(filtervar.searchLength), range: -100...100, label: "Test")
 		
 		
     }

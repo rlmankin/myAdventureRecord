@@ -155,6 +155,7 @@ struct BatchParseView: View {
 	
     var body: some View {
 		
+		
 			//print("batchparseview body: avail: \(xmlFilesAvailable)\n \(bpFiles.xmlFiles.map {$0.color})")
 	
 		//return  Group {

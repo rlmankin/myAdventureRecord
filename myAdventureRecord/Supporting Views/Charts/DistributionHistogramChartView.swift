@@ -94,7 +94,7 @@ struct DistributionHistogramChartView: View {
 
 struct DistributionHistogramChartView_Previews: PreviewProvider {
     static var previews: some View {
-		let filteredAdventures =  adventureData.filter {$0.hikeCategory == .all}
+		let filteredAdventures =  adventureData.filter {$0.hikeCategory == .hike}
 		
 		let arry = filteredAdventures.compactMap({$0.distance / metersperMile})
 		let arryBins = populateHistorgramArray(arry : arry)

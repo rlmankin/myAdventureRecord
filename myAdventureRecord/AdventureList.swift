@@ -17,80 +17,38 @@ enum FlagStates {
 }
 
 struct FilterRange {
-	var lower : Double
-	var upper : Double
-	
-	init() {
-		lower = 0.0
-		upper = 0.0
-	}
+	var filterRange : ClosedRange<Double> = 0...0
+	var baseRange : ClosedRange<Double> = 0...0
 }
 struct FilterVars {
 	
-	var filterByCategory : [Adventure.HikeCategory]
-	var filterByDifficulty : [Color]
-	
-	var showFilterView : Bool
-	
-	var searchArea : String
-	var searchTitle : String
-	var searchStartDate : Date
-	var searchEndDate : Date
+	var filterByCategory : [Adventure.HikeCategory] = [.hike, .walkabout, .orv, .scenicDrive, .snowshoe, .none]
+	var filterByDifficulty : [Color] = difficultyCases
+	var searchArea : String = nullString
+	var searchTitle : String = nullString
+	/*let startDate: Date?  = { let df = DateFormatter()
+							 df.dateFormat = "MM/dd/yyyy"
+							 if let theDate = df.date(from: "01/01/2013") {
+								 return theDate
+							 } else {
+								 return Date()
+							 }
+						  }()*/
+	var searchDateRange : ClosedRange<Date> = { let df = DateFormatter()
+												 df.dateFormat = "MM/dd/yyyy"
+											     if let theDate = df.date(from: "01/01/2013") {
+												   return theDate
+											     } else {
+												   return Date()
+											     }
+											  }() ... Date()
+	var searchEndDate = Date()
 	var searchLength = FilterRange()
 	var searchPace = FilterRange()
 	var searchAscent = FilterRange()
 	var searchDescent = FilterRange()
 	var searchMaxElevation = FilterRange()
 	
-	mutating func setVarsToDefault() {
-		self.filterByCategory =  [.hike, .walkabout, .orv, .scenicDrive, .snowshoe, .none]
-		self.filterByDifficulty = difficultyCases
-		self.searchArea = nullString
-		self.searchTitle  = nullString
-		self.searchStartDate = Date()
-		self.searchEndDate = Date()
-		self.searchLength.lower = 0.0
-		self.searchLength.upper = 500.0
-		self.searchPace.lower = 0.0
-		self.searchPace.upper = 75.0
-		self.searchAscent.lower = 0.0
-		self.searchAscent.upper = 30000.0
-		self.searchDescent.lower = -30000.0
-		self.searchDescent.upper = 0.0
-		self.searchMaxElevation.lower = 0.0
-		self.searchMaxElevation.upper = 15000.0
-		
-	
-	}
-	
-	init() {
-		timeStampLog(message: "-> FilterVars.init")
-		self.filterByCategory =  [.hike, .walkabout, .orv, .scenicDrive, .snowshoe, .none]
-		self.filterByDifficulty = difficultyCases
-		self.searchArea = nullString
-		self.searchTitle  = nullString
-		self.searchStartDate = {let df = DateFormatter()
-									df.dateFormat = "MM/dd/yyyy"
-									if let theDate = df.date(from: "01/01/2013") {
-										return theDate
-									} else {
-										return Date()
-									}
-								}()
-		self.searchEndDate = Date()
-		searchLength.lower = 0.0
-		searchLength.upper = 500.0
-		self.searchPace.lower = 0.0
-		self.searchPace.upper = 75.0
-		self.searchAscent.lower = 0.0
-		self.searchAscent.upper = 30000.0
-		self.searchDescent.lower = -30000.0
-		self.searchDescent.upper = 0.0
-		self.searchMaxElevation.lower = 0.0
-		self.searchMaxElevation.upper = 15000.0
-		showFilterView = false
-		timeStampLog(message: "<- FilterVars.init")
-	}
 }
 
 
@@ -105,53 +63,32 @@ struct AdventureList: View {
 	@EnvironmentObject var parseGPX: parseController				// contains all tracks from a set of requested URLs
 	
 	@State private var selectedURLs : [URL] = []
-	// the following flags should probably be transitioned to enums to make view management more readable and clear
-	
 	@State private var stateFlag : FlagStates? = .empty
 	@State private var showDBTable = false							// flag to display the SQL database table (true), or not (false)
-	
 	@State private var parseFile = false							// flag to show if requested to parse a GPX file (true)
 	@State private var batchParse = false
 	@State private var parseFileRequested = false
 	@State private var refreshList = false
 		// Filtering State variables
 	@State private var filtervars = FilterVars()
-	
 	@State private var showfilterView : Bool = false
 	
-	
-	func printStateVars() {
-		print("stateFlag: \(stateFlag)", terminator: " ")
-		print("showDBtable: \(showDBTable)", terminator: " ")
-		print("parseFile: \(parseFile)", terminator: " ")
-		print("batchParse: \(batchParse)", terminator: " ")
-		print("parseFileRequested: \(parseFileRequested)", terminator: " ")
-		print("refreshList: \(refreshList)")
-	}
-	
-	var filteredAdventures : [Adventure] {
-		
-		var filteredAdventures : [Adventure] = userData.adventures
-		
+	func filterAdventures(adventures: [Adventure]) -> [Adventure] {
+		timeStampLog(message: "->filterAdventures.count \(adventures.count)")
+		var filteredAdventures = adventures
 		let categoryIntersection = Array(Set(filteredAdventures.map({$0.hikeCategory})).intersection(filtervars.filterByCategory))
 		filteredAdventures =  filteredAdventures.filter { categoryIntersection.contains( $0.hikeCategory)}
 		
 		let difficultyIntersection = Array(Set(filteredAdventures.map({$0.difficulty.color})).intersection(filtervars.filterByDifficulty))
 		filteredAdventures = filteredAdventures.filter { difficultyIntersection.contains( $0.difficulty.color)}
-		
-		if filtervars.searchArea != nullString {
-			filteredAdventures = filteredAdventures.filter {$0.area.lowercased().contains(filtervars.searchArea.lowercased()) }
-		}
-		
-		if filtervars.searchTitle != nullString {
-			filteredAdventures = filteredAdventures.filter {$0.name.lowercased().contains(filtervars.searchTitle.lowercased()) }
-		}
-		filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.startTime! >= filtervars.searchStartDate  &&
+		filteredAdventures = filteredAdventures.filter { $0.area.lowercased().contains(filtervars.searchArea.lowercased()) }
+		filteredAdventures = filteredAdventures.filter {$0.name.lowercased().contains(filtervars.searchTitle.lowercased()) }
+//******************  making filterAdventures more swifty as part of adding baseRange to slider range values
+		filteredAdventures = filteredAdventures.filter {filtervars.searchDateRange.contains( $0.trackData.trackSummary.startTime! >= filtervars.searchStartDate  &&
 													$0.trackData.trackSummary.endTime! <= filtervars.searchEndDate }
-				
-		if filtervars.searchLength.upper > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.distance/metersperMile <= filtervars.searchLength.upper &&
-				$0.distance/metersperMile >= filtervars.searchLength.lower
+		
+		if filtervars.searchLength.filterRange.upperBound > 0 {
+			filteredAdventures = filteredAdventures.filter {filtervars.searchLength.filterRange.contains($0.distance/metersperMile)}
 			}
 		}
 		
@@ -179,12 +116,18 @@ struct AdventureList: View {
 	}
 	
 	
+	
+	
     var body: some View {
 		
 		
 		timeStampLog(message: "-> adventureList body, \(self.stateFlag), \(showDBTable)")
 			//printStateVars()
-		
+		var filteredAdventures : [Adventure] {
+			timeStampLog(message: "->var filteredAdventures")
+			return filterAdventures(adventures: userData.adventures)
+			
+		}
 		return
 			// The list of Adventures
 			
@@ -239,7 +182,7 @@ struct AdventureList: View {
 							
 						//filterview *****
 						NavigationLink(
-							destination: FilterView(filtervars: $filtervars, stateFlag: $stateFlag),
+							destination: FilterView(filtervars: $filtervars, stateFlag: $stateFlag, noFilteredAdventures: filteredAdventures.isEmpty),
 							tag: FlagStates.showFilterView,
 							selection: self.$stateFlag,
 							label: 	{Text("filterview").toolbar {}
