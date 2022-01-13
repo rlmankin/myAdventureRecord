@@ -55,7 +55,12 @@ struct SplashView: View {
 	
     var body: some View {
 		timeStampLog(message: "-> SplashView")
+		
 		return
+		Group {
+			if filteredAdventures.isEmpty {
+				Text("No adventures")
+			} else {
 			VStack {
 				GeometryReader { proxy in
 					HStack {
@@ -75,9 +80,11 @@ struct SplashView: View {
 						
 				
 			}//.frame( height: 500)
-		
+		}
+		}
     }
 }
+
 
 struct SplashView_Previews: PreviewProvider {
     static var previews: some View {

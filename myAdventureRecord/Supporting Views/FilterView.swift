@@ -14,19 +14,46 @@ struct FilterView: View {
 	@Binding var stateFlag : FlagStates?
 	var noFilteredAdventures : Bool
 	
+	@State private var startDate : Date = { let df = DateFormatter()
+										df.dateFormat = "MM/dd/yyyy"
+									   if let theDate = df.date(from: "01/01/2013") {
+										 return theDate
+									   } else {
+										 return Date()
+									   }
+							   }()
+	@State private var endDate : Date = Date.now
+	@State private var allCategories : Bool = false
+	@State private var allDifficulties : Bool = false
+	
+	init(filtervars : Binding<FilterVars>,
+		 stateFlag : Binding<FlagStates?>,
+		 noFilteredAdventures : Bool) {
+		
+		self._filtervars = filtervars
+		self._stateFlag = stateFlag
+		self.noFilteredAdventures = noFilteredAdventures
+	}
+	
+	
+	
     var body: some View {
-
 		
-		
-		timeStampLog(message: "-> FilterView, \(noFilteredAdventures), Length \(filtervars.searchLength.lower), \(filtervars.searchLength.upper)")
+		let boundStartDate = Binding(
+								get: {self.startDate},
+								set: {self.startDate = $0}
+								)
+		let boundEndDate = Binding(
+								get: {self.endDate},
+								set: {self.endDate = $0}
+								)
 		
 		return
-		
 		
 			VStack(alignment: .leading) {
 					//  present the Button View (category & difficulty).  Since I start with an empty list,
 					//		leaving these unset will present no hikes, therefore no additional filters are useful
-				FilterButtonsView(filtervars: $filtervars)
+				FilterButtonsView(filtervars: $filtervars, allCategories: $allCategories, allDifficulties: $allDifficulties)
 				if noFilteredAdventures {						// no hikes to present
 					EmptyView()
 				} else {											// add in the additional filters
@@ -40,38 +67,59 @@ struct FilterView: View {
 					}
 					HStack  {
 						DatePicker(	"Start Date",
-									selection: $filtervars.searchStartDate,
+									selection: boundStartDate,
 									displayedComponents: [.date])
 							.datePickerStyle(DefaultDatePickerStyle())
-					
+							.onChange(of: startDate) { value in
+								if value <= filtervars.searchDateRange.filterRange.upperBound {
+									filtervars.searchDateRange.filterRange = value ... filtervars.searchDateRange.filterRange.upperBound
+								}
+							}
 						
 						DatePicker("End Date",
-								   selection: $filtervars.searchEndDate,
+								   selection: boundEndDate,
 								displayedComponents: [.date])
 							.datePickerStyle(DefaultDatePickerStyle())
+							.onChange(of: endDate) { value in
+								if value >= filtervars.searchDateRange.filterRange.lowerBound {filtervars.searchDateRange.filterRange = filtervars.searchDateRange.filterRange.lowerBound ... value
+								}
+							}
 					}
-				
 					FilterSlidersView(filtervars: $filtervars)
 				}
 				
-					 
+				HStack {
+					Button("Cancel") {
+						filtervars = FilterVars()			// initializes the filter
+						self.stateFlag = FlagStates.empty	// return to the top view
+					}
 					
-				
-				Button("Cancel") {
-						//self.setStateToDefault()
-					self.stateFlag = FlagStates.empty
+					Button("Close") {						// keep the existing filter
+						self.stateFlag = FlagStates.empty	// return to the top view with filter in place
+					}
+					
+					Button("Clear") {
+						filtervars = FilterVars()			// initilizes the filter
+						filtervars.filterByCategory = []	// clears the categories
+						filtervars.filterByDifficulty = []	// clears the difficulty
+						allCategories = false
+						allDifficulties = false
+						self.stateFlag = FlagStates.showFilterView	// stay in the filterview
+					}
 				}
+				
 		}  // VStack
 	}
+	
 }
 
 
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
 		let filtervars = FilterVars()
-		let filteredAdventures = adventureData.filter({$0.hikeCategory == .scenicDrive})
 		Group {
 			FilterView(filtervars: .constant(filtervars), stateFlag: .constant(FlagStates.showFilterView), noFilteredAdventures: true)
+				.environmentObject(UserData())
 				.padding()
 		}
 			

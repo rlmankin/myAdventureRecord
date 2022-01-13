@@ -13,10 +13,8 @@ struct FilterButtonsView: View {
 	
 	@EnvironmentObject var userData: UserData
 	@Binding var filtervars: FilterVars
-	@State private var allCategories : Bool = false
-	@State private var allDifficulties : Bool = false
-	
-	
+	@Binding var allCategories : Bool
+	@Binding var allDifficulties : Bool
 	// populate the button category array
 	@State private var categoryButtonActive : [Adventure.HikeCategory: Bool] = {
 		var tempDict : [Adventure.HikeCategory: Bool] = [:]
@@ -25,7 +23,6 @@ struct FilterButtonsView: View {
 		}
 		return tempDict
 	}()
-	
 	// populate the button difficulty array
 	@State private var difficultyButtonActive : [Color: Bool] = {
 		var tempDict : [Color: Bool] = [:]
@@ -35,15 +32,16 @@ struct FilterButtonsView: View {
 		return tempDict
 	}()
 	
-	// change the various search parameters to reflect the range in the selected adventures
-	func setSearchParameter( adventures : [Adventure], mapClosure : (Adventure) -> Double) -> FilterRange {
-		let low : Double  = (adventures.map(mapClosure).min()
-							?? adventureData.map(mapClosure).min() ?? 0)/metersperMile
-		var high : Double  = (adventures.map(mapClosure).max()
-							 ?? adventureData.map(mapClosure).max() ?? 804672)/metersperMile
+	// change the search parameters (mapClosure) to reflect the range in the selected adventures
+	func setSearchParameter( adventures : [Adventure], mapClosure : (Adventure) -> Double, scale: Double) -> FilterRange {
+		
+		let low : Double  = Double((adventures.map(mapClosure).min()
+									?? adventureData.map(mapClosure).min() ?? 0)*scale).nextDown			// change based on closure *e.g. /meterpermile, *feetperMeter, etc
+		var high : Double  = Double((adventures.map(mapClosure).max()
+									 ?? adventureData.map(mapClosure).max() ?? 804672)*scale).nextUp		// here too
 		var range = FilterRange()
-		 range.lower = low
-		 range.upper = high
+		range.filterRange = low ... high
+		range.baseRange = low ... high
 		return range
 	}
 	
@@ -60,6 +58,20 @@ struct FilterButtonsView: View {
 		return searchAdventures
 	}
 	
+	// change all search parameters to reflect the range in the selected adventures
+	func setAllSearchParameters() -> Void {
+		
+		let searchAdventures = getAdventureSearchResults()
+		// find the min/max of the various sliders
+		filtervars.searchLength = setSearchParameter(adventures: searchAdventures, mapClosure: {$0.distance}, scale: 1/metersperMile)
+		filtervars.searchPace = setSearchParameter(adventures: searchAdventures, mapClosure: {$0.trackData.trackSummary.avgSpeed}, scale: secondsperHour/metersperMile)
+		filtervars.searchAscent = setSearchParameter(adventures: searchAdventures, mapClosure: {$0.trackData.trackSummary.totalAscent}, scale: feetperMeter)
+		
+		filtervars.searchDescent = setSearchParameter(adventures: searchAdventures, mapClosure: {$0.trackData.trackSummary.totalDescent}, scale: feetperMeter)
+		filtervars.searchMaxElevation = setSearchParameter(adventures: searchAdventures, mapClosure: {$0.trackData.trackSummary.elevationStats.max.elevation}, scale: feetperMeter)
+		timeStampLog(message: "capture search results \(filtervars.filterByDifficulty),\(filtervars.searchLength), \(searchAdventures.count)")
+	}
+	
     var body: some View {
 		timeStampLog(message: "-> FilterButtonsView")
 		
@@ -69,7 +81,7 @@ struct FilterButtonsView: View {
 			set: {
 				self.allCategories = $0
 				filtervars.filterByCategory.removeAll()
-				if $0 == true {
+				if self.allCategories == true {
 					
 					for category in Adventure.HikeCategory.allCases {
 						filtervars.filterByCategory.append(category)
@@ -80,6 +92,9 @@ struct FilterButtonsView: View {
 						categoryButtonActive[category] = false
 					}
 				}
+				// find the adventures that meet the category requirements
+				setAllSearchParameters()
+				//timeStampLog(message: "capture search results \(filtervars.filterByDifficulty),\(filtervars.searchLength), \(searchAdventures.count)")
 			})
 		
 				//	custom binding for "all" difficulty Toggle
@@ -88,7 +103,7 @@ struct FilterButtonsView: View {
 			set: {
 				self.allDifficulties = $0
 				filtervars.filterByDifficulty.removeAll()
-				if $0 == true {
+				if self.allDifficulties == true {
 					
 					for difficulty in difficultyCases {
 						filtervars.filterByDifficulty.append(difficulty)
@@ -99,6 +114,9 @@ struct FilterButtonsView: View {
 						difficultyButtonActive[difficulty] = false
 					}
 				}
+				// find the adventures that meet the category requirements
+				setAllSearchParameters()
+				//timeStampLog(message: "capture search results \(filtervars.filterByDifficulty),\(filtervars.searchLength), \(searchAdventures.count)")
 			})
 		return
 		
@@ -113,7 +131,7 @@ struct FilterButtonsView: View {
 					Spacer()
 					Toggle(isOn: categoryBinding) {					// uses the custom Binding for category
 						Text("all")
-					}
+					}		// may need an on-change
 					ForEach ( Adventure.HikeCategory.allCases, id: \.self) { category in
 							Button(category.description,
 								   action: {
@@ -131,10 +149,8 @@ struct FilterButtonsView: View {
 											
 										}
 										// find the adventures that meet the category requirements
-										let searchAdventures = getAdventureSearchResults()
-										// find the min/max of the various sliders
-										filtervars.searchLength = setSearchParameter(adventures: searchAdventures, mapClosure: {$0.distance})
-										timeStampLog(message: "capture search results")
+										setAllSearchParameters()
+										//timeStampLog(message: "capture search results \(filtervars.filterByDifficulty),\(filtervars.searchLength), \(searchAdventures.count)")
 									}
 							).opacity(categoryButtonActive[category]! ? 1.0 : 0.5)
 						}
@@ -165,10 +181,8 @@ struct FilterButtonsView: View {
 											difficultyButtonActive[difficulty] = true
 										}
 										// find the adventures that meet the category requirements
-										let searchAdventures = getAdventureSearchResults()
-										// find the min/max of the various sliders
-										filtervars.searchLength = setSearchParameter(adventures: searchAdventures, mapClosure: {$0.distance})
-										timeStampLog(message: "capture search results")
+										setAllSearchParameters()
+										//timeStampLog(message: "capture search results \(filtervars.filterByDifficulty),\(filtervars.searchLength), \(searchAdventures.count)")
 									}
 							)
 							//filtervars.filterByDifficulty = (score: 0.0, color: difficulty)})
@@ -188,6 +202,6 @@ struct FilterButtonsView_Previews: PreviewProvider {
  
     static var previews: some View {
 		let filtervars = FilterVars()
-		FilterButtonsView(filtervars: .constant(filtervars))
+		FilterButtonsView(filtervars: .constant(filtervars), allCategories: .constant(false), allDifficulties: .constant(false))
     }
 }

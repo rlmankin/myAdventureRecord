@@ -3,28 +3,17 @@ import SwiftUI
 
 public struct RangeSlider: View {
 	/// ` Slider` Binding min & max values
-	@Binding var boundLowerValue: Double
-	@Binding var boundUpperValue: Double
-	let range : ClosedRange<Double>
-	@State private var lowerXValue : CGFloat
+	@Binding var boundValue : FilterRange
+	@State private var lowerXValue : CGFloat = 0.0
 	@State private var upperXValue : CGFloat
-	
-	let label : String
-	let sliderFrameWidth : Double
+	let label : String = "test"
+	let sliderFrameWidth : Double = 450.0
 	
 	let thumbdiameter : CGFloat = 15
 	
-	init( 	boundLowerValue: Binding<Double>,
-			boundUpperValue: Binding<Double>,
-			range : ClosedRange<Double>,
-			label : String,
-			sliderFrameWidth : Double ) {
-		self._boundLowerValue = boundLowerValue
-		self._boundUpperValue = boundUpperValue
-		self.range = range
-		self.label = label
-		self.sliderFrameWidth = sliderFrameWidth
-		self.lowerXValue = 0
+	init(boundValue : Binding<FilterRange>,
+		 sliderFrameWidth : Double ) {
+		self._boundValue = boundValue
 		self.upperXValue = sliderFrameWidth-thumbdiameter/2
 	}
 	
@@ -32,12 +21,12 @@ public struct RangeSlider: View {
 
 	public var body: some View {
 		
-		let rangeSpan = range.upperBound - range.lowerBound
+		let rangeSpan = boundValue.baseRange.upperBound - boundValue.baseRange.lowerBound
 		let adjustedSliderWidth = sliderFrameWidth - thumbdiameter
 		let sliderHeight : CGFloat = 3
 		
 		func lowerRangeOffset(xValue: CGFloat) -> CGFloat {
-			let offset = xValue / adjustedSliderWidth * rangeSpan + range.lowerBound
+			let offset = xValue / adjustedSliderWidth * rangeSpan + boundValue.baseRange.lowerBound
 			return offset
 		}
 		
@@ -45,7 +34,7 @@ public struct RangeSlider: View {
 			let offset = xValue / adjustedSliderWidth * rangeSpan
 			return offset
 		}
-		timeStampLog(message: "-> RangeSlider \(range),\(boundLowerValue), \(boundUpperValue)")
+		timeStampLog(message: "-> RangeSlider \(boundValue.baseRange),\(boundValue.filterRange)")
 		return
 			VStack {
 				
@@ -62,7 +51,7 @@ public struct RangeSlider: View {
 						Circle()							//the lower thumb
 							.frame(width: thumbdiameter, height: thumbdiameter)
 							.offset(x: lowerXValue-thumbdiameter/2, y: thumbdiameter/2)		// center the circle on the rectancle
-						Text(String(format: "%5.0f", boundLowerValue))		// the lower thumb value
+						Text(String(format: "%5.0f", boundValue.filterRange.lowerBound))		// the lower thumb value
 							.foregroundColor(Color.white)
 							.font(.footnote)
 							.border(Color.green)
@@ -74,7 +63,7 @@ public struct RangeSlider: View {
 							value.location.x <= upperXValue{
 							lowerXValue = (value.location.x > thumbdiameter/4 ? value.location.x : 0.0)
 							//print("\(value.location.x), \(lowerRangeOffset(xValue: value.location.x)), \(lowerXValue)")
-							self.boundLowerValue = Double(lowerRangeOffset(xValue: lowerXValue))
+							boundValue.filterRange = Double(lowerRangeOffset(xValue: lowerXValue)) ... boundValue.filterRange.upperBound
 						}
 					}))
 					
@@ -83,7 +72,7 @@ public struct RangeSlider: View {
 						Circle()							//the upper thumb
 							.frame(width: thumbdiameter, height: thumbdiameter)
 							.offset(x:upperXValue-thumbdiameter/2, y: thumbdiameter/2)
-						Text(String(format: "%5.0f", boundUpperValue))		// the upper thumb value
+						Text(String(format: "%5.0f", boundValue.filterRange.upperBound))		// the upper thumb value
 							.foregroundColor(Color.white)
 							.font(.footnote)
 							.offset(x:adjustedSliderWidth - 1.5*thumbdiameter)
@@ -95,7 +84,7 @@ public struct RangeSlider: View {
 							value.location.x > lowerXValue {
 							upperXValue = ( value.location.x > sliderFrameWidth-thumbdiameter/2 ? sliderFrameWidth-thumbdiameter/2 : value.location.x)
 							print("\(value.location.x), \(upperRangeOffset(xValue: value.location.x)), \(upperXValue)")
-							self.boundUpperValue = Double(upperRangeOffset(xValue: value.location.x))
+							boundValue.filterRange = boundValue.filterRange.lowerBound ... Double(upperRangeOffset(xValue: value.location.x))
 						}
 					}))
 					
@@ -110,7 +99,7 @@ struct RangeSlider_Previews: PreviewProvider {
 		let filtervar = FilterVars()
 		
 		let sliderWidth = 450.0
-		RangeSlider(boundLowerValue: .constant(-100), boundUpperValue: .constant(100), range: -100...100, label: "test", sliderFrameWidth: sliderWidth)
+		RangeSlider(boundValue: .constant(filtervar.searchLength), sliderFrameWidth: sliderWidth)
 		
 	}
 }

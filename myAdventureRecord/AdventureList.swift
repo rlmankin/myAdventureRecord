@@ -17,8 +17,35 @@ enum FlagStates {
 }
 
 struct FilterRange {
-	var filterRange : ClosedRange<Double> = 0...0
-	var baseRange : ClosedRange<Double> = 0...0
+	var filterRange : ClosedRange<Double> = -Double.greatestFiniteMagnitude ... Double.greatestFiniteMagnitude
+	var baseRange : ClosedRange<Double> = -Double.greatestFiniteMagnitude ... Double.greatestFiniteMagnitude
+}
+
+struct FilterDateRange {
+	var filterRange : ClosedRange<Date> = { let df = DateFormatter()
+												df.dateFormat = "MM/dd/yyyy"
+												 if let theDate = df.date(from: "01/01/2013") {
+												   return theDate
+												 } else {
+												   return Date()
+												 }
+										 }() ...
+										 {let df = DateFormatter()
+												df.dateFormat = "MM/dd/yyyy"
+												return Date.now
+										 }()
+	var baseRange : ClosedRange<Date> = { let df = DateFormatter()
+												df.dateFormat = "MM/dd/yyyy"
+												 if let theDate = df.date(from: "01/01/2013") {
+												   return theDate
+												 } else {
+												   return Date()
+												 }
+										}() ...
+									    {let df = DateFormatter()
+									     	 df.dateFormat = "MM/dd/yyyy"
+									    	 return Date.now
+									    }()
 }
 struct FilterVars {
 	
@@ -26,23 +53,8 @@ struct FilterVars {
 	var filterByDifficulty : [Color] = difficultyCases
 	var searchArea : String = nullString
 	var searchTitle : String = nullString
-	/*let startDate: Date?  = { let df = DateFormatter()
-							 df.dateFormat = "MM/dd/yyyy"
-							 if let theDate = df.date(from: "01/01/2013") {
-								 return theDate
-							 } else {
-								 return Date()
-							 }
-						  }()*/
-	var searchDateRange : ClosedRange<Date> = { let df = DateFormatter()
-												 df.dateFormat = "MM/dd/yyyy"
-											     if let theDate = df.date(from: "01/01/2013") {
-												   return theDate
-											     } else {
-												   return Date()
-											     }
-											  }() ... Date()
-	var searchEndDate = Date()
+	
+	var searchDateRange = FilterDateRange()
 	var searchLength = FilterRange()
 	var searchPace = FilterRange()
 	var searchAscent = FilterRange()
@@ -76,42 +88,37 @@ struct AdventureList: View {
 	func filterAdventures(adventures: [Adventure]) -> [Adventure] {
 		timeStampLog(message: "->filterAdventures.count \(adventures.count)")
 		var filteredAdventures = adventures
+			// category
 		let categoryIntersection = Array(Set(filteredAdventures.map({$0.hikeCategory})).intersection(filtervars.filterByCategory))
-		filteredAdventures =  filteredAdventures.filter { categoryIntersection.contains( $0.hikeCategory)}
-		
+		filteredAdventures =  filteredAdventures.filter{ categoryIntersection.contains( $0.hikeCategory)}
+			// difficulty
 		let difficultyIntersection = Array(Set(filteredAdventures.map({$0.difficulty.color})).intersection(filtervars.filterByDifficulty))
-		filteredAdventures = filteredAdventures.filter { difficultyIntersection.contains( $0.difficulty.color)}
-		filteredAdventures = filteredAdventures.filter { $0.area.lowercased().contains(filtervars.searchArea.lowercased()) }
-		filteredAdventures = filteredAdventures.filter {$0.name.lowercased().contains(filtervars.searchTitle.lowercased()) }
-//******************  making filterAdventures more swifty as part of adding baseRange to slider range values
-		filteredAdventures = filteredAdventures.filter {filtervars.searchDateRange.contains( $0.trackData.trackSummary.startTime! >= filtervars.searchStartDate  &&
-													$0.trackData.trackSummary.endTime! <= filtervars.searchEndDate }
+		filteredAdventures = filteredAdventures.filter{ difficultyIntersection.contains( $0.difficulty.color)}
+			// area & titile
+		if filtervars.searchArea != nullString {
+			filteredAdventures = filteredAdventures.filter{ $0.area.lowercased().contains(filtervars.searchArea.lowercased()) }
+		}
+		if filtervars.searchTitle != nullString {
+			filteredAdventures = filteredAdventures.filter{ $0.name.lowercased().contains(filtervars.searchTitle.lowercased()) }
+		}
+			// date
+		filteredAdventures = filteredAdventures.filter{ filtervars.searchDateRange.filterRange.contains( $0.trackData.trackSummary.startTime!)  &&
+														filtervars.searchDateRange.filterRange.contains( $0.trackData.trackSummary.endTime!)  }
+			// length (distance)
+		filteredAdventures = filteredAdventures.filter{ filtervars.searchLength.filterRange.contains($0.distance/metersperMile)}
+			// pace (speed)
+		filteredAdventures = filteredAdventures.filter{ filtervars.searchPace.filterRange.contains(
+														$0.trackData.trackSummary.avgSpeed/metersperMile*secondsperHour)}
+			// ascent (gain)
+		filteredAdventures = filteredAdventures.filter{ filtervars.searchAscent.filterRange.contains(
+														$0.trackData.trackSummary.totalAscent*feetperMeter)}
+			// descent (-gain)
+		filteredAdventures = filteredAdventures.filter{ filtervars.searchDescent.filterRange.contains(
+														$0.trackData.trackSummary.totalDescent*feetperMeter)}
+			// max elevation
+		filteredAdventures = filteredAdventures.filter{ filtervars.searchMaxElevation.filterRange.contains(
+														$0.trackData.trackSummary.elevationStats.max.elevation/metersperMile*secondsperHour)}
 		
-		if filtervars.searchLength.filterRange.upperBound > 0 {
-			filteredAdventures = filteredAdventures.filter {filtervars.searchLength.filterRange.contains($0.distance/metersperMile)}
-			}
-		}
-		
-		if filtervars.searchPace.upper > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.avgSpeed/metersperMile*secondsperHour <= filtervars.searchPace.upper &&
-				$0.trackData.trackSummary.avgSpeed/metersperMile*secondsperHour >= filtervars.searchPace.lower
-			}
-		}
-		if filtervars.searchAscent.upper > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.totalAscent*feetperMeter <= filtervars.searchAscent.upper &&
-				$0.trackData.trackSummary.totalAscent*feetperMeter >= filtervars.searchAscent.lower
-			}
-		}
-		if filtervars.searchDescent.lower < 0 {
-			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.totalDescent*feetperMeter <= filtervars.searchDescent.upper &&
-				$0.trackData.trackSummary.totalDescent*feetperMeter >= filtervars.searchDescent.lower
-			}
-		}
-		if filtervars.searchMaxElevation.upper > 0 {
-			filteredAdventures = filteredAdventures.filter {$0.trackData.trackSummary.elevationStats.max.elevation * feetperMeter <= filtervars.searchMaxElevation.upper &&
-				$0.trackData.trackSummary.elevationStats.max.elevation * feetperMeter >= filtervars.searchMaxElevation.lower
-			}
-		}
 		return filteredAdventures
 	}
 	
@@ -229,6 +236,7 @@ struct AdventureList: View {
 						Menu("Commands") {
 							Button("Splash") {
 								self.stateFlag = .empty
+								filtervars = FilterVars()
 								showDBTable = false
 								
 							}

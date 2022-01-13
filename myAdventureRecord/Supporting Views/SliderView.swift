@@ -33,7 +33,7 @@ struct SliderView : View {
 					.border(Color.orange)
 					.padding(2.0)
 				Spacer()
-				RangeSlider(boundLowerValue: $filtervar.lower, boundUpperValue: $filtervar.upper, range: range, label: label, sliderFrameWidth: 450)
+				RangeSlider(boundValue: $filtervar, sliderFrameWidth: 450)
 			}.frame(width: 500)
 	}
 }

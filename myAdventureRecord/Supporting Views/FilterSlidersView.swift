@@ -14,18 +14,25 @@ struct FilterSlidersView: View {
     var body: some View {
 		
 		 
-		var range : ClosedRange =  filtervars.searchLength.lower ... filtervars.searchLength.upper
+		var range : ClosedRange =  filtervars.searchLength.filterRange
 		 
 		timeStampLog(message: "-> filterSlider: range \(range)")
 	return
 		Group {
 		 SliderView(filtervar: $filtervars.searchLength,
-					range: range,
+					range: filtervars.searchLength.baseRange,
 					label: "Length (miles)")
-		// SliderView(filtervar: $filtervars.searchPace, range: 0.0 ... 75.0, label: "Pace (mph)")
-		// SliderView(filtervar: $filtervars.searchAscent, range: 0.0 ... 30000.0, label: "Ascent (ft)")
-		// SliderView(filtervar: $filtervars.searchDescent, range: -20000.0 ... 0, label: "Descent (ft)")
-		// SliderView(filtervar: $filtervars.searchMaxElevation, range: 0 ... 15000, label: "Elevation (ft)")
+		SliderView(filtervar: $filtervars.searchPace,
+				   range: filtervars.searchPace.baseRange, label: "Pace (mph)")
+		SliderView(filtervar: $filtervars.searchAscent,
+				   range: filtervars.searchAscent.baseRange,
+				   label: "Ascent (ft)")
+		SliderView(filtervar: $filtervars.searchDescent,
+				   range: filtervars.searchDescent.baseRange,
+				   label: "Descent (ft)")
+		SliderView(filtervar: $filtervars.searchMaxElevation,
+				   range: filtervars.searchMaxElevation.baseRange,
+				   label: "Elevation (ft)")
 			
 		}
 	}
