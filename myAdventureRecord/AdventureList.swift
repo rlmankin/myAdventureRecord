@@ -117,7 +117,7 @@ struct AdventureList: View {
 														$0.trackData.trackSummary.totalDescent*feetperMeter)}
 			// max elevation
 		filteredAdventures = filteredAdventures.filter{ filtervars.searchMaxElevation.filterRange.contains(
-														$0.trackData.trackSummary.elevationStats.max.elevation/metersperMile*secondsperHour)}
+														$0.trackData.trackSummary.elevationStats.max.elevation*feetperMeter)}
 		
 		return filteredAdventures
 	}
