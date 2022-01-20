@@ -149,14 +149,12 @@ struct AdventureList: View {
 						selection: self.$stateFlag,
 						label: { Text("empty").toolbar {}}
 					).hidden()
-					//CommandButtonsView(showDBTable: $showDBTable, batchParse: $batchParse, stateFlag: $stateFlag, parseFileRequested: $parseFileRequested, filtervars: $filtervars , filteredAdventures: filteredAdventures)
-					
 					//	The List of Adventure *****
 					//	in the loop, create a navigation link for each entry.  if the adventure is selected, the display the detail in the
 					//	detail view (right pane)
-					ForEach(filteredAdventures/*userData.adventures*/) { adventure in
+					ForEach(filteredAdventures) { adventure in
 						NavigationLink(
-							destination: AdventureDetail(passedAdventure: adventure, beenInserted: true)) {
+							destination: AdventureDetail(adventure: adventure, beenInserted: true)) {
 								AdventureRow(adventure: adventure)
 								}
 						.tag(adventure)
@@ -217,10 +215,6 @@ struct AdventureList: View {
 										//		by setting stateflag to either empty or parsefile
 									stateFlag = (selectedURLs.isEmpty ? .empty : .parseFile)
 									if stateFlag == FlagStates.parseFile {
-									//parseFile = !selectedURLs.isEmpty
-									//if !parseFile {
-									//	stateFlag = .empty
-									//} else {
 										let parseFilesSuccess = parseGPX.parseGpxFileList(selectedURLs)	// parse all the selected URLs in background
 											parseFileRequested.toggle()						//	turn off parseFileRequested to indicate we have received a set of URLs
 									}

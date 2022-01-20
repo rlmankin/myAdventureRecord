@@ -186,6 +186,9 @@ struct SplitStruct: Codable, Hashable {
 	var endIndex : Int = 0
 }
 
+//	a function to calculate the various 1/8 mile and one mile splits in the adventure.  This requires the recreation of the
+//		1/8 and one mile calculation as these arrays are not stored in the track structure.  May some day make this an extension
+//		of the track structure.  This process can be time consuming...
 func createSplits(trkptsList: [Trkpt]) -> (eighthSplits: [SplitStruct], mileSplits: [SplitStruct]) {
 	var currentBase8thIndex : Int = 0
 	var currentBaseMileIndex : Int = 0
@@ -197,10 +200,7 @@ func createSplits(trkptsList: [Trkpt]) -> (eighthSplits: [SplitStruct], mileSpli
 	for index in (2 ..< trkptsList.endIndex) {
 		let currentTrkpt = trkptsList[index]
 		let base8thTrkpt = trkptsList[currentBase8thIndex]
-		//let eighthDistance = calcDistance(currentTrkpt, base8thTrkpt)
-		//let legArray = trkptsList[currentBase8thIndex...index].compactMap({$0.lastTimeEleTrkpt.distance})
 		let legDistance8th = trkptsList[currentBase8thIndex...index].compactMap({$0.lastTimeEleTrkpt.distance}).reduce(0,+)
-		
 		
 		if (legDistance8th >= metersperMile / 8) || (index == trkptsList.endIndex - 1) {
 			currentSplit.startIndex = currentBase8thIndex
@@ -231,23 +231,21 @@ func createSplits(trkptsList: [Trkpt]) -> (eighthSplits: [SplitStruct], mileSpli
 	return ( eighthSplits,mileSplits)
 }
 
-
+// a property and function to pad a string with blanks to a fixed length.  I use this to insure alignment in VStacks
 let fixedLength : Int = 8
 func padStringWithFormat (value : String, format: Int) -> String {
 	var formattedValue : String = value
 	let stringLength : Int = value.count
-	
-	
 	if stringLength <= fixedLength {
 		formattedValue = String(repeating: " ", count: fixedLength - stringLength) + formattedValue
 	}
 	return formattedValue
 }
+
+// a function to create a fixed lenght String by padding blanks to a fixed length number.  I use this to insure alignment in VStacks
 func padNumberWithFormat (value : Double, format: String) -> String {
 	var formattedValue = String(format: format, value)
 	let stringLength : Int = formattedValue.count
-	
-	
 	if stringLength <= fixedLength {
 		formattedValue = String(repeating: " ", count: fixedLength - stringLength) + formattedValue
 	}

@@ -1015,6 +1015,7 @@ class SqlHikingDatabase: NSObject {
 	}
 
 	func sqlRetrieveTrkptlist(_ trackRowID: Int) -> [Trkpt] {
+		timeStampLog(message: "-> sqlRetrieveTrkptList")
 		let rowIDexpression = Expression<Int>(String(trackRowID))
 		let tpdbTable = Table(sqltpDbTableName)
 		let query = tpdbTable.filter(sqltpDbTable.sqltpAssociatedTrackID == rowIDexpression)
@@ -1061,6 +1062,7 @@ class SqlHikingDatabase: NSObject {
 			}
 		}
 		
+		timeStampLog(message: "<- sqlRetrieveTrkptList")
 		return trkptsList
 	}
 	

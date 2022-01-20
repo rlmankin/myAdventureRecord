@@ -36,11 +36,11 @@ struct whichAdventureView : View {
 		
 		return Group {
 				if let userDataTrackIndex = userData.adventures.firstIndex(where: {($0.id == parseGPX.parsedTracks[trackIndex].trkUniqueID)}) {
-					AdventureDetail(passedAdventure: userData.adventures[userDataTrackIndex],  beenInserted: true)
+					AdventureDetail(adventure: userData.adventures[userDataTrackIndex],  beenInserted: true)
 						.tag(trackIndex)
 						.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 				} else {
-					AdventureDetail(passedAdventure: loadAdventureTrack(track: parseGPX.parsedTracks[trackIndex]), beenInserted: false)
+					AdventureDetail(adventure: loadAdventureTrack(track: parseGPX.parsedTracks[trackIndex]), beenInserted: false)
 						.tag(trackIndex)
 						.tabItem { Text("\(parseGPX.parsedTracks[trackIndex].header)")}
 				}

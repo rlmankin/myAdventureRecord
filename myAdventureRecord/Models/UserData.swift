@@ -30,6 +30,10 @@ final class	UserData: ObservableObject {
 		self.adventures = adventureData
 	}
 	
+	func getTpListfromDb(index: Int, id: Int) async -> Void {
+		self.adventures[index].trackData.trkptsList = sqlHikingData.sqlRetrieveTrkptlist(id)
+	}
+	
 	
 	
 }

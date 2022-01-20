@@ -35,21 +35,19 @@ struct DetailButtonStyle: ButtonStyle {
 struct ContentView: View {
 	@EnvironmentObject var userData: UserData
 	
-	@ViewBuilder
+	@ViewBuilder										// use @ViewBuilder to allow for the return of different View type.
 	var body: some View {
-		//timeStampLog(message: "->ContentView")
-	
-		
 		if userData.adventures.isEmpty {
-			ProgressView() //Text("Loading ...")
-			
-				.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 800, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-				.task {
-					 await userData.loadUserData()
-				}
+			VStack {
+				Text("Loading all your adventures...")
+				ProgressView() //Text("Loading ...")
+					.task {
+						 await userData.loadUserData()
+					}
+			}.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 800, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 		} else {
 			AdventureList()
-					.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 800, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+				.frame(minWidth: 1200, idealWidth: 1800, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  minHeight: 800, idealHeight: 1000, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 		}
 	}
 	
@@ -58,9 +56,8 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
-		
-			ContentView()
-				.environmentObject(UserData())
+		ContentView()
+			.environmentObject(UserData())
 			
 		
 	}
